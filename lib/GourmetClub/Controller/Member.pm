@@ -3,6 +3,8 @@ package GourmetClub::Controller::Member;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
+use DateTime;
+use Digest::SHA1 qw(sha1_base64);
 
 =head1 NAME
 
@@ -45,7 +47,7 @@ sub login :Path('login') {
                 password => $c->req->param('password'),
             })
     ) {
-        my $uri = $c->session->{backurl} || $c->uri_for('/member/');
+        my $uri = $c->session->{backurl} || $c->uri_for('./');
         $c->res->redirect($uri);
     }
 }
@@ -55,6 +57,31 @@ sub logout :Path('logout') {
 
     $c->logout;
     $c->res->redirect($c->uri_for('/'));
+}
+
+sub invite :Path('invite') {
+    my ( $self, $c ) = @_;
+    
+    my $q = $c->req;
+    if ($q->method eq 'POST') {
+        my $now = DateTime->now;
+        my $mail = $q->param('mail');
+        my $nonce = sha1_base64($now, $mail, $c->user, rand);
+        my $model = $c->model('DBIC::Invitation');
+        my $invitation = $model->create({
+                caller_id => $c->user->id,
+                mail => $mail,
+                nonce => $nonce,
+                created_at => $now,
+            });
+        $c->model('TheSchwartz')->insert(
+            'GourmetClub::Worker::Invite', 
+            {
+                id => $invitation->id,
+            },
+        );
+        $c->res->redirect('./');
+    }
 }
 
 =head1 AUTHOR

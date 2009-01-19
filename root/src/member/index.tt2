@@ -1,1 +1,4 @@
-hoge
+<ul>
+<li><a href="[% c.uri_for('invite') %]">invite</a></li>
+<li><a href="[% c.uri_for('logout') %]">logout</a></li>
+</ul>
