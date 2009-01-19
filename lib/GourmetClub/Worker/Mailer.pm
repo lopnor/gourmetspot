@@ -12,8 +12,11 @@ sub work {
     my $message = $job->arg->{message};
 
     my $sender = Email::Send->new({mailer => 'Sendmail'});
-    my $result = $sender->send($message);
-    warn $result;
+    if ($sender->send($message)) {
+        $job−>completed();
+    } else {
+        $job->failed('sending mail failed!',$@);
+    }
 }
 
 1;
