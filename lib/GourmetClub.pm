@@ -23,6 +23,7 @@ use Catalyst qw/-Debug
                 Session::State::Cookie
                 Session::Store::DBIC
                 Unicode
+                FillInForm
                 /;
 our $VERSION = '0.01';
 

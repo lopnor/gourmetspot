@@ -33,19 +33,6 @@ sub index :Path :Args(0) {
     $c->response->body( $c->welcome_message );
 }
 
-sub login :Path('login') {
-    my ($self, $c) = @_;
-
-    if (
-        $c->authenticate( {
-                mail => $c->req->param('mail'),
-                password => $c->req->param('passworld'),
-            })
-    ) {
-        my $uri = $c->session->{backurl} || $c->uri_for('/');
-        $c->res->redirect($uri);
-    }
-}
 
 sub default :Path {
     my ( $self, $c ) = @_;

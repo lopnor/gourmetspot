@@ -23,9 +23,9 @@ Catalyst Controller.
 
 sub auto :Private {
     my ( $self, $c ) = @_;
-    unless ($c->user_exists) {
+    if (!$c->user_exists && ($c->req->uri ne $c->uri_for('login'))) {
         $c->session->{backurl} = $c->req->uri;
-        $c->res->redirect($c->uri_for('/login'));
+        $c->res->redirect($c->uri_for('login'));
         return 0;
     }
     return 1;
@@ -36,6 +36,26 @@ sub index :Path :Args(0) {
 
 }
 
+sub login :Path('login') {
+    my ( $self, $c ) = @_;
+
+    if (
+        $c->authenticate( {
+                mail => $c->req->param('mail'),
+                password => $c->req->param('password'),
+            })
+    ) {
+        my $uri = $c->session->{backurl} || $c->uri_for('/member/');
+        $c->res->redirect($uri);
+    }
+}
+
+sub logout :Path('logout') {
+    my ( $self, $c ) = @_;
+
+    $c->logout;
+    $c->res->redirect($c->uri_for('/'));
+}
 
 =head1 AUTHOR
 
