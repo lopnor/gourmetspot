@@ -1,0 +1,6 @@
+<ul>
+<li><a href="[% c.uri_for('add') %]">add</a></li>
+[% FOR m IN member %]
+<li><a href="[% c.uri_for('edit', m.id) %]">[% m.id %] - [% m.nickname %]</a></li>
+[% END %]
+</li>
