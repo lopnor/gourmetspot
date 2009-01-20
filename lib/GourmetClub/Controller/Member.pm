@@ -6,9 +6,7 @@ use utf8;
 use parent 'Catalyst::Controller';
 use DateTime;
 use Digest::SHA1 qw(sha1_base64);
-use Email::MIME::Creator;
 use Encode;
-use String::TT qw(strip tt);
 
 =head1 NAME
 
@@ -68,47 +66,21 @@ sub invite :Path('invite') {
     
     my $q = $c->req;
     if ($q->method eq 'POST') {
-        my $now = DateTime->now;
-        my ($mail, $name, $message);
-        my $mail = $q->param('mail');
-        my $name = $q->param('name');
-        my $message = $q->param('message');
-        my $caller = $c->user->nickname;
-        my $nonce = sha1_base64($now, $mail, $c->user, rand);
         my $model = $c->model('DBIC::Invitation');
+        my $now = DateTime->now;
+        my $mail = $q->param('mail');
         my $invitation = $model->create({
                 caller_id => $c->user->id,
                 mail => $mail,
-                nonce => $nonce,
+                nonce => sha1_base64($now, $mail, $c->user, rand),
                 created_at => $now,
             });
-        my $uriforjoin = $c->uri_for('join', {id => $invitation->id, nonce => $nonce});
-        my $body = strip tt q{
-            [% name %]様
-
-            美食倶楽部に入りませんか？
-            以下のURLをクリックしてください。
-            [% uriforjoin %]
-
-            [% caller %] さまからのメッセージです
-
-            [% message %]
+        $c->stash->{email} = {
+            to => $invitation->mail,
+            subject => encode('MIME-Header-ISO_2022_JP', '美食倶楽部へのお誘い'),
+            template => 'invitation.tt2',
         };
-        my $mime = Email::MIME->create(
-            header => [
-                To      => $mail,
-                Subject => encode('MIME-Header-ISO_2022_JP', '美食倶楽部へのお誘い'),
-                'Content-Type' => 'text/plain;charset=iso-2022-jp',
-            ],
-            body => encode('iso-2022-jp', $body),
-        );
-
-        $c->model('TheSchwartz')->insert(
-            'GourmetClub::Worker::Mailer', 
-            {
-                message => $mime,
-            },
-        );
+        $c->forward( $c->view('Email::Template') );
         $c->res->redirect('./');
     }
 }

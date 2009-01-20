@@ -13,7 +13,7 @@ sub work {
 
     my $sender = Email::Send->new({mailer => 'Sendmail'});
     if ($sender->send($message)) {
-        $job−>completed();
+        $job->completed();
     } else {
         $job->failed('sending mail failed!',$@);
     }

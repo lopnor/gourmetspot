@@ -1,4 +1,4 @@
-package GourmetClub::View::TT;
+package GourmetClub::View::TTSite;
 
 use strict;
 use base 'Catalyst::View::TT';
@@ -8,23 +8,16 @@ __PACKAGE__->config({
         GourmetClub->path_to( 'root', 'src' ),
         GourmetClub->path_to( 'root', 'lib' )
     ],
-    DEFAULT_ENCODING => 'utf8',
-    PROVIDERS => [
-        {
-            name => 'Encoding',
-            copy_config => [qw(DEFAULT_ENCODING INCLUDE_PATH PRE_CHOMP POST_CHOMP)]
-        }
-    ],
     PRE_PROCESS  => 'config/main',
     WRAPPER      => 'site/wrapper',
     ERROR        => 'error.tt2',
+    TIMER        => 0,
     TEMPLATE_EXTENSION => '.tt2',
-    TIMER        => 0
 });
 
 =head1 NAME
 
-GourmetClub::View::TT - Catalyst TTSite View
+GourmetClub::View::TTSite - Catalyst TTSite View
 
 =head1 SYNOPSIS
 
