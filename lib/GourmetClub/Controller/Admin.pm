@@ -43,13 +43,19 @@ sub index :Path :Args(0) {
 sub add :Path('add') {
     my ( $self, $c ) = @_;
 
+    my $pre_salt = $c->config->{'Plugin::Authentication'}
+                                ->{realms}
+                                ->{members}
+                                ->{credential}
+                                ->{password_pre_salt};
+
     my $q = $c->req;
     if ($q->method eq 'POST') {
         my $model = $c->model('DBIC::Member');
         my $member = $model->create({
                 mail => $q->param('mail'),
                 nickname => $q->param('nickname'),
-                password => sha1_base64($q->param('password')),
+                password => sha1_base64($pre_salt . $q->param('password')),
             });
         $c->res->redirect($c->uri_for('./'));
     }
@@ -58,6 +64,12 @@ sub add :Path('add') {
 
 sub edit :Path('edit') :Args(1) {
     my ( $self, $c, $id ) = @_;
+
+    my $pre_salt = $c->config->{'Plugin::Authentication'}
+                                ->{realms}
+                                ->{members}
+                                ->{credential}
+                                ->{password_pre_salt};
 
     my $member = $c->model('DBIC::Member')->find($id);
     
@@ -69,14 +81,14 @@ sub edit :Path('edit') :Args(1) {
             my $hash = {};
             for (qw(mail nickname password)) {
                 my $value = $q->param($_);
-                $value = sha1_base64($value) if $_ eq 'password';
-                $hash->{$_} = $q->param($_) if length $q->param($_);
+                $value = sha1_base64($pre_salt . $value) if $_ eq 'password';
+                $hash->{$_} = $value if length $q->param($_);
             }
             $member->update($hash);
         }
         $c->res->redirect($c->uri_for('./'));
     }
-    $c->forward('GourmetClub::View::TT');
+    $c->forward($c->view);
     $c->fillform( {
             mail => $member->mail,
             nickname => $member->nickname,

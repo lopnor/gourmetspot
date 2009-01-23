@@ -2,6 +2,7 @@ package GourmetClub;
 
 use strict;
 use warnings;
+use YAML;
 
 use Catalyst::Runtime '5.70';
 
@@ -22,8 +23,15 @@ use Catalyst qw/-Debug
                 Session
                 Session::State::Cookie
                 Session::Store::DBIC
+
                 Unicode
                 FillInForm
+
+                FormValidator::Simple
+
+                +GourmetClub::Util::ProfileLoader
+                FormValidator::Simple::Auto
+
                 /;
 our $VERSION = '0.01';
 
@@ -36,11 +44,19 @@ our $VERSION = '0.01';
 # with a external configuration file acting as an override for
 # local deployment.
 
-__PACKAGE__->config( name => 'GourmetClub' );
+$YAML::Syck::ImplicitUnicode = 1;
+
+__PACKAGE__->config( 
+    name => 'GourmetClub',
+    'Plugin::ConfigLoader' => {
+        driver => {
+            'General' => { '-UTF8' => 1 }
+        }
+    }
+);
 
 # Start the application
 __PACKAGE__->setup();
-
 
 =head1 NAME
 

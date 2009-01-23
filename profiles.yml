@@ -1,0 +1,15 @@
+'member/invite_confirm':
+    name: 
+        - rule: NOT_BLANK
+          message: 'お名前を入力してください。'
+    mail:
+        - rule: NOT_BLANK
+          message: 'メールアドレスを入力してください。'
+        - rule: EMAIL_LOOSE
+          message: 'メールアドレスが正しくありません。'
+    message:
+        - rule: NOT_BLANK
+          message: 'メッセージを入力してください。'
+    caller_name:
+        - rule: NOT_BLANK
+          message: 'お名前を入力してください。'

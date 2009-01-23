@@ -1,1 +1,10 @@
-$B$3$s$K$A$O!<(B
+Subject: 美食倶楽部へのお誘い
+
+[% c.flash.invitation.name %]さま、
+
+[% c.flash.invitation.caller_name %]さまより美食倶楽部への招待状をお送りします。
+
+[% c.flash.invitation.message %]
+
+--
+[% c.uri_for('/') %]

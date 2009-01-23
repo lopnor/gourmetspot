@@ -1,4 +1,4 @@
-package GourmetClub::ConfigLoader;
+package GourmetClub::Util::ConfigLoader;
 use strict;
 use warnings;
 

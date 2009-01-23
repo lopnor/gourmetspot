@@ -1,3 +1,14 @@
 <!-- BEGIN site/header -->
 <h1 class="title">[% template.title or site.title %]</h1>
+<div class="menu">
+<ul>
+<li><a href="[% c.uri_for('/') %]">トップページ</a></li>
+[% IF c.user_in_realm('members') -%]
+<li><a href="[% c.uri_for('/member/') %]">メンバーページ</a></li>
+<li><a href="[% c.uri_for('/member/logout') %]">ログアウト</a></li>
+[% ELSE -%]
+<li><a href="[% c.uri_for('/member/login') %]">ログイン </a></li>
+[% END -%]
+</ul>
+</div>
 <!-- END site/header -->

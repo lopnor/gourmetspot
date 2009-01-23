@@ -27,7 +27,10 @@ Catalyst Controller.
 
 sub auto :Private {
     my ( $self, $c ) = @_;
-    if (!$c->user_exists && ($c->req->uri ne $c->uri_for('login'))) {
+    if (
+            !$c->user_in_realm('members')
+            && ($c->req->uri ne $c->uri_for('login'))
+            && ($c->req->uri ne $c->uri_for('password'))) {
         $c->session->{backurl} = $c->req->uri;
         $c->res->redirect($c->uri_for('login'));
         return 0;
@@ -43,14 +46,19 @@ sub index :Path :Args(0) {
 sub login :Path('login') {
     my ( $self, $c ) = @_;
 
-    if (
-        $c->authenticate( {
-                mail => $c->req->param('mail'),
-                password => $c->req->param('password'),
-            })
-    ) {
-        my $uri = $c->session->{backurl} || $c->uri_for('./');
-        $c->res->redirect($uri);
+    if ($c->req->method eq 'POST') {
+        if (
+            $c->authenticate( {
+                    mail => $c->req->param('mail'),
+                    password => $c->req->param('password'),
+                })
+        ) {
+            my $uri = $c->session->{backurl} || $c->uri_for('./');
+            $c->res->redirect($uri);
+        } else {
+            $c->flash->{error} = 
+            'ログインできませんでした！メールアドレスとパスワードをもう一度お確かめください！';
+        }
     }
 }
 
@@ -65,23 +73,49 @@ sub invite :Path('invite') {
     my ( $self, $c ) = @_;
     
     my $q = $c->req;
+    my $flash = $c->flash->{invitation} || {};
     if ($q->method eq 'POST') {
-        my $model = $c->model('DBIC::Invitation');
-        my $now = DateTime->now;
-        my $mail = $q->param('mail');
-        my $invitation = $model->create({
-                caller_id => $c->user->id,
-                mail => $mail,
-                nonce => sha1_base64($now, $mail, $c->user, rand),
-                created_at => $now,
-            });
-        $c->stash->{email} = {
-            to => $invitation->mail,
-            subject => encode('MIME-Header-ISO_2022_JP', '美食倶楽部へのお誘い'),
-            template => 'invitation.tt2',
-        };
-        $c->forward( $c->view('Email::Template') );
-        $c->res->redirect('./');
+        if ($q->param('confirm')) {
+            return $c->forward('invite_confirm');
+        } elsif ($q->param('invite')) {
+            my $model = $c->model('DBIC::Invitation');
+            my $now = DateTime->now;
+            my $mail = $flash->{mail};
+            my $invitation = $model->create({
+                    caller_id => $c->user->id,
+                    mail => $mail,
+                    nonce => sha1_base64($now, $mail, $c->user, rand),
+                    created_at => $now,
+                });
+            $c->stash->{email} = {
+                to => $invitation->mail,
+                template => 'invitation.tt2',
+            };
+            $c->forward( $c->view('Email::TemplateEntity') );
+            warn 'here';
+            $c->res->redirect('./');
+        }
+    }
+    $c->forward($c->view);
+    $c->fillform($flash);
+}
+
+sub invite_confirm :Private {
+    my ($self, $c) = @_;
+
+    if (!$c->form->has_error) {
+        for (qw(mail name caller_name message)) {
+            $c->flash->{invitation}->{$_} = $c->req->param($_);
+        }
+        $c->stash->{template} = 'member/invite_confirm.tt2';
+    }
+}
+
+sub password :Path('password') {
+    my ( $self, $c ) = @_;
+    if ( $c->req->method eq 'POST') {
+        my $mail = $c->req->param('mail');
+        my $member = $c->model('DBIC::Member')->find({mail => $mail});
     }
 }
 

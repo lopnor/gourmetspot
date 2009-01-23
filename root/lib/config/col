@@ -4,18 +4,21 @@
      grey1  = '#46494c'
      grey2  = '#c6c9cc'
      grey3  = '#e3e6ea'
+     grey4  = '#f3f6fa'
      red    = '#CC4444'
      green  = '#66AA66'
      blue   = '#89b8df'
      orange = '#f08900'
+     soffritto = '#FCC800'
    };
 
    site.col = {
       page    = site.rgb.white
       text    = site.rgb.grey1
-      head    = site.rgb.grey3
+      head    = site.rgb.grey4
       line    = site.rgb.orange
       message = site.rgb.green
       error   = site.rgb.red
+      soffritto = site.rgb.soffritto
    };
 %]

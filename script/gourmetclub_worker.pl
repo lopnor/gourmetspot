@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use GourmetClub::ConfigLoader;
+use GourmetClub::Util::ConfigLoader;
 use GourmetClub::Worker;
 use TheSchwartz;
 use Daemon::Generic;
@@ -19,7 +19,7 @@ my $config;
 
 sub gd_preconfig {
     my $self = shift;
-    my $c = GourmetClub::ConfigLoader->load;
+    my $c = GourmetClub::Util::ConfigLoader->load;
     $config = $c->{'Model::TheSchwartz'};
     if (ref $config->{databases} eq 'HASH') {
         $config->{databases} = [ $config->{databases} ];

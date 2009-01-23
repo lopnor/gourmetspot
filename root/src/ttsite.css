@@ -1,6 +1,8 @@
-
-html {
-    height: 100%;
+* {
+    font-family: "Lucida Grande", Verdana, Arial, Geneva, sans-serif;
+    line-height: 1.8em;
+    font-weight: normal;
+    size: 90%;
 }
 
 body { 
@@ -8,27 +10,42 @@ body {
     color: [% site.col.text %];
     margin: 0px;
     padding: 0px;
-    height: 100%;
 }
+
+a {
+    text-decoration: none;
+    color: [% site.rgb.soffritto %];
+    border-bottom: 2px solid [% site.rgb.soffritto %];
+    padding: 2px;
+}
+
 
 #header {
     background-color: [% site.col.head %];
-    border-bottom: 1px solid [% site.col.line %];
+    padding: 10px;
+}
+#header div.menu {
+    text-align: right;
+}
+
+#header div.menu li {
+    display: inline;
+    margin: 3px;
+    list-style: none;
 }
 
 #footer {
     background-color: [% site.col.head %];
     text-align: center;
-    border-top: 1px solid [% site.col.line %];
-    position: absolute;
-    bottom: 0;
-    left: 0px;
-    width: 100%;
     padding: 4px;
 }
 
 #content {
     padding: 10px;
+}
+
+h1 {
+    float: left;
 }
 
 h1.title {
@@ -42,4 +59,8 @@ h1.title {
 
 .error {
     color: [% site.col.error %];
+}
+
+form.login {
+    margin: 60px;
 }

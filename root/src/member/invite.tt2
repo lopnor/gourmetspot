@@ -1,8 +1,37 @@
-<form method="POST">
+[% META title="招待する" %]
+[% IF c.form.has_error -%]
+<div class="error message">
+<ul>
+[% FOR message IN c.form.messages('member/invite_confirm') -%]
+<li>[% message | html %]</li>
+[% END -%]
+</ul>
+</div>
+[% END -%]
+<form method="POST" class="invite">
 <table>
-<tr><td> mail: </td><td><input type="text" name="mail" class="mail"></td></tr>
-<tr><td> name: </td><td><input type="text" name="name"></td></tr>
-<tr><td> message: </td><td><textarea name="message" rows="5" cols="70"></textarea></td></tr>
-<tr><td>       </td><td><input type="submit"></td></tr>
+<tr>
+    <td> あなたのお名前 </td>
+    <td><input type="text" name="caller_name"></td>
+</tr>
+<tr>
+    <td> 招待する方のお名前 </td>
+    <td><input type="text" name="name"></td>
+</tr>
+<tr>
+    <td> メールアドレス </td>
+    <td><input type="text" name="mail" class="mail"></td>
+</tr>
+<tr>
+    <td> ヒトコト </td>
+    <td><textarea name="message" rows="5" cols="70"></textarea></td>
+</tr>
+<tr>
+    <td></td>
+    <td>
+        <input type="submit" name="confirm" value="確認画面にすすむ">
+        <input type="reset" value="リセット">
+    </td>
+</tr>
 </table>
 </form>

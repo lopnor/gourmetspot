@@ -1,0 +1,27 @@
+<form method="POST">
+<table>
+<tr>
+    <td> あなたのお名前 </td>
+    <td> [% c.req.param('caller_name') %] </td>
+</tr>
+<tr>
+    <td> 招待する方のお名前 </td>
+    <td> [% c.req.param('name') %] </td>
+</tr>
+<tr>
+    <td> メールアドレス </td>
+    <td> [% c.req.param('mail') %] </td>
+</tr>
+<tr>
+    <td> メッセージ </td>
+    <td> [% c.req.param('message') %] </td>
+</tr>
+<tr>
+    <td></tr>
+    <td>
+        <input type="submit" name="invite" value="確認して送信">
+        <input type="submit" name="rewrite" value="招待文を書き直す">
+    </td>
+</tr>
+</table>
+</form>

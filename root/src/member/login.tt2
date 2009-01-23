@@ -1,5 +1,9 @@
-<form method="POST">
-    mail: <input type="text" name="mail"><br>
-    password: <input type="password" name="password"></br>
-    <input type="submit">
+[% META title="ログイン" %]
+<form method="POST" class="login">
+<table>
+<tr><td> メールアドレス </td><td> <input type="text" name="mail"> </td></tr>
+<tr><td> パスワード </td><td> <input type="password" name="password"> </td></tr>
+<tr><td> </td><td><input type="submit" value="ログイン"></td></tr>
+<tr><td colspan="2"><a href="[% c.uri_for('password') %]">パスワードを忘れたら</a> </td></tr>
+</table>
 </form>

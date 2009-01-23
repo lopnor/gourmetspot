@@ -5,7 +5,7 @@ use base 'Catalyst::View::TT';
 
 __PACKAGE__->config(
     TEMPLATE_EXTENSION => '.tt2',
-    DEFAULT_ENCODING => 'iso-2022-jp',
+    DEFAULT_ENCODING => 'utf8',
     DEBUG => 'all',
     PROVIDERS => [
         {

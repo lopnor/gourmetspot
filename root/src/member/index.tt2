@@ -1,4 +1,5 @@
+[% META title="メンバーページ" %]
 <ul>
-<li><a href="[% c.uri_for('invite') %]">invite</a></li>
-<li><a href="[% c.uri_for('logout') %]">logout</a></li>
+<li><a href="[% c.uri_for('invite') %]">招待する</a></li>
+<li><a href="[% c.uri_for('logout') %]">ログアウト</a></li>
 </ul>

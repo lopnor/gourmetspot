@@ -13,6 +13,13 @@ __PACKAGE__->config({
     ERROR        => 'error.tt2',
     TIMER        => 0,
     TEMPLATE_EXTENSION => '.tt2',
+    DEFULT_ENCODING => 'utf8',
+    PROVIDERS => [
+        {
+            name => 'Encoding',
+            copy_config => [qw(DEFAULT_ENCODING INCLUDE_PATH PRE_CHOMP POST_CHOMP)]
+        },
+    ],
 });
 
 =head1 NAME
