@@ -1,5 +1,7 @@
 [% META title="メンバーページ" %]
 <ul>
+<li><a href="[% c.uri_for('edit') %]">登録内容を変更する</a></li>
 <li><a href="[% c.uri_for('invite') %]">招待する</a></li>
 <li><a href="[% c.uri_for('logout') %]">ログアウト</a></li>
+<li><a href="[% c.uri_for('leave') %]">退会する</a></li>
 </ul>

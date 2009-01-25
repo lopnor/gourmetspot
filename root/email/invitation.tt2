@@ -7,7 +7,7 @@ Subject: 美食倶楽部へのお誘い
 [% c.req.param('message') | html %]
 
 以下のリンクから美食倶楽部にご参加ください。
-[% c.uri_for('/member/join', {nonce => invitation.nonce, id => invitation.id}) %]
+[% c.uri_for('/account/join', {nonce => invitation.nonce, id => invitation.id}) %]
 
 --
 [% c.uri_for('/') %]

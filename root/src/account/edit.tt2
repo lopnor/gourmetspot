@@ -1,0 +1,32 @@
+[% META title="登録内容の変更" %]
+[% IF c.form.has_error -%]
+<div class="error message">
+<ul>
+[% FOR message IN c.form.messages('account/edit_commit') -%]
+<li>[% message | html %]</li>
+[% END -%]
+</ul>
+</div>
+[% END -%]
+<form method="POST">
+<table>
+<tr>
+    <td>メールアドレス</td>
+    <td>[% c.user.mail | html %]</td>
+</tr>
+<tr>
+    <td>パスワード</td>
+    <td><a href="[% c.uri_for('password') %]">パスワードの変更はこちらで</a></td>
+<tr>
+    <td>ニックネーム</td>
+    <td><input type="text" name="nickname"></td>
+</tr>
+<tr>
+    <td></td>
+    <td>
+        <input type="hidden" name="_token">
+        <input type="submit" value="登録内容を変更する">
+    </td>
+</tr>
+</table>
+</form>

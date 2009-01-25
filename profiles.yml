@@ -1,4 +1,4 @@
-'member/invite_confirm':
+'account/invite_confirm':
     name: 
         - rule: NOT_BLANK
           message: 'お名前を入力してください。'
@@ -15,7 +15,7 @@
     caller_name:
         - rule: NOT_BLANK
           message: 'お名前を入力してください。'
-'member/join_confirm':
+'account/join_confirm':
     nickname:
         - rule: NOT_BLANK
           message: 'ニックネームを入力してください。'
@@ -29,7 +29,7 @@
     password_confirm:
         - self_rule: SAME_AS_PASSWORD 
           message: 'パスワードが一致しません。'
-'member/password_reset':
+'account/password_reset':
     password:
         - rule: NOT_BLANK
           message: 'パスワードを入力してください。'

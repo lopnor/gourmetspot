@@ -6,7 +6,6 @@ use utf8;
 use parent 'Catalyst::Controller::RequestToken';
 use DateTime;
 use Digest::SHA1 qw(sha1_base64);
-use Encode;
 
 =head1 NAME
 
@@ -226,7 +225,25 @@ sub join_complete :Private {
 
 sub password :Path('password') {
     my ( $self, $c ) = @_;
-    $c->logout;
+
+    if ( !$c->user_in_realm('members') ) {
+        $c->forward('password_guest');
+    } else {
+        if ($c->req->method eq 'POST') {
+            $c->forward('password_reset');
+        }
+        $c->stash(
+            template => 'account/password_reset.tt2',
+            member => $c->user,
+        );
+        $c->forward($c->view);
+        $c->fillform;
+    }
+}
+
+sub password_guest :Private {
+    my ( $self, $c ) = @_;
+
     if ( $c->req->param('nonce') ) {
         my ($reset) = $c->model('DBIC::ResetPassword')->search(
             {
@@ -245,11 +262,10 @@ sub password :Path('password') {
         }
         if ($c->req->method eq 'POST') {
             $c->forward('password_reset', [ $reset ]);
-
         }
         $c->stash(
             template => 'account/password_reset.tt2',
-            reset => $reset,
+            member => $reset->member,
         );
         $c->forward($c->view);
         $c->fillform;
@@ -295,20 +311,60 @@ sub password_reset :Private {
         $c->form->set_invalid('password_confirm', 'SAME_AS_PASSWORD');
     }
     if (!$c->form->has_error) {
+        my $member = $c->user || $reset->member;
         my $password = $c->req->param('password');
-        $reset->member->update(
+        $member->update(
             {
                 password => $c->compute_password($password),
             }
         );
-        $c->authenticate( {
-                mail => $reset->member->mail,
-                password => $password,
-            });
-        $reset->delete;
+        if ( !$c->user && $reset ) {
+            $c->authenticate( {
+                    mail => $reset->member->mail,
+                    password => $password,
+                });
+            $reset->delete;
+        }
         $c->flash->{message} = 'パスワードを設定しました';
         return $c->res->redirect($c->uri_for('./'));
     }
+}
+
+sub edit :Path('edit') {
+    my ( $self, $c ) = @_;
+    if ( $c->req->method eq 'POST' ) {
+        $c->forward('edit_commit');
+    }
+    $c->req->param(nickname => $c->user->nickname) unless $c->req->param('nickname');
+    $c->forward('create_token');
+    $c->forward( $c->view );
+    $c->fillform;
+}
+
+sub edit_commit :Private {
+    my ( $self, $c ) = @_;
+    if (!$c->form->has_error && $self->validate_token($c)) {
+        my $q = $c->req;
+        my $hash = {};
+        $hash->{nickname} = $q->param('nickname') if $q->param('nickname');
+        if (length %{$hash}) {
+            $c->user->update( $hash );
+            $c->res->redirect($c->uri_for('./'));
+        }
+    }
+}
+
+sub leave :Path('leave') {
+    my ( $self, $c ) = @_;
+    if ( $c->req->method eq 'POST' && $self->validate_token($c) ) {
+        $c->user->delete;
+        $c->logout;
+        $c->flash->{message} = '退会処理が完了しました。';
+        return $c->res->redirect($c->uri_for('/'));
+    }
+    $c->forward('create_token');
+    $c->forward( $c->view );
+    $c->fillform;
 }
 
 sub create_token :Private {

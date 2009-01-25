@@ -2,7 +2,7 @@
 [% IF c.form.has_error -%]
 <div class="error message">
 <ul>
-[% FOR message IN c.form.messages('member/invite_confirm') -%]
+[% FOR message IN c.form.messages('account/invite_confirm') -%]
 <li>[% message | html %]</li>
 [% END -%]
 </ul>

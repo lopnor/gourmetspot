@@ -2,13 +2,13 @@
 [% IF c.form.has_error -%]
 <div class="error message">
 <ul>
-[% FOR message IN c.form.messages('member/join_confirm') -%]
+[% FOR message IN c.form.messages('account/join_confirm') -%]
 <li>[% message | html %]</li>
 [% END -%]
 </ul>
 </div>
 [% END -%]
-<form method="POST" action="[% c.uri_for('/member/join') %]">
+<form method="POST" action="[% c.uri_for('join') %]">
 <table>
 <tr>
     <td>メールアドレス</td>

@@ -1,0 +1,12 @@
+[% META title="退会" %]
+<form method="POST">
+<table>
+<tr>
+    <td></td>
+    <td>
+        <input type="hidden" name="_token">
+        <input type="submit" value="退会する">
+    </td>
+<tr>
+</table>
+</form>
