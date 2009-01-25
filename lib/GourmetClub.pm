@@ -24,7 +24,6 @@ use Catalyst qw/-Debug
                 Session::State::Cookie
                 Session::Store::DBIC
 
-                Unicode
                 FillInForm
 
                 FormValidator::Simple
@@ -32,7 +31,10 @@ use Catalyst qw/-Debug
                 +GourmetClub::Util::ProfileLoader
                 FormValidator::Simple::Auto
 
+                Unicode
                 /;
+use Digest::SHA1 qw(sha1_base64);
+
 our $VERSION = '0.01';
 
 # Configure the application. 
@@ -57,6 +59,19 @@ __PACKAGE__->config(
 
 # Start the application
 __PACKAGE__->setup();
+
+sub compute_password {
+    my ( $self, $raw ) = @_;
+    my $config = $self->config->{'Plugin::Authentication'}
+                                ->{realms}
+                                ->{members}
+                                ->{credential};
+    return sha1_base64(
+        ($config->{password_pre_salt} || '')
+        . $raw
+        . ($config->{password_post_salt} || '')
+    );
+}
 
 =head1 NAME
 

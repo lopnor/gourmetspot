@@ -1,0 +1,39 @@
+[% META title="参加する" -%]
+[% IF c.form.has_error -%]
+<div class="error message">
+<ul>
+[% FOR message IN c.form.messages('member/join_confirm') -%]
+<li>[% message | html %]</li>
+[% END -%]
+</ul>
+</div>
+[% END -%]
+<form method="POST" action="[% c.uri_for('/member/join') %]">
+<table>
+<tr>
+    <td>メールアドレス</td>
+    <td>[% invitation.mail | html %]</td>
+</tr>
+<tr>
+    <td>ニックネーム</td>
+    <td><input type="text" name="nickname"></td>
+</tr>
+<tr>
+    <td>パスワード</td>
+    <td><input type="password" name="password"></td>
+</tr>
+<tr>
+    <td>パスワードをもう一度</td>
+    <td><input type="password" name="password_confirm"></td>
+</tr>
+<tr>
+    <td></td>
+    <td>
+        <input type="hidden" name="nonce">
+        <input type="hidden" name="id">
+        <input type="submit" name="confirm" value="美食倶楽部に参加">
+        <input type="reset" value="リセット">
+    </td>
+</tr>
+</table>
+</form>

@@ -4,10 +4,10 @@
 <ul>
 <li><a href="[% c.uri_for('/') %]">トップページ</a></li>
 [% IF c.user_in_realm('members') -%]
-<li><a href="[% c.uri_for('/member/') %]">メンバーページ</a></li>
-<li><a href="[% c.uri_for('/member/logout') %]">ログアウト</a></li>
+<li><a href="[% c.uri_for('/member/') %]">[% c.user.nickname | html %]さんのページ</a></li>
+<li><a href="[% c.uri_for('/account/logout') %]">ログアウト</a></li>
 [% ELSE -%]
-<li><a href="[% c.uri_for('/member/login') %]">ログイン </a></li>
+<li><a href="[% c.uri_for('/account/login') %]">ログイン </a></li>
 [% END -%]
 </ul>
 </div>

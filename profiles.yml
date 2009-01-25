@@ -7,9 +7,36 @@
           message: 'メールアドレスを入力してください。'
         - rule: EMAIL_LOOSE
           message: 'メールアドレスが正しくありません。'
+        - self_rule: NOT_REGISTERED
+          message: 'このメールアドレスの方はすでに登録済みのようです。'
     message:
         - rule: NOT_BLANK
           message: 'メッセージを入力してください。'
     caller_name:
         - rule: NOT_BLANK
           message: 'お名前を入力してください。'
+'member/join_confirm':
+    nickname:
+        - rule: NOT_BLANK
+          message: 'ニックネームを入力してください。'
+    password:
+        - rule: NOT_BLANK
+          message: 'パスワードを入力してください。'
+        - rule: ASCII
+          message: 'パスワードは半角英数字を入力してください。'
+        - rule: [ 'LENGTH', 8, 16 ]
+          message: 'パスワードの長さは8文字から16文字にしてください。'
+    password_confirm:
+        - self_rule: SAME_AS_PASSWORD 
+          message: 'パスワードが一致しません。'
+'member/password_reset':
+    password:
+        - rule: NOT_BLANK
+          message: 'パスワードを入力してください。'
+        - rule: ASCII
+          message: 'パスワードは半角英数字を入力してください。'
+        - rule: [ 'LENGTH', 8, 16 ]
+          message: 'パスワードの長さは8文字から16文字にしてください。'
+    password_confirm:
+        - self_rule: SAME_AS_PASSWORD 
+          message: 'パスワードが一致しません。'

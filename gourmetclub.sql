@@ -24,9 +24,18 @@ create table invitation (
     mail        varchar(128) not null default '',
     nonce       char(27) not null default '',
     created_at  datetime,
+    member_id   int,
+    joined_at   datetime,
     key (caller_id),
     key (nonce)
 );
     
+create table reset_password (
+    id          int not null primary key auto_increment,
+    member_id     int not null default 0,
+    nonce       char(27) not null default '',
+    expires_at  datetime,
+    key (nonce)
+);
 
 -- vim: set ft=mysql

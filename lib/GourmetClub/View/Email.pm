@@ -1,4 +1,4 @@
-package GourmetClub::View::Email::TemplateEntity;
+package GourmetClub::View::Email;
 
 use strict;
 use warnings;

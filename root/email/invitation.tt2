@@ -1,10 +1,13 @@
 Subject: 美食倶楽部へのお誘い
 
-[% c.flash.invitation.name %]さま、
+[% c.req.param('name') | html %]さま、
 
-[% c.flash.invitation.caller_name %]さまより美食倶楽部への招待状をお送りします。
+[% c.req.param('caller_name') | html %]さまより美食倶楽部への招待状をお送りします。
 
-[% c.flash.invitation.message %]
+[% c.req.param('message') | html %]
+
+以下のリンクから美食倶楽部にご参加ください。
+[% c.uri_for('/member/join', {nonce => invitation.nonce, id => invitation.id}) %]
 
 --
 [% c.uri_for('/') %]

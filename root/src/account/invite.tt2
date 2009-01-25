@@ -1,4 +1,4 @@
-[% META title="招待する" %]
+[% META title="招待する" -%]
 [% IF c.form.has_error -%]
 <div class="error message">
 <ul>
