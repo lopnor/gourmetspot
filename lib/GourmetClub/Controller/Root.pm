@@ -28,7 +28,6 @@ GourmetClub::Controller::Root - Root Controller for GourmetClub
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-
 }
 
 

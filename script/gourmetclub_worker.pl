@@ -21,15 +21,12 @@ sub gd_preconfig {
     my $self = shift;
     my $c = GourmetClub::Util::ConfigLoader->load;
     $config = $c->{'Model::TheSchwartz'};
-    if (ref $config->{databases} eq 'HASH') {
-        $config->{databases} = [ $config->{databases} ];
-    }
     return;
 }
 
 sub gd_run {
-    print "starting gourmetclub_worker",
-    my $schwartz = TheSchwartz->new(%{ $config });
+    print "starting gourmetclub_worker";
+    my $schwartz = TheSchwartz->new(%{ $config->{args} });
     for my $w (GourmetClub::Worker->workers) {
         $w->require;
         $schwartz->can_do($w);

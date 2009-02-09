@@ -1,10 +1,10 @@
-package GourmetClub::Model::TheSchwartz;
+package GourmetClub::Model::Gnavi;
 use strict;
 use warnings;
 use base 'Catalyst::Model::Adaptor';
 
 __PACKAGE__->config( 
-    class       => 'TheSchwartz',
+    class       => 'GourmetClub::WebService::Gnavi',
     constructor => 'new',
 );
 

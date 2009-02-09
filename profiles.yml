@@ -40,3 +40,28 @@
     password_confirm:
         - self_rule: SAME_AS_PASSWORD 
           message: 'パスワードが一致しません。'
+'member/restrant_add_enter':
+    name:
+        - rule: NOT_BLANK
+          message: 'お店の名前を入力してください。'
+    tel:
+        - rule: NOT_BLANK
+          message: '電話番号を入力してください。'
+    address:
+        - rule: NOT_BLANK
+          message: '住所を入力してください。'
+'member/review_edit':
+    restrant_id:
+        - rule: NOT_BLANK
+          message: 'お店を指定してください。'
+    budget:
+        - rule: NOT_BLANK
+          message: '予算を入力してください。'
+    scene_id:
+        - rule: NOT_BLANK
+          message: 'シーンを選んでください。'
+        - rule: INT
+          message: 'シーンを選んでください。'
+    comment:
+        - rule: NOT_BLANK
+          message: 'ヒトコトを書いてください。'

@@ -38,4 +38,32 @@ create table reset_password (
     key (nonce)
 );
 
+create table scene (
+    id      int not null primary key auto_increment,
+    value   varchar(255) not null default '',
+    created_by int not null default 0,
+    created_at datetime
+);
+
+create table restrant (
+    id      int not null primary key auto_increment,
+    name    varchar(255) not null default '',
+    tel     varchar(16) not null default '',
+    address varchar(255) not null default '',
+    created_by int not null default 0,
+    created_at datetime,
+    modified_at datetime
+);
+
+create table review (
+    id          int not null primary key auto_increment,
+    restrant_id int not null default 0,
+    budget      varchar(32) not null default '',
+    scene_id    int,
+    comment     text,
+    created_by  int not null default 0,
+    created_at  datetime,
+    modified_at datetime
+);
+
 -- vim: set ft=mysql

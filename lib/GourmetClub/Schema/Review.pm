@@ -1,4 +1,4 @@
-package GourmetClub::Schema::Invitation;
+package GourmetClub::Schema::Review;
 
 use strict;
 use warnings;
@@ -6,16 +6,25 @@ use warnings;
 use base 'DBIx::Class';
 
 __PACKAGE__->load_components("Core");
-__PACKAGE__->table("invitation");
+__PACKAGE__->table("review");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "INT", default_value => undef, is_nullable => 0, size => 11 },
-  "caller_id",
+  "restrant_id",
   { data_type => "INT", default_value => 0, is_nullable => 0, size => 11 },
-  "mail",
-  { data_type => "VARCHAR", default_value => "", is_nullable => 0, size => 128 },
-  "nonce",
-  { data_type => "CHAR", default_value => "", is_nullable => 0, size => 27 },
+  "budget",
+  { data_type => "VARCHAR", default_value => "", is_nullable => 0, size => 32 },
+  "scene_id",
+  { data_type => "INT", default_value => undef, is_nullable => 1, size => 11 },
+  "comment",
+  {
+    data_type => "TEXT",
+    default_value => undef,
+    is_nullable => 1,
+    size => 65535,
+  },
+  "created_by",
+  { data_type => "INT", default_value => 0, is_nullable => 0, size => 11 },
   "created_at",
   {
     data_type => "DATETIME",
@@ -23,9 +32,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 19,
   },
-  "member_id",
-  { data_type => "INT", default_value => undef, is_nullable => 1, size => 11 },
-  "joined_at",
+  "modified_at",
   {
     data_type => "DATETIME",
     default_value => undef,
@@ -37,15 +44,16 @@ __PACKAGE__->set_primary_key("id");
 
 
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-03 23:40:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B0bLHDMjpLCP+sSynnBmTg
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DoUI1TXgPjGI5AxlAhFXhA
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime));
+
 __PACKAGE__->add_columns(
     created_at => {
         data_type => 'datetime',
         extra => {timezone => 'Asia/Tokyo'},
     },
-    joined_at => {
+    modified_at => {
         data_type => 'datetime',
         extra => {timezone => 'Asia/Tokyo'},
     },

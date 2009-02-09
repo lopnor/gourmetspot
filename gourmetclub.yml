@@ -1,0 +1,68 @@
+--- 
+Controller::Restrant:
+    search_field: name
+    model: DBIC::Restrant
+    path: member/restrant
+    form:
+        name:
+            - rule: NOT_BLANK
+              message: 'お店の名前を入力してください'
+        tel:
+            - rule: NOT_BLANK
+              message: '電話番号を入力してください'
+        address:
+            - rule: NOT_BLANK
+              message: '住所を入力してください'
+Model::Geo: 
+  args: 
+    base_url: http://maps.google.com/maps/geo
+    param: 
+      output: xml
+Model::TheSchwartz: 
+  args: 
+    databases: 
+        -
+            dsn: dbi:mysql:theschwartz
+Plugin::Authentication: 
+  default_realm: members
+  realms: 
+    admin: 
+      credential: 
+        class: HTTP
+        password_field: password
+        password_salt_len: 4
+        password_type: salted_hash
+        type: basic
+    members: 
+      credential: 
+        class: Password
+        password_field: password
+        password_hash_type: SHA-1
+        password_type: hashed
+      store: 
+        class: DBIx::Class
+        id_field: mail
+        user_model: DBIC::Member
+View::Email: 
+  default: 
+    charset: iso-2022-jp
+    content_type: text/plain
+    view: TTMail
+  sender: 
+    mailer: GourmetClub::Util::Mailer
+    mailer_args: 
+      databases: 
+        dsn: dbi:mysql:theschwartz
+        user: root
+  stash_key: email
+  template_prefix: email
+View::JSON: 
+  allow_callback: 1
+default_view: TTSite
+name: GourmetClub
+session: 
+  data_field: session_data
+  dbic_class: DBIC::Session
+  expires: 3600
+validator: 
+  profiles: __path_to(profiles.yml)__

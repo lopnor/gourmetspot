@@ -1,0 +1,8 @@
+<table>
+<tr>
+    <td>店名</td>
+    <td>[% item.name %]</td>
+</tr>
+</table>
+<a href="[% c.uri_for( item.id, 'edit' ) %]">編集</a>
+<a href="[% c.uri_for( item.id, 'remove' ) %]">削除</a>

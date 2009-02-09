@@ -4,7 +4,7 @@ use warnings;
 
 use FindBin;
 use Catalyst::Utils;
-use Config::General;
+use YAML;
 use Path::Class qw/file dir/;
 
 sub load {
@@ -12,12 +12,12 @@ sub load {
 
     my $bin = file($FindBin::Bin);
     my $config = { home => $bin->parent };
-    for my $cfg ( qw/gourmetclub.conf gourmetclub_local.conf/ ) {
+    for my $cfg ( qw/gourmetclub.yml gourmetclub_local.yml/ ) {
         my $c = eval {
-            Config::General->new( $bin->parent->file($cfg) );
+            YAML::LoadFile( $bin->parent->file($cfg) );
         } or next;
 
-        $config = Catalyst::Utils::merge_hashes($config, +{ $c->getall() });
+        $config = Catalyst::Utils::merge_hashes($config, $c);
     }
     $config;
 }

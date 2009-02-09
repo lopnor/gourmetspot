@@ -1,0 +1,33 @@
+[% META title="お店を登録" %]
+[% IF c.form.has_error -%]
+<div class="error message">
+<ul>
+[% FOR message IN c.form.messages -%]
+<li>[% message | html %]</li>
+[% END -%]
+</ul>
+</div>
+[% END -%]
+<form method="POST">
+<table>
+<tr>
+    <td>店名</td>
+    <td><input type="text" name="name"></td>
+</tr>
+<tr>
+    <td>電話番号</td>
+    <td><input type="text" name="tel"></td>
+</tr>
+<tr>
+    <td>住所</td>
+    <td><input type="text" name="address"></td>
+</tr>
+<tr>
+    <td></td>
+    <td>
+        <input type="hidden" name="_token">
+        <input type="submit" value="登録">
+    </td>
+</tr>
+</table>
+</form>
