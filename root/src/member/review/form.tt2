@@ -1,5 +1,5 @@
 [% META title="レビューを書く" %]
-[% IF c.form.has_error -%]
+[% IF c.req.method == 'POST' && c.form.has_error -%]
 <div class="error message">
 <ul>
 [% FOR message IN c.form.messages('member/review_edit') -%]
@@ -13,19 +13,19 @@
 <tr>
     <td>店名</td>
     <td>
-        [% restrant.name | html %]
+        [% item.restrant.name OR restrant.name | html %]
     </td>
 </tr>
 <tr>
     <td>電話番号</td>
     <td>
-        [% restrant.tel | html %]
+        [% item.restrant.tel OR restrant.tel | html %]
     </td>
 </tr>
 <tr>
     <td>住所</td>
     <td>
-        [% restrant.address %]
+        [% item.restrant.address OR restrant.address | html %]
     </td>
 </tr>
 <tr>

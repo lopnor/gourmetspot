@@ -32,3 +32,6 @@ Plugin::Authentication:
     members: 
       credential: 
         password_pre_salt: soffritto
+googlemaps:
+    key: 'ABQIAAAAMWTUBHvigTjKlGJ4VDs9KRTJQa0g3IQ9GZqIMmInSLzwtGDKaBQDWL43rmh8mRb1buhi2NvIzqeu-w'
+#    key: 'ABQIAAAAMWTUBHvigTjKlGJ4VDs9KRTBBTQLtA5jM769F7wKnWWsdRtDjBQg13PzeEHGIeitHamS1fixpQ9EUQ'

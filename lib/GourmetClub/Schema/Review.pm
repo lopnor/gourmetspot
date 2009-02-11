@@ -59,5 +59,8 @@ __PACKAGE__->add_columns(
     },
 );
 
+__PACKAGE__->belongs_to('restrant' => 'GourmetClub::Schema::Restrant' => 'restrant_id');
+__PACKAGE__->belongs_to('member' => 'GourmetClub::Schema::Member' => 'created_by');
+
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

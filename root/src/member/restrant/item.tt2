@@ -1,8 +1,23 @@
+[% META title="お店情報" %]
+<div id="map"></div>
 <table>
 <tr>
     <td>店名</td>
-    <td>[% item.name %]</td>
+    <td>[% item.name | html %]</td>
+</tr>
+<tr>
+    <td>電話番号</td>
+    <td>[% item.tel | html %]</td>
+</tr>
+<tr>
+    <td>住所</td>
+    <td>[% item.address | html %]</td>
 </tr>
 </table>
+<a href="[% c.uri_for( "../review", { restrant_id => item.id }) %]">レビューを書く</a>
 <a href="[% c.uri_for( item.id, 'edit' ) %]">編集</a>
 <a href="[% c.uri_for( item.id, 'remove' ) %]">削除</a>
+<script type="text/javascript">
+var init_lat = [% point.1 or 0 %];
+var init_lng = [% point.0 or 0 %];
+</script>

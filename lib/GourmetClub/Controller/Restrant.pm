@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use parent 'GourmetClub::Base::Controller::Resource';
 
+use MRO::Compat;
+
 =head1 NAME
 
 GourmetClub::Controller::Restrant - Catalyst Controller
@@ -21,6 +23,19 @@ Catalyst Controller.
 
 =cut
 
+sub setup_item :Private {
+    my ( $self, $c, $id ) = @_;
+    $self->next::method($c, $id);
+    my $geo = $c->model('Geo');
+    my $res = $geo->get({q => $c->stash->{item}->address});
+    if ($res->is_success) {
+        my $p = $res->parse_response->{Response}{Placemark};
+        my $coordinates = $p->{Point} ? $p->{Point}{coordinates} : $p->{p1}{Point}{coordinates};
+        $c->stash(
+            point => [ split (',', $coordinates) ]
+        );
+    }
+}
 
 
 =head1 AUTHOR

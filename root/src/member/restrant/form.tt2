@@ -1,8 +1,9 @@
 [% META title="お店を登録" %]
-[% IF c.form.has_error -%]
+<div id="map" class="draggable"></div>
+[% IF c.req.method == "POST" && c.form.has_error -%]
 <div class="error message">
 <ul>
-[% FOR message IN c.form.messages -%]
+[% FOR message IN c.form.messages(c.action.reverse) -%]
 <li>[% message | html %]</li>
 [% END -%]
 </ul>
@@ -23,6 +24,14 @@
     <td><input type="text" name="address"></td>
 </tr>
 <tr>
+    <td>緯度</td>
+    <td><input type="text" name="latitude"></td>
+</tr>
+<tr>
+    <td>経度</td>
+    <td><input type="text" name="longitude"></td>
+</tr>
+<tr>
     <td></td>
     <td>
         <input type="hidden" name="_token">
@@ -31,3 +40,7 @@
 </tr>
 </table>
 </form>
+<script type="text/javascript">
+var init_lat = [% point.1 or 0 %];
+var init_lng = [% point.0 or 0 %];
+</script>

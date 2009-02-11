@@ -1,8 +1,9 @@
 --- 
 Controller::Restrant:
-    search_field: name
     model: DBIC::Restrant
-    path: member/restrant
+    namespace: member/restrant
+    like_fields: 
+        - name
     form:
         name:
             - rule: NOT_BLANK
@@ -13,11 +14,24 @@ Controller::Restrant:
         address:
             - rule: NOT_BLANK
               message: '住所を入力してください'
-Model::Geo: 
-  args: 
-    base_url: http://maps.google.com/maps/geo
-    param: 
-      output: xml
+Controller::Review:
+    model: DBIC::Review
+    namespace: member/review
+    like_field:
+        - budget
+        - comment
+    form:
+        budget:
+            - rule: NOT_BLANK
+              message: '予算を入力してください'
+        scene_id:
+            - rule: NOT_BLANK
+              message: 'シーンを選択してください'
+            - rule: INT
+              message: 'シーンを選択してください'
+        comment:
+            - rule: NOT_BLANK
+              message: 'ヒトコトを入力してください'
 Model::TheSchwartz: 
   args: 
     databases: 

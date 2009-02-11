@@ -1,0 +1,11 @@
+[% META title="お店検索" %]
+<form method="GET">
+<input type="text" name="name">
+</form>
+<ul>
+[% FOR item IN list %]
+<li><a href="[% c.uri_for(item.id) %]">[% item.restrant.name %] by [% item.member.nickname %]</a>
+</li>
+[% END %]
+</ul>
+<a href="[% c.uri_for('add') %]">追加</a>

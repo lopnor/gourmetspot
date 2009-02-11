@@ -2,7 +2,6 @@
     font-family: "Lucida Grande", Verdana, Arial, Geneva, sans-serif;
     line-height: 1.8em;
     font-weight: normal;
-    size: 90%;
 }
 
 body { 
@@ -36,6 +35,7 @@ a {
 }
 
 #footer {
+    clear: both;
     background-color: [% site.col.head %];
     text-align: center;
     padding: 4px;
@@ -71,6 +71,23 @@ div.message {
     color: [% site.col.error %];
 }
 
-form.login {
-    margin: 60px;
+form {
+    margin: 30px;
+}
+
+#map {
+    float: right;
+    margin: 0px;
+    width: 550px;
+    height: 400px;
+}
+
+#map * {
+    line-height: 1em;
+}
+#map a {
+    text-decoration: underline;
+    color: [% site.rgb.soffritto %];
+    border-bottom: 0px;
+    padding: px;
 }

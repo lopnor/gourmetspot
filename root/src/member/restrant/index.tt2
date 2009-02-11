@@ -6,7 +6,7 @@
 [% FOR r IN list %]
 <li><a href="[% c.uri_for(r.id) %]">[% r.name %]</a>
 <ul>
-<li><a href="[% c.uri_for('review', { restrant_id => r.id }) %]">レビューを書く</a></li>
+<li><a href="[% c.uri_for('../review', { restrant_id => r.id }) %]">レビューを書く</a></li>
 </ul>
 </li>
 [% END %]
