@@ -24,6 +24,10 @@
     <td><input type="text" name="address"></td>
 </tr>
 <tr>
+    <td>行き方</td>
+    <td><input type="text" name="how_to_get_there"></td>
+</tr>
+<tr>
     <td>緯度</td>
     <td><input type="text" name="latitude"></td>
 </tr>
@@ -34,6 +38,7 @@
 <tr>
     <td></td>
     <td>
+        <input type="hidden" name="panorama">
         <input type="hidden" name="_token">
         <input type="submit" value="登録">
     </td>
@@ -41,6 +46,7 @@
 </table>
 </form>
 <script type="text/javascript">
-var init_lat = [% point.1 or 0 %];
-var init_lng = [% point.0 or 0 %];
+var init_pano = [% item.panorama or 0 %];
+var init_lat = [% item.latitude or 0 %];
+var init_lng = [% item.longitude or 0 %];
 </script>

@@ -18,6 +18,7 @@
 <a href="[% c.uri_for( item.id, 'edit' ) %]">編集</a>
 <a href="[% c.uri_for( item.id, 'remove' ) %]">削除</a>
 <script type="text/javascript">
-var init_lat = [% point.1 or 0 %];
-var init_lng = [% point.0 or 0 %];
+var init_pano = [% item.panorama or 0 %];
+var init_lat = [% item.latitude or 0 %];
+var init_lng = [% item.longitude or 0 %];
 </script>
