@@ -3,7 +3,7 @@ package GourmetSpot::Controller::Account;
 use strict;
 use warnings;
 use utf8;
-use parent 'Catalyst::Controller::RequestToken';
+use parent 'Catalyst::Controller';
 use DateTime;
 use Digest::SHA1 qw(sha1_base64);
 
