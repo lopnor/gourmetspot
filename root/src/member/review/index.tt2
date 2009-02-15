@@ -1,6 +1,7 @@
-[% META title="お店検索" %]
+[% META title="レビュー一覧" %]
 <form method="GET">
 <input type="text" name="name">
+<input type="submit" value="レビューを検索">
 </form>
 <ul>
 [% FOR item IN list %]
@@ -8,4 +9,3 @@
 </li>
 [% END %]
 </ul>
-<a href="[% c.uri_for('add') %]">追加</a>

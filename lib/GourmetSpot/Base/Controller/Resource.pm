@@ -30,15 +30,15 @@ sub COMPONENT {
             for my $rule (@$rules) {
                 if ( ref $rule eq 'HASH' and defined $rule->{rule} ) {
                     my $rule_name = ref $rule->{rule} eq 'ARRAY' ? $rule->{rule}[0] : $rule->{rule};
-                    for my $endpoint (qw(edit add)) {
-                        my $action = "$prefix/$endpoint";
+                    for my $endpoint (qw(update create)) {
+                        my $action = $prefix ? "$prefix/$endpoint" : $endpoint;
                         $messages->{$action}{$param} ||= {};
                         $messages->{$action}{$param}{ $rule_name } = $rule->{message} if defined $rule->{message};
                     }
                     $rule = $rule->{rule};
                 }
                 elsif (ref $rule eq 'HASH' and defined $rule->{self_rule} ) {
-                    for my $endpoint (qw(edit add)) {
+                    for my $endpoint (qw(update create)) {
                         my $action = "$prefix/$endpoint";
                         $messages->{$action}{$param} ||= {};
                         $messages->{$action}{$param}{ $rule->{self_rule} } = $rule->{message} if defined $rule->{message};
@@ -48,7 +48,7 @@ sub COMPONENT {
                 $i++;
             }
         }
-        for my $endpoint (qw(edit add)) {
+        for my $endpoint (qw(update create)) {
             my $action = "$prefix/$endpoint";
             $config->{profiles}->{$action} = $profile;
         }
@@ -95,7 +95,20 @@ sub index :Chained('noitem_load') :PathPart('') :Args(0) {
     $c->fillform;
 }
 
-sub add :Chained('noitem_load') :PathPart('add') :Args(0) {
+sub update_or_create :Chained('noitem_load') :PathPart('update_or_create') :Args(0) {
+    my ( $self, $c ) = @_;
+    my $item = $c->model($self->{model})->search(
+        $c->stash->{search_params},
+        {
+            order_by => 'id desc',
+            rows => 1,
+        }
+    )->single;
+    $c->res->redirect( $item ? 
+        $c->uri_for( $item->id, 'update' ) : $c->uri_for('create', $c->req->params) );
+}
+
+sub create :Chained('noitem_load') :PathPart('create') :Args(0) {
     my ( $self, $c ) = @_;
 
     if ( $c->req->method eq 'POST' && $self->validate_token($c) ) {
@@ -107,7 +120,7 @@ sub add :Chained('noitem_load') :PathPart('add') :Args(0) {
     $c->forward('form');
 }
 
-sub edit :Chained('item_load') :PathPart('edit') :Args(0) {
+sub update :Chained('item_load') :PathPart('update') :Args(0) {
     my ( $self, $c ) = @_;
     if ( $c->req->method eq 'POST' && $self->validate_token($c) ) {
         if ( ! $c->form->has_error ) {
@@ -118,7 +131,7 @@ sub edit :Chained('item_load') :PathPart('edit') :Args(0) {
     $c->forward('form');
 }
 
-sub remove :Chained('item_load') :PathPart('remove') Args(0) {
+sub delete :Chained('item_load') :PathPart('delete') Args(0) {
     my ( $self, $c ) = @_;
     
     if ( $c->req->method eq 'POST' && $self->validate_token($c) ) {

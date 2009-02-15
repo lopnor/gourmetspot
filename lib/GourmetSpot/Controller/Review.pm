@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use parent 'GourmetSpot::Base::Controller::Resource';
 use MRO::Compat;
+use DateTime;
 
 =head1 NAME
 
@@ -32,6 +33,18 @@ sub form :Private {
     $self->next::method($c);
 }
 
+sub setup_item_params :Private {
+    my ( $self, $c ) = @_;
+    $self->next::method($c);
+
+    my $now = DateTime->now;
+    $c->stash->{search_params}->{created_by} = $c->user->id;
+    $c->stash->{item_params}->{modified_at} = $now;
+    if ( ! $c->stash->{item} ) {
+        $c->stash->{item_params}->{created_at} = $now;
+        $c->stash->{item_params}->{created_by} = $c->user->id;
+    }
+}
 
 =head2 index
 

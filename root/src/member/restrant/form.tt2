@@ -10,34 +10,28 @@
 </div>
 [% END -%]
 <form method="POST">
-<table>
+<table class="data">
 <tr>
-    <td>店名</td>
+    <th>店名</th>
     <td><input type="text" name="name"></td>
 </tr>
 <tr>
-    <td>電話番号</td>
+    <th>電話番号</th>
     <td><input type="text" name="tel"></td>
 </tr>
 <tr>
-    <td>住所</td>
+    <th>住所</th>
     <td><input type="text" name="address"></td>
 </tr>
 <tr>
-    <td>行き方</td>
-    <td><input type="text" name="how_to_get_there"></td>
+    <th>行き方</th>
+    <td><textarea name="how_to_get_there" rows="3" cols="30"></textarea></td>
 </tr>
 <tr>
-    <td>緯度</td>
-    <td><input type="text" name="latitude"></td>
-</tr>
-<tr>
-    <td>経度</td>
-    <td><input type="text" name="longitude"></td>
-</tr>
-<tr>
-    <td></td>
+    <th></th>
     <td>
+        <input type="hidden" name="latitude">
+        <input type="hidden" name="longitude">
         <input type="hidden" name="panorama">
         <input type="hidden" name="_token">
         <input type="submit" value="登録">

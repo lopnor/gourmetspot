@@ -75,6 +75,23 @@ form {
     margin: 30px;
 }
 
+table.data {
+    width: 300px;
+}
+
+table.data th {
+    color: [% site.rgb.soffritto %];
+    margin-left: 5px;
+    text-align: right;
+    vertical-align: baseline;
+    width: 70px;
+}
+
+table.data textarea {
+    width: 200px;
+    font-size: 80%;
+}
+
 #map {
     float: right;
     margin: 0px;

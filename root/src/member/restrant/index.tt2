@@ -1,14 +1,15 @@
 [% META title="お店検索" %]
 <form method="GET">
 <input type="text" name="name">
+<input type="submit" value="お店を検索">
+→ <a href="[% c.uri_for('create') %]">新しいお店を登録する</a>
 </form>
-<ul>
+<table>
 [% FOR r IN list %]
-<li><a href="[% c.uri_for(r.id) %]">[% r.name %]</a>
-<ul>
-<li><a href="[% c.uri_for('../review', { restrant_id => r.id }) %]">レビューを書く</a></li>
-</ul>
-</li>
+<tr>
+    <td> <a href="[% c.uri_for(r.id) %]">[% r.name %]</a> </td>
+    <td>[% r.address | html %]</td>
+    <td> → <a href="[% c.uri_for('../review/update_or_create', { restrant_id => r.id }) %]">レビューを書く</a></td>
+</tr>
 [% END %]
-</ul>
-<a href="[% c.uri_for('add') %]">追加</a>
+</table>

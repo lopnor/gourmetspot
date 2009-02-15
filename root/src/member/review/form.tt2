@@ -1,4 +1,5 @@
 [% META title="レビューを書く" %]
+<div id="map"></div>
 [% IF c.req.method == 'POST' && c.form.has_error -%]
 <div class="error message">
 <ul>
@@ -9,31 +10,31 @@
 </div>
 [% END -%]
 <form method="POST">
-<table>
+<table class="data">
 <tr>
-    <td>店名</td>
+    <th>店名</th>
     <td>
         [% item.restrant.name OR restrant.name | html %]
     </td>
 </tr>
 <tr>
-    <td>電話番号</td>
+    <th>電話番号</th>
     <td>
         [% item.restrant.tel OR restrant.tel | html %]
     </td>
 </tr>
 <tr>
-    <td>住所</td>
+    <th>住所</th>
     <td>
         [% item.restrant.address OR restrant.address | html %]
     </td>
 </tr>
 <tr>
-    <td>予算</td>
+    <th>予算</th>
     <td><input type="text" name="budget"></td>
 </tr>
 <tr>
-    <td>シーン</td>
+    <th>シーン</th>
     <td>
         <select name="scene_id" id="review_select_scene">
             <option value="">選択してください</option>
@@ -45,15 +46,21 @@
     </td>
 </tr>
 <tr>
-    <td>ヒトコト</td>
-    <td><textarea name="comment" rows="5" cols="60"></textarea></td>
+    <th>ヒトコト</th>
+    <td><textarea name="comment" rows="5" cols="30"></textarea></td>
 </tr>
 <tr>
-    <td></td>
+    <th></th>
     <td>
+        <input type="hidden" name="_token">
         <input type="hidden" name="restrant_id" value="[% restrant.id | html %]">
         <input type="submit" value="登録">
     </td>
 </tr>
 </table>
 </form>
+<script>
+var init_pano = [% item.restrant.panorama or 0 %];
+var init_lat = [% item.restrant.latitude or 0 %];
+var init_lng = [% item.restrant.longitude or 0 %];
+</script>

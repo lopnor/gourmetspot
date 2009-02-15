@@ -61,6 +61,7 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->belongs_to('restrant' => 'GourmetSpot::Schema::Restrant' => 'restrant_id');
 __PACKAGE__->belongs_to('member' => 'GourmetSpot::Schema::Member' => 'created_by');
+__PACKAGE__->belongs_to('scene' => 'GourmetSpot::Schema::Scene' => 'scene_id');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

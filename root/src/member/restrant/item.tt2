@@ -14,9 +14,9 @@
     <td>[% item.address | html %]</td>
 </tr>
 </table>
-<a href="[% c.uri_for( "../review", { restrant_id => item.id }) %]">レビューを書く</a>
-<a href="[% c.uri_for( item.id, 'edit' ) %]">編集</a>
-<a href="[% c.uri_for( item.id, 'remove' ) %]">削除</a>
+<a href="[% c.uri_for( "../review/update_or_create", { restrant_id => item.id }) %]">レビューを書く</a>
+<a href="[% c.uri_for( item.id, 'update' ) %]">編集</a>
+<a href="[% c.uri_for( item.id, 'delete' ) %]">削除</a>
 <script type="text/javascript">
 var init_pano = [% item.panorama or 0 %];
 var init_lat = [% item.latitude or 0 %];

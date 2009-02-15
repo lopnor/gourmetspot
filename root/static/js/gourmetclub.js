@@ -24,7 +24,7 @@ $(function() {
             var mapdiv = document.getElementById('map');
             if ( mapdiv ) {
                 var map = new GMap2(mapdiv, {
-                    googleBarOptions: {showOnLoad: 1}
+                    googleBarOptions: {showOnLoad: 0}
                 });
                 map.enableGoogleBar();
                 map.addControl(new GMapTypeControl());
@@ -65,21 +65,25 @@ $(window).unload = 'GUnload()';
 function createMarker(map, point, option) {
     var marker = new GMarker(point, option);
     map.addOverlay(marker);
-    GEvent.addListener(marker, "dragend", function() {
-                fillLatLng(marker.getLatLng());
-            }
-        );
-    GEvent.addListener(marker, "dragstart", function() {
-                map.closeInfoWindow();
-            }
-        );
+    var panodiv = document.createElement('div');
+    $(panodiv).css({height: '200px', width: '300px'});
+    marker.openInfoWindow(panodiv);
+    setTimeout(function() {setupPanorama(marker, panodiv)}, 300);
+    if ( option.draggable ) {
+        GEvent.addListener(marker, "dragend", function() {
+                    fillLatLng(marker.getLatLng());
+                }
+            );
+        GEvent.addListener(marker, "dragstart", function() {
+                    map.closeInfoWindow();
+                }
+            );
+    }
     GEvent.addListener(marker, "click", function() {
-                var panodiv = document.createElement('div');
-                $(panodiv).css({height: '200px', width: '300px'});
-                marker.openInfoWindow(panodiv);
-                setTimeout(function() {setupPanorama(marker, panodiv)}, 100);
-            }
-        );
+            marker.openInfoWindow(panodiv);
+            setTimeout(function() {setupPanorama(marker, panodiv)}, 300);
+        }
+    );
 }
 
 function fillLatLng(point) {

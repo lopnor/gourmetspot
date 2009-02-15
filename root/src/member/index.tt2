@@ -1,5 +1,6 @@
 [% META title="メンバーページ" %]
 <ul>
+<li><a href="[% c.uri_for('review') %]">レビュー一覧</a></li>
 <li><a href="[% c.uri_for('restrant') %]">お店一覧</a></li>
 <li><a href="[% c.uri_for('/account') %]">招待／登録情報の変更など</a></li>
 </ul>
