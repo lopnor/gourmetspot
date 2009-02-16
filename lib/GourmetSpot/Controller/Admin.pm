@@ -24,8 +24,16 @@ Catalyst Controller.
 
 sub auto :Private {
     my ( $self, $c ) = @_;
-
-    $c->authenticate({}, 'admin');
+    if ( !$c->user_in_realm('members') ) {
+        $c->session->{backurl} = $c->req->uri;
+        $c->res->redirect($c->uri_for('/account/login'));
+        return 0;
+    }
+    unless ($c->check_user_roles('admin')) {
+        $c->res->status(403);
+        $c->res->body('forbidden');
+        return 0;
+    }
     return 1;
 }
 

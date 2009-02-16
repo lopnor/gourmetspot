@@ -17,9 +17,19 @@ __PACKAGE__->add_columns(
   "address",
   { data_type => "VARCHAR", default_value => "", is_nullable => 0, size => 255 },
   "latitude",
-  { data_type => "FLOAT", default_value => 0, is_nullable => 0, size => 32 },
+  {
+    data_type => "DECIMAL",
+    default_value => "0.000000",
+    is_nullable => 0,
+    size => 10,
+  },
   "longitude",
-  { data_type => "FLOAT", default_value => 0, is_nullable => 0, size => 32 },
+  {
+    data_type => "DECIMAL",
+    default_value => "0.000000",
+    is_nullable => 0,
+    size => 10,
+  },
   "panorama",
   {
     data_type => "TEXT",
@@ -54,11 +64,11 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-11 21:57:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wwy0HI9R/gfdxo6MrgGcLA
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-16 14:58:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AjPQBry0Q25HU1P7twl2yg
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime));
-
+ 
 __PACKAGE__->add_columns(
     created_at => {
         data_type => 'datetime',

@@ -5,8 +5,8 @@
 <li><a href="[% c.uri_for('/') %]">トップページ</a></li>
 [% IF c.user_in_realm('members') -%]
 <li><a href="[% c.uri_for('/member/') %]">[% c.user.nickname | html %]さんのページ</a></li>
-<li><a href="[% c.uri_for('/member/review') %]">レビュー</li>
-<li><a href="[% c.uri_for('/member/restrant') %]">お店</li>
+<li><a href="[% c.uri_for('/member/review') %]">レビュー</a></li>
+<li><a href="[% c.uri_for('/member/restrant') %]">お店</a></li>
 <li><a href="[% c.uri_for('/account/logout') %]">ログアウト</a></li>
 [% ELSE -%]
 <li><a href="[% c.uri_for('/account/login') %]">ログイン </a></li>

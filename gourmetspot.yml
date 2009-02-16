@@ -39,50 +39,45 @@ Controller::Review:
             - rule: NOT_BLANK
               message: 'ヒトコトを入力してください'
 Model::TheSchwartz: 
-  args: 
-    databases: 
-        -
-            dsn: dbi:mysql:theschwartz
+    args: 
+        databases: 
+            -
+                dsn: dbi:mysql:theschwartz
 Plugin::Authentication: 
-  default_realm: members
-  realms: 
-    admin: 
-      credential: 
-        class: HTTP
-        password_field: password
-        password_salt_len: 4
-        password_type: salted_hash
-        type: basic
-    members: 
-      credential: 
-        class: Password
-        password_field: password
-        password_hash_type: SHA-1
-        password_type: hashed
-      store: 
-        class: DBIx::Class
-        id_field: mail
-        user_model: DBIC::Member
+    default_realm: members
+    realms: 
+        members: 
+            credential: 
+                class: Password
+                password_field: password
+                password_hash_type: SHA-1
+                password_type: hashed
+            store: 
+                class: DBIx::Class
+                id_field: mail
+                user_model: DBIC::Member
+                role_relation: roles
+                role_field: role
 View::Email: 
-  default: 
-    charset: iso-2022-jp
-    content_type: text/plain
-    view: TTMail
-  sender: 
-    mailer: GourmetSpot::Util::Mailer
-    mailer_args: 
-      databases: 
-        dsn: dbi:mysql:theschwartz
-        user: root
-  stash_key: email
-  template_prefix: email
+    default: 
+        charset: iso-2022-jp
+        content_type: text/plain
+        view: TTMail
+    sender: 
+        mailer: GourmetSpot::Util::Mailer
+        mailer_args: 
+            databases: 
+                dsn: dbi:mysql:theschwartz
+                user: root
+        stash_key: email
+        template_prefix: email
 View::JSON: 
-  allow_callback: 1
+    allow_callback: 1
 default_view: TTSite
 name: GourmetSpot
 session: 
-  data_field: session_data
-  dbic_class: DBIC::Session
-  expires: 3600
+    data_field: session_data
+    dbic_class: DBIC::Session
+    expires: 3600
 validator: 
-  profiles: __path_to(profiles.yml)__
+    profiles: __path_to(profiles.yml)__

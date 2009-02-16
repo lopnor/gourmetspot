@@ -20,6 +20,8 @@ use Catalyst qw/
                 Static::Simple
                 
                 Authentication
+                Authorization::Roles
+
                 Session
                 Session::State::Cookie
                 Session::Store::DBIC
