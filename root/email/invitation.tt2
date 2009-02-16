@@ -1,13 +1,14 @@
-Subject: 美食倶楽部へのお誘い
+Subject: 美食倶楽部（仮）へのお誘い
 
 [% c.req.param('name') | html %]さま、
 
-[% c.req.param('caller_name') | html %]さまより美食倶楽部への招待状をお送りします。
+[% c.req.param('caller_name') | html %]さんより美食倶楽部（仮）への招待状をお送りします。
 
 [% c.req.param('message') | html %]
 
-以下のリンクから美食倶楽部にご参加ください。
+以下のリンクから美食倶楽部（仮）にご参加ください。
 [% c.uri_for('/account/join', {nonce => invitation.nonce, id => invitation.id}) %]
 
 --
+美食倶楽部（仮）
 [% c.uri_for('/') %]

@@ -11,23 +11,23 @@
 <form method="POST" class="invite">
 <table>
 <tr>
-    <td> あなたのお名前 </td>
+    <th> あなたのお名前 </th>
     <td><input type="text" name="caller_name"></td>
 </tr>
 <tr>
-    <td> 招待する方のお名前 </td>
+    <th> 招待する方のお名前 </th>
     <td><input type="text" name="name"></td>
 </tr>
 <tr>
-    <td> メールアドレス </td>
+    <th> メールアドレス </th>
     <td><input type="text" name="mail" class="mail"></td>
 </tr>
 <tr>
-    <td> ヒトコト </td>
+    <th> ヒトコト </th>
     <td><textarea name="message" rows="5" cols="70"></textarea></td>
 </tr>
 <tr>
-    <td></td>
+    <th></th>
     <td>
         <input type="submit" name="confirm" value="確認画面にすすむ">
         <input type="reset" value="リセット">
