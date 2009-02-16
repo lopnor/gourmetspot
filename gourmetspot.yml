@@ -63,14 +63,15 @@ View::Email:
         charset: iso-2022-jp
         content_type: text/plain
         view: TTMail
+        from: info@gourmetclub.jp
     sender: 
         mailer: GourmetSpot::Util::Mailer
         mailer_args: 
             databases: 
                 dsn: dbi:mysql:theschwartz
                 user: root
-        stash_key: email
-        template_prefix: email
+    stash_key: email
+    template_prefix: email
 View::JSON: 
     allow_callback: 1
 default_view: TTSite
@@ -81,3 +82,5 @@ session:
     expires: 3600
 validator: 
     profiles: __path_to(profiles.yml)__
+Worker::Mailer:
+    mailer: Sendmail

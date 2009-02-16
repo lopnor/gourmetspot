@@ -15,6 +15,7 @@ sub process {
     my $template_prefix         = $self->{template_prefix};
     my $default_view            = $self->{default}->{view};
     my $default_content_type    = $self->{default}->{content_type};
+    my $default_from            = $self->{default}->{from};
     my $default_charset         = $self->{default}->{charset};
 
     my $view;
@@ -51,6 +52,9 @@ sub process {
     $email->body_set(Encode::encode('iso-2022-jp', $email->body));
     $email->header_set('Subject' => Encode::encode('MIME-Header-ISO_2022_JP', $email->header('Subject')));
     $email->header_set('To' => $c->stash->{$stash_key}->{to}) if $c->stash->{$stash_key}->{to};
+    if ( ! $email->header('From') ) {
+        $email->header_set('From' => $default_from);
+    }
 
     if ( $email ) {
         my $return = $self->mailer->send($email);

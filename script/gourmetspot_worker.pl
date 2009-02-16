@@ -19,16 +19,17 @@ my $config;
 
 sub gd_preconfig {
     my $self = shift;
-    my $c = GourmetSpot::Util::ConfigLoader->load;
-    $config = $c->{'Model::TheSchwartz'};
+    $config = GourmetSpot::Util::ConfigLoader->load;
     return;
 }
 
 sub gd_run {
     print "starting gourmetspot_worker";
-    my $schwartz = TheSchwartz->new(%{ $config->{args} });
+    my $schwartz = TheSchwartz->new(%{ $config->{'Model::TheSchwartz'}{args} });
     for my $w (GourmetSpot::Worker->workers) {
         $w->require;
+        (my $config_name = $w) =~ s{^GourmetSpot::}{};
+        $w->config($config->{$config_name});
         $schwartz->can_do($w);
     }
     $schwartz->work();

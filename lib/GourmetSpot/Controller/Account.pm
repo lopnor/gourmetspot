@@ -81,8 +81,7 @@ sub invite :Path('invite') {
             caller_id => $c->user->id,
         },
     );
-    warn $invitation_count;
-    if ($invitation_count > 3) {
+    if ($invitation_count >= 3) {
         $c->flash->{error} = '3人以上招待できません！';
         return $c->res->redirect($c->uri_for('./'));
     }
