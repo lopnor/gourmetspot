@@ -12,17 +12,6 @@ create table member (
     key (caller_id)
 ) engine innodb;
 
-create table role (
-    id          int not null primary key auto_increment,
-    role        varchar(32) not null default ''
-);
-
-create table member_role (
-    user_id int,
-    role_id int,
-    primary key (user_id, role_id)
-);
-
 create table session (
     id              char(72) primary key,
     session_data    text,
