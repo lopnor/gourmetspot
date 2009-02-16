@@ -12,8 +12,8 @@
 
    # define a data structure to hold sitewide data
    site = {
-     title     => '美食倶楽部',
-     copyright => '2009 Nobuo Danjou',
+     title     => '美食倶楽部（仮）',
+     copyright => '2009 gourmetspot.jp',
    };
 
    # load up any other configuration items 
