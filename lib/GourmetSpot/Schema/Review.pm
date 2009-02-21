@@ -43,8 +43,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-16 14:58:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mjsoA/dun3GYkToC4pBUXQ
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-21 20:51:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7zJlX/sYXhVBCoLC5PNfDw
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime));
 

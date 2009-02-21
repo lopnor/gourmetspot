@@ -61,6 +61,7 @@ create table restrant (
     name    varchar(255) not null default '',
     tel     varchar(16) not null default '',
     address varchar(255) not null default '',
+    building varchar(255) not null default '',
     latitude decimal(10,6) not null default 0,
     longitude decimal(10,6) not null default 0,
     panorama text not null default '',
@@ -68,6 +69,16 @@ create table restrant (
     created_by int not null default 0,
     created_at datetime,
     modified_at datetime
+);
+
+create table open_hours (
+    id int not null primary key auto_increment,
+    restrant_id int not null default 0,
+    day_of_week set('Sun','Mon','Tue','Wed','Thu','Fri','Sat'),
+    holiday     enum('true','false','masked') not null default 'false',
+    pre_holiday enum('true','false','masked') not null default 'false',
+    opens_at    time,
+    closes_at   time
 );
 
 create table review (

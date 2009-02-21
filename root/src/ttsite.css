@@ -75,6 +75,10 @@ form {
     margin: 30px;
 }
 
+input[type="text"], input[type="password"], textarea {
+    border: 1px solid [% site.rgb.grey2 %];
+}
+
 table th {
     color: [% site.rgb.soffritto %];
     margin-left: 5px;
@@ -110,4 +114,15 @@ table.data textarea {
     color: [% site.rgb.soffritto %];
     border-bottom: 0px;
     padding: px;
+}
+#operation_hours {
+    font-size: 80%;
+
+}
+label {
+    font-size: 80%;
+}
+input.checkbox {
+    width: 8px;
+    border: none;
 }

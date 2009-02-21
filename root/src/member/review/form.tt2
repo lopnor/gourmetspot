@@ -60,7 +60,7 @@
 </table>
 </form>
 <script>
-var init_pano = [% item.restrant.panorama or 0 %];
-var init_lat = [% item.restrant.latitude or 0 %];
-var init_lng = [% item.restrant.longitude or 0 %];
+var init_pano = [% item.restrant.panorama or restrant.panorama or 0 %];
+var init_lat = [% item.restrant.latitude or restrant.latitude or 0 %];
+var init_lng = [% item.restrant.longitude or restrant.longitude or 0 %];
 </script>

@@ -1,6 +1,8 @@
 --- 
 Controller::Restrant:
     model: DBIC::Restrant
+    outer_model:
+        - DBIC::OpenHours
     namespace: member/restrant
     like_fields: 
         - name
@@ -8,12 +10,12 @@ Controller::Restrant:
         name:
             - rule: NOT_BLANK
               message: 'お店の名前を入力してください'
-        tel:
-            - rule: NOT_BLANK
-              message: '電話番号を入力してください'
-        address:
-            - rule: NOT_BLANK
-              message: '住所を入力してください'
+#        tel:
+#            - rule: NOT_BLANK
+#              message: '電話番号を入力してください'
+#        address:
+#            - rule: NOT_BLANK
+#              message: '住所を入力してください'
         latitude:
             - rule: NOT_BLANK
               message: '場所を地図で指定してください'

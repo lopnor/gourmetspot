@@ -1,3 +1,5 @@
+var map;
+var mapClickListener;
 $(function() {
         $('#review_select_scene').change(function(){
             if ($(this).children("option[selected]").val() == '-') {
@@ -20,10 +22,57 @@ $(function() {
                 }
             }
         });
+        $('form input[name="address"]').change(function() {
+                var geocoder = new GClientGeocoder();
+                geocoder.getLatLng(
+                    $(this).val(),
+                    function(point) {
+                        if ( point ) {
+                            map.closeInfoWindow();
+                            map.clearOverlays();
+                            map.setCenter(point,17);
+                            createMarker(map, point, {draggable: true});
+                            GEvent.removeListener(mapClickListener);
+                            fillLatLng(point);
+                        }
+                    }
+                );
+            }
+        );
+        $('form input[class="minutes"]').keydown(function(event) {
+                var nextval = parseInt($(this).val(),10);
+                if (event.keyCode == 38) {
+                    nextval += 5;
+                    if (nextval > 59) nextval = 00;
+                    nextval = '0' + nextval;
+                    $(this).val(nextval.slice(-2));
+                } else if (event.keyCode == 40) {
+                    nextval -= 5;
+                    if (nextval < 0) nextval = 55;
+                    nextval = '0' + nextval;
+                    $(this).val(nextval.slice(-2));
+                }
+            }
+        );
+        $('form input[class="hours"]').keydown(function(event) {
+                var nextval = parseInt($(this).val(),10);
+                if (event.keyCode == 38) {
+                    nextval += 1;
+                    if (nextval > 23) nextval = 00;
+                    nextval = '0' + nextval;
+                    $(this).val(nextval.slice(-2));
+                } else if (event.keyCode == 40) {
+                    nextval -= 1;
+                    if (nextval < 0) nextval = 23;
+                    nextval = '0' + nextval;
+                    $(this).val(nextval.slice(-2));
+                }
+            }
+        );
         if (GBrowserIsCompatible()) {
             var mapdiv = document.getElementById('map');
             if ( mapdiv ) {
-                var map = new GMap2(mapdiv, {
+                map = new GMap2(mapdiv, {
                     googleBarOptions: {showOnLoad: 0}
                 });
                 map.enableGoogleBar();
@@ -48,10 +97,10 @@ $(function() {
                 } else {
                     var hachikoLatLng = new GLatLng(35.6590397, 139.7005660);
                     map.setCenter(hachikoLatLng, 18);
-                    var myListener = GEvent.addListener(
+                    mapClickListener = GEvent.addListener(
                             map, "click", function(overlay, point) {
                                 createMarker(map, point, option);
-                                GEvent.removeListener(myListener);
+                                GEvent.removeListener(mapClickListener);
                                 fillLatLng(point);
                             }
                         );
@@ -140,3 +189,50 @@ function setupPanorama(marker, div) {
     );
 }
 
+
+function append_hours() {
+    var count = $(".week_input").size()-1;
+    var mydiv = $("#operation_hours")
+        .clone()   
+        .removeAttr('id')
+        .css({display: 'block'});
+    mydiv.find('input').each(function(){
+            $(this).attr(
+                'name', $(this).attr('name').replace(/\[\]/,"["+count+"]")
+                )
+            });
+    $('#hours_cell').find('a[class="append_hours"]').remove();
+    $("#hours_cell").append(mydiv);
+    mydiv.find('input:first').focus();
+    mydiv.find('input[class="minutes"]').bind("keydown", function(event) {
+            timeval($(this),event,{max: 60,step: 5});
+            }
+            );
+    mydiv.find('input[class="hours"]').bind("keydown",function(event) {
+            timeval($(this),event,{max: 24,step: 1});
+            }
+            );
+    mydiv.find("a[class='append_hours']").bind('click',function(event) {
+            append_hours();
+            }
+            );
+    mydiv.find("input[class='checkbox']").bind('click',function(event) {
+            $(this).focus();
+            }
+            );
+}
+
+function timeval(j,event,option) {  
+    var nextval = parseInt($(j).val(), 10);
+    if (event.keyCode == 38) {
+        nextval += option.step;
+        if (nextval >= option.max) nextval = 00;
+        nextval = '0' + nextval;
+        $(j).val(nextval.slice(-2));
+    } else if (event.keyCode == 40) {
+        nextval -= option.step;
+        if (nextval < 0) nextval = option.max - option.step;
+        nextval = '0' + nextval;
+        $(j).val(nextval.slice(-2));
+    }
+}

@@ -2,6 +2,7 @@ package GourmetSpot::Base::Controller::Resource;
 
 use strict;
 use warnings;
+use utf8;
 use parent qw(Catalyst::Controller);
 use MRO::Compat;
 use Digest::SHA1 qw(sha1_base64);
@@ -9,6 +10,7 @@ use Digest::SHA1 qw(sha1_base64);
 __PACKAGE__->config(
     {
         model => undef,
+        outer_model => [],
         like_fields => [],
         form => undef,
     }
@@ -113,8 +115,7 @@ sub create :Chained('noitem_load') :PathPart('create') :Args(0) {
 
     if ( $c->req->method eq 'POST' && $self->validate_token($c) ) {
         if ( ! $c->form->has_error ) {
-            my $item = $c->model($self->{model})->create($c->stash->{item_params});
-            return $c->res->redirect( $c->uri_for( $item->id ) );
+            return $c->forward('create_item');
         }
     }
     $c->forward('form');
@@ -124,9 +125,8 @@ sub update :Chained('item_load') :PathPart('update') :Args(0) {
     my ( $self, $c ) = @_;
     if ( $c->req->method eq 'POST' && $self->validate_token($c) ) {
         if ( ! $c->form->has_error ) {
-            $c->stash->{item}->update($c->stash->{item_params});
+            return $c->forward('update_item');
         }
-        $c->res->redirect( $c->uri_for( $c->stash->{item}->id ) );
     }
     $c->forward('form');
 }
@@ -135,7 +135,7 @@ sub delete :Chained('item_load') :PathPart('delete') Args(0) {
     my ( $self, $c ) = @_;
     
     if ( $c->req->method eq 'POST' && $self->validate_token($c) ) {
-        $c->stash->{item}->delete;
+        $c->forward('delete_item');
         return $c->res->redirect($c->uri_for('./'));
     }
     $c->forward('create_token');
@@ -146,19 +146,37 @@ sub delete :Chained('item_load') :PathPart('delete') Args(0) {
 sub setup_item_params :Private {
     my ( $self, $c ) = @_;
     my $params = {};
-    my $search_params = {};
     for my $key (grep { $_ !~ /^[\.\_]/ } keys %{$c->req->params}) {
-        my $value = $c->req->param($key);
-        $params->{$key} = $value;
-        if ( grep {$_ eq $key} @{$self->{like_fields}} ) {
-            $search_params->{$key} = {like => "%$value%"};
+        my @value = $c->req->param($key);
+        my ($outer_model,$outer_key) = split(/\./, $key);
+        if ($outer_model && $outer_key) {
+            my $outer_index;
+            if ($outer_model =~ s/\[(\d+)\]$//) {
+                $outer_index = $1;
+            }
+            grep {$_ eq "DBIC::$outer_model"} @{$self->{outer_model}} or next;
+            if ( defined $outer_index ) {
+                $params->{outer}->{"DBIC::$outer_model"}->[$outer_index]->{$outer_key} 
+                    = (scalar @value > 1) ? \@value : $value[0];
+            } else {
+                $params->{outer}->{"DBIC::$outer_model"}->{$outer_key}
+                    = (scalar @value > 1) ? \@value : $value[0];
+            }
         } else {
-            $search_params->{$key} = $value;
+            $params->{item}->{$key}
+                = (scalar @value > 1) ? \@value : $value[0];
+            if ( grep {$_ eq $key} @{$self->{like_fields}} ) {
+                $params->{search}->{$key} = {like => "%$value[0]%"};
+            } else {
+                $params->{search}->{$key}
+                    = (scalar @value > 1) ? \@value : $value[0];
+            }
         }
     }
     $c->stash(
-        item_params => $params,
-        search_params => $search_params,
+        item_params => $params->{item},
+        outer_params => $params->{outer},
+        search_params => $params->{search},
     );
 }
 
@@ -199,6 +217,23 @@ sub setup_item :Private {
     $c->stash(
         item => $item,
     );
+}
+
+sub update_item :Private {
+    my ( $self, $c ) =@_;
+    $c->stash->{item}->update($c->stash->{item_params});
+    $c->res->redirect( $c->uri_for( $c->stash->{item}->id ) );
+}
+
+sub create_item :Private {
+    my ( $self, $c ) =@_;
+    my $item = $c->model($self->{model})->create($c->stash->{item_params});
+    return $c->res->redirect( $c->uri_for( $item->id ) );
+}
+
+sub delete_item :Private {
+    my ( $self, $c ) =@_;
+    $c->stash->{item}->delete;
 }
 
 1;

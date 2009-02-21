@@ -16,6 +16,8 @@ __PACKAGE__->add_columns(
   { data_type => "VARCHAR", default_value => "", is_nullable => 0, size => 16 },
   "address",
   { data_type => "VARCHAR", default_value => "", is_nullable => 0, size => 255 },
+  "building",
+  { data_type => "VARCHAR", default_value => "", is_nullable => 0, size => 255 },
   "latitude",
   {
     data_type => "DECIMAL",
@@ -64,8 +66,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-16 14:58:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AjPQBry0Q25HU1P7twl2yg
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-21 20:51:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IVPr3wA3q5SprVQtR8TJGw
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime));
  
@@ -79,6 +81,8 @@ __PACKAGE__->add_columns(
         extra => {timezone => 'Asia/Tokyo'},
     },
 );
+
+__PACKAGE__->has_many('openhours' => 'GourmetSpot::Schema::OpenHours' => 'restrant_id');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
