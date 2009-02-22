@@ -228,6 +228,7 @@ sub update_item :Private {
 sub create_item :Private {
     my ( $self, $c ) =@_;
     my $item = $c->model($self->{model})->create($c->stash->{item_params});
+    $c->stash->{item} = $item;
     return $c->res->redirect( $c->uri_for( $item->id ) );
 }
 

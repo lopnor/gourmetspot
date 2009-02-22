@@ -38,49 +38,6 @@ sub index :Path :Args(0) {
 
 }
 
-
-#sub review :Path('review') :Args(0) {
-#    my ( $self, $c ) = @_;
-#    
-#    my $restrant;
-#    if (my $r_id = $c->req->param('restrant_id')) {
-#        $restrant = $c->model('DBIC::Restrant')->find({id => $r_id});
-#    }
-#    if ($c->req->method eq 'POST') {
-#        $c->forward('review_edit', [ $restrant ]);
-#    } 
-#
-#    if (! $c->res->output ) {
-#        my @scene = $c->model('DBIC::Scene')->all;
-#
-#        $c->stash(
-#            scene => \@scene,
-#            restrant => $restrant || undef,
-#        );
-#    }
-#}
-#
-#sub review_edit :Private {
-#    my ( $self, $c, $restrant ) = @_;
-#
-#    if ( !$c->form->has_error) {
-#        my $now = DateTime->now;
-#
-#        my $review = $c->model('DBIC::Review')->create(
-#            {
-#                restrant_id => $restrant->id,
-#                budget => $c->req->param('budget'),
-#                scene_id => $c->req->param('scene_id'),
-#                comment => $c->req->param('comment'),
-#                created_by => $c->user->id,
-#                created_at => $now,
-#                modified_at => $now,
-#            }
-#        );
-#        return $c->res->redirect('review', $review->id);
-#    }
-#}
-
 sub scene : Path('scene') {
     my ( $self, $c ) = @_;
     
@@ -94,6 +51,21 @@ sub scene : Path('scene') {
     $c->stash(
         id => $scene->id,
         value => $scene->value,
+    );
+    $c->forward('View::JSON');
+}
+
+sub openhours :Path('openhours') {
+    my ( $self, $c ) = @_;
+
+    my @hours = $c->model('DBIC::OpenHours')->search(
+        {
+            restrant_id => $c->req->param('restrant_id'),
+        }
+    )->all;
+    my @value = map { +{ $_->get_columns} } @hours;
+    $c->stash(
+        hours => \@value,
     );
     $c->forward('View::JSON');
 }

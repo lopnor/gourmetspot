@@ -39,36 +39,6 @@ $(function() {
                 );
             }
         );
-        $('form input[class="minutes"]').keydown(function(event) {
-                var nextval = parseInt($(this).val(),10);
-                if (event.keyCode == 38) {
-                    nextval += 5;
-                    if (nextval > 59) nextval = 00;
-                    nextval = '0' + nextval;
-                    $(this).val(nextval.slice(-2));
-                } else if (event.keyCode == 40) {
-                    nextval -= 5;
-                    if (nextval < 0) nextval = 55;
-                    nextval = '0' + nextval;
-                    $(this).val(nextval.slice(-2));
-                }
-            }
-        );
-        $('form input[class="hours"]').keydown(function(event) {
-                var nextval = parseInt($(this).val(),10);
-                if (event.keyCode == 38) {
-                    nextval += 1;
-                    if (nextval > 23) nextval = 00;
-                    nextval = '0' + nextval;
-                    $(this).val(nextval.slice(-2));
-                } else if (event.keyCode == 40) {
-                    nextval -= 1;
-                    if (nextval < 0) nextval = 23;
-                    nextval = '0' + nextval;
-                    $(this).val(nextval.slice(-2));
-                }
-            }
-        );
         if (GBrowserIsCompatible()) {
             var mapdiv = document.getElementById('map');
             if ( mapdiv ) {
@@ -190,7 +160,7 @@ function setupPanorama(marker, div) {
 }
 
 
-function append_hours() {
+function append_hours(data) {
     var count = $(".week_input").size()-1;
     var mydiv = $("#operation_hours")
         .clone()   
@@ -203,6 +173,18 @@ function append_hours() {
             });
     $('#hours_cell').find('a[class="append_hours"]').remove();
     $("#hours_cell").append(mydiv);
+    if (data) {
+        $.each(data.day_of_week.split(','), function() {
+                mydiv.find('input[value='+this+']').attr('checked', true);
+        });
+        mydiv.find('input[name$=.id]').val(data.id);
+        mydiv.find('input[name$=.holiday]').attr('checked', data.holiday);
+        mydiv.find('input[name$=.pre_holiday]').attr('checked', data.holiday);
+        mydiv.find('input[name$=.opens_at_hour]').val((data.opens_at.split(':'))[0]);
+        mydiv.find('input[name$=.opens_at_minute]').val((data.opens_at.split(':'))[1]);
+        mydiv.find('input[name$=.closes_at_hour]').val((data.closes_at.split(':'))[0]);
+        mydiv.find('input[name$=.closes_at_minute]').val((data.closes_at.split(':'))[1]);
+    }
     mydiv.find('input:first').focus();
     mydiv.find('input[class="minutes"]').bind("keydown", function(event) {
             timeval($(this),event,{max: 60,step: 5});

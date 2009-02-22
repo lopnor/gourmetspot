@@ -13,6 +13,18 @@
     <td>住所</td>
     <td>[% item.address | html %]</td>
 </tr>
+<tr>
+    <td>営業時間</td>
+    <td>
+[% FOR oh IN item.openhours %]
+[% oh.day_of_week %]
+[% IF oh.holiday %]祝[% END %]
+[% IF oh.pre_holiday %]祝前[% END %]
+:
+[% oh.opens_at | html %] ~ [% oh.closes_at | html %]
+[% END %]
+    </td>
+</tr>
 </table>
 <a href="[% c.uri_for( "../review/update_or_create", { restrant_id => item.id }) %]">レビューを書く</a>
 <a href="[% c.uri_for( item.id, 'update' ) %]">編集</a>

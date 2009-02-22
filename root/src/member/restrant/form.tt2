@@ -13,23 +13,23 @@
 <table class="data">
 <tr>
     <th>店名</th>
-    <td><input type="text" name="name"></td>
+    <td><input type="text" name="name" tabindex="1"></td>
 </tr>
 <tr>
     <th>電話番号</th>
-    <td><input type="text" name="tel"></td>
+    <td><input type="text" name="tel" tabindex="2"></td>
 </tr>
 <tr>
     <th>住所</th>
-    <td><input type="text" name="address"></td>
+    <td><input type="text" name="address" tabindex="3"></td>
 </tr>
 <tr>
     <th>建物名</th>
-    <td><input type="text" name="building"></td>
+    <td><input type="text" name="building" tabindex="4"></td>
 </tr>
 <tr>
     <th>行き方</th>
-    <td><textarea name="how_to_get_there" rows="3" cols="30"></textarea></td>
+    <td><textarea name="how_to_get_there" rows="3" cols="30" tabindex="5"></textarea></td>
 </tr>
 <tr>
     <th>営業時間</th>
@@ -52,7 +52,23 @@ var init_pano = [% item.panorama or 0 %];
 var init_lat = [% item.latitude or 0 %];
 var init_lng = [% item.longitude or 0 %];
 $(function() {
-    append_hours();
+[% IF item.id %]
+    $.get("[% c.uri_for('/member/openhours') %]", 
+       {restrant_id: [% item.id %]},
+       function(data) {
+           if (data.hours.length) {
+                $.each(data.hours, function() {
+                    append_hours(this);
+                });
+           } else {
+               append_hours();
+           }
+       },
+       'json'
+   );
+[% ELSE %]
+append_hours();
+[% END %]
 });
 </script>
 <div id="operation_hours" class="week_input" style="display:none;">
@@ -61,11 +77,11 @@ $(function() {
     ><label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Tue">火</label
     ><label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Wed">水</label
     ><label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Thu">木</label
-    ><label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Fri">金</label
-    ><label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Sat">土</label
-    ><label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Sun">日</label><br>
-    <label><input class="checkbox" type="checkbox" name="OpenHours[].holiday" value="1">祝日</label
-    ><label><input class="checkbox" type="checkbox" name="OpenHours[].pre_holiday" value="1">祝前日</label>
+    ><label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Fri">金</label><br>
+    <label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Sat">土</label
+    ><label><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Sun">日</label
+    ><label><input class="checkbox" type="checkbox" name="OpenHours[].holiday" value="1">祝日</label
+    ><label><input class="checkbox" type="checkbox" name="OpenHours[].pre_holiday" value="1">祝前日</label><br>
     <input type="text" class="hours" name="OpenHours[].opens_at_hour" size=2 value="00"
     >:<input type="text" class="minutes" name="OpenHours[].opens_at_minute" size=2 value="00"
     >-<input type="text" class="hours" name="OpenHours[].closes_at_hour" size=2 value="00"

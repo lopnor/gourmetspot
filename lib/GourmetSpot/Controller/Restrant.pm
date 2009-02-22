@@ -18,14 +18,28 @@ Catalyst Controller.
 
 =cut
 
+sub create_item :Private {
+    my ( $self, $c ) = @_;
+
+    $self->next::method($c);
+    $c->forward('update_openhours');
+}
+
 sub update_item :Private {
     my ( $self, $c ) = @_;
 
     $self->next::method($c);
+    $c->forward('update_openhours');
+}
 
+sub update_openhours :Private {
+    my ( $self, $c ) = @_;
+    
     for my $item (@{$c->stash->{outer_params}->{'DBIC::OpenHours'}}) {
         $item->{restrant_id} = $c->stash->{item}->id;
         $item->{day_of_week} = join(',', @{$item->{day_of_week}});
+        $item->{holiday} ||= 0;
+        $item->{pre_holiday} ||= 0;
         for (qw(opens_at closes_at)) {
             $item->{$_} = join(':', 
                 delete $item->{"${_}_hour"} || '00', 

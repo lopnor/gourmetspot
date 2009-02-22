@@ -19,9 +19,9 @@ Controller::Restrant:
         latitude:
             - rule: NOT_BLANK
               message: '場所を地図で指定してください'
-        panorama:
-            - rule: NOT_BLANK
-              message: 'ストリートビューを地図で指定してください'
+#        panorama:
+#            - rule: NOT_BLANK
+#              message: 'ストリートビューを地図で指定してください'
 Controller::Review:
     model: DBIC::Review
     namespace: member/review
