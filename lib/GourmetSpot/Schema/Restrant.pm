@@ -46,6 +46,13 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 65535,
   },
+  "open_hours_memo",
+  {
+    data_type => "TEXT",
+    default_value => undef,
+    is_nullable => 1,
+    size => 65535,
+  },
   "created_by",
   { data_type => "INT", default_value => 0, is_nullable => 0, size => 11 },
   "created_at",
@@ -66,8 +73,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-21 20:51:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IVPr3wA3q5SprVQtR8TJGw
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 14:06:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sflHkmExyW+x/dmy1FRoLQ
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime));
  

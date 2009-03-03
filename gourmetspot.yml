@@ -1,33 +1,13 @@
 --- 
 Controller::Restrant:
-    model: DBIC::Restrant
-    outer_model:
-        - DBIC::OpenHours
-    namespace: member/restrant
-    like_fields: 
-        - name
     form:
         name:
             - rule: NOT_BLANK
               message: 'お店の名前を入力してください'
-#        tel:
-#            - rule: NOT_BLANK
-#              message: '電話番号を入力してください'
-#        address:
-#            - rule: NOT_BLANK
-#              message: '住所を入力してください'
         latitude:
             - rule: NOT_BLANK
               message: '場所を地図で指定してください'
-#        panorama:
-#            - rule: NOT_BLANK
-#              message: 'ストリートビューを地図で指定してください'
 Controller::Review:
-    model: DBIC::Review
-    namespace: member/review
-    like_field:
-        - budget
-        - comment
     form:
         budget:
             - rule: NOT_BLANK
@@ -76,6 +56,7 @@ View::Email:
     template_prefix: email
 View::JSON: 
     allow_callback: 1
+    expose_stash: json_data
 default_view: TTSite
 name: GourmetSpot
 session: 

@@ -18,6 +18,14 @@ Catalyst Controller.
 
 =cut
 
+__PACKAGE__->config(
+    {
+        model => 'DBIC::Review',
+        namespace => 'member/review',
+        like_field => ['budget', 'comment'],
+    }
+);
+
 sub form :Private {
     my ( $self, $c ) = @_;
 

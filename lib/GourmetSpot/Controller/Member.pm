@@ -49,23 +49,10 @@ sub scene : Path('scene') {
         }
     );
     $c->stash(
-        id => $scene->id,
-        value => $scene->value,
-    );
-    $c->forward('View::JSON');
-}
-
-sub openhours :Path('openhours') {
-    my ( $self, $c ) = @_;
-
-    my @hours = $c->model('DBIC::OpenHours')->search(
-        {
-            restrant_id => $c->req->param('restrant_id'),
+        json_data => {
+            id => $scene->id,
+            value => $scene->value,
         }
-    )->all;
-    my @value = map { +{ $_->get_columns} } @hours;
-    $c->stash(
-        hours => \@value,
     );
     $c->forward('View::JSON');
 }

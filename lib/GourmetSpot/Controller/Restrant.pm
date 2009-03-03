@@ -18,6 +18,15 @@ Catalyst Controller.
 
 =cut
 
+__PACKAGE__->config(
+    {
+        'model' => 'DBIC::Restrant',
+        'outer_model' => ['DBIC::OpenHours'],
+        'namespace' => 'member/restrant',
+        'like_fields' => ['name'],
+    }
+);
+
 sub create_item :Private {
     my ( $self, $c ) = @_;
 
@@ -36,8 +45,9 @@ sub update_openhours :Private {
     my ( $self, $c ) = @_;
     
     for my $item (@{$c->stash->{outer_params}->{'DBIC::OpenHours'}}) {
+        $item or next;
         $item->{restrant_id} = $c->stash->{item}->id;
-        $item->{day_of_week} = join(',', @{$item->{day_of_week}});
+        $item->{day_of_week} = $item->{day_of_week} ? join(',', @{$item->{day_of_week}}) : '';
         $item->{holiday} ||= 0;
         $item->{pre_holiday} ||= 0;
         for (qw(opens_at closes_at)) {

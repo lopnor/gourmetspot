@@ -1,4 +1,4 @@
-package GourmetSpot::Schema::Scene;
+package GourmetSpot::Schema::Tag;
 
 use strict;
 use warnings;
@@ -6,7 +6,7 @@ use warnings;
 use base 'DBIx::Class';
 
 __PACKAGE__->load_components("Core");
-__PACKAGE__->table("scene");
+__PACKAGE__->table("tag");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "INT", default_value => undef, is_nullable => 0, size => 11 },
@@ -25,17 +25,9 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-21 20:51:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aDysva0gdNWD2x7xW6yzDw
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 14:06:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MGd7NEQ4xzgSCX+bRUSL+A
 
-__PACKAGE__->load_components(qw(InflateColumn::DateTime));
-
-__PACKAGE__->add_columns(
-    created_at => {
-        data_type => 'datetime',
-        extra => {timezone => 'Asia/Tokyo'},
-    },
-);
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

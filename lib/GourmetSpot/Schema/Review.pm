@@ -14,8 +14,6 @@ __PACKAGE__->add_columns(
   { data_type => "INT", default_value => 0, is_nullable => 0, size => 11 },
   "budget",
   { data_type => "VARCHAR", default_value => "", is_nullable => 0, size => 32 },
-  "scene_id",
-  { data_type => "INT", default_value => undef, is_nullable => 1, size => 11 },
   "comment",
   {
     data_type => "TEXT",
@@ -43,8 +41,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-21 20:51:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7zJlX/sYXhVBCoLC5PNfDw
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 14:06:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SC47RELk9Rcd0X9rysOCrA
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime));
 

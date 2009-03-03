@@ -13,6 +13,7 @@ __PACKAGE__->config(
         outer_model => [],
         like_fields => [],
         form => undef,
+        default_view => undef,
     }
 );
 
@@ -92,8 +93,9 @@ sub index :Chained('noitem_load') :PathPart('') :Args(0) {
     $c->stash(
         list => [ $rs->all ],
         pager => $rs->pager,
+        json_data => [ map { +{$_->get_columns} } $rs->all ],
     );
-    $c->forward($c->view);
+    $c->forward($self->{default_view} || $c->view);
     $c->fillform;
 }
 
@@ -139,7 +141,7 @@ sub delete :Chained('item_load') :PathPart('delete') Args(0) {
         return $c->res->redirect($c->uri_for('./'));
     }
     $c->forward('create_token');
-    $c->forward( $c->view );
+    $c->forward( $self->{default_view} || $c->view );
     $c->fillform;
 }
 
@@ -187,7 +189,7 @@ sub form :Private {
     $c->stash(
         template => $self->path_prefix . "/form.tt2",
     );
-    $c->forward( $c->view );
+    $c->forward( $self->{default_view} || $c->view );
     my $hash = $c->stash->{item} ? { $c->stash->{item}->get_columns }
                                  : $c->req->params;
     $hash->{_token} = $c->req->param('_token');
@@ -202,7 +204,8 @@ sub create_token :Private {
 
 sub validate_token {
     my ( $self, $c ) = @_;
-    my $token = delete $c->session->{_token};
+#    my $token = delete $c->session->{_token};
+    my $token = $c->session->{_token};
     return $token && ($c->req->param('_token') eq $token);
 }
 
@@ -216,6 +219,7 @@ sub setup_item :Private {
     }
     $c->stash(
         item => $item,
+        json_data => +{ $item->get_columns },
     );
 }
 

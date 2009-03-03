@@ -22,8 +22,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-02-21 20:51:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k/slWd3Qp9EPeHj5+LWD3A
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 14:06:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/8IfPPMRHB4MFS3xTOTh7A
 
 __PACKAGE__->has_many(map_member_role => 'GourmetSpot::Schema::MemberRole' => 'member_id');
 __PACKAGE__->many_to_many(roles => 'map_member_role' => 'role');

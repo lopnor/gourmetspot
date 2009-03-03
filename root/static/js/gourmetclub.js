@@ -6,7 +6,7 @@ $(function() {
                 var new_scene = prompt("追加するシーンを入力してください")
                 if ( new_scene ) {
                     $.post(
-                        add_scene_url, 
+                        scene_url, 
                         {value: new_scene},
                         function(data) {
                             var s = document.createElement('option');
@@ -159,62 +159,96 @@ function setupPanorama(marker, div) {
     );
 }
 
-
+var hours_count = 0;
 function append_hours(data) {
-    var count = $(".week_input").size()-1;
+    hours_count = hours_count + 1;
     var mydiv = $("#operation_hours")
         .clone()   
         .removeAttr('id')
         .css({display: 'block'});
-    mydiv.find('input').each(function(){
+    mydiv.find('input, select').each(function(){
             $(this).attr(
-                'name', $(this).attr('name').replace(/\[\]/,"["+count+"]")
+                'name', $(this).attr('name').replace(/\[\]/,"["+hours_count+"]")
                 )
             });
-    $('#hours_cell').find('a[class="append_hours"]').remove();
-    $("#hours_cell").append(mydiv);
+    $('#hours_cell').append(mydiv);
+    mydiv.find('select[class="hours"]').each(function() {
+            create_time_option(this,31,1);
+        }
+    );
+    mydiv.find('select[class="minutes"]').each(function() {
+            create_time_option(this,60,5);
+        }
+    );
     if (data) {
         $.each(data.day_of_week.split(','), function() {
                 mydiv.find('input[value='+this+']').attr('checked', true);
         });
         mydiv.find('input[name$=.id]').val(data.id);
         mydiv.find('input[name$=.holiday]').attr('checked', data.holiday);
-        mydiv.find('input[name$=.pre_holiday]').attr('checked', data.holiday);
-        mydiv.find('input[name$=.opens_at_hour]').val((data.opens_at.split(':'))[0]);
-        mydiv.find('input[name$=.opens_at_minute]').val((data.opens_at.split(':'))[1]);
-        mydiv.find('input[name$=.closes_at_hour]').val((data.closes_at.split(':'))[0]);
-        mydiv.find('input[name$=.closes_at_minute]').val((data.closes_at.split(':'))[1]);
+        mydiv.find('input[name$=.pre_holiday]').attr('checked', data.pre_holiday);
+        mydiv.find('select[name$=.opens_at_hour]').val((data.opens_at.split(':'))[0]);
+        mydiv.find('select[name$=.opens_at_minute]').val((data.opens_at.split(':'))[1]);
+        mydiv.find('select[name$=.closes_at_hour]').val((data.closes_at.split(':'))[0]);
+        mydiv.find('select[name$=.closes_at_minute]').val((data.closes_at.split(':'))[1]);
     }
     mydiv.find('input:first').focus();
-    mydiv.find('input[class="minutes"]').bind("keydown", function(event) {
-            timeval($(this),event,{max: 60,step: 5});
-            }
-            );
-    mydiv.find('input[class="hours"]').bind("keydown",function(event) {
-            timeval($(this),event,{max: 24,step: 1});
-            }
-            );
-    mydiv.find("a[class='append_hours']").bind('click',function(event) {
-            append_hours();
-            }
-            );
     mydiv.find("input[class='checkbox']").bind('click',function(event) {
             $(this).focus();
             }
             );
+    update_links();
 }
 
-function timeval(j,event,option) {  
-    var nextval = parseInt($(j).val(), 10);
-    if (event.keyCode == 38) {
-        nextval += option.step;
-        if (nextval >= option.max) nextval = 00;
-        nextval = '0' + nextval;
-        $(j).val(nextval.slice(-2));
-    } else if (event.keyCode == 40) {
-        nextval -= option.step;
-        if (nextval < 0) nextval = option.max - option.step;
-        nextval = '0' + nextval;
-        $(j).val(nextval.slice(-2));
+function remove_hours (item) {
+    var p = $(item).parents();
+    if (confirm("営業時間を削除します")) {
+        p = $.grep(p, function(n,i){return $(n).hasClass('week_input');});
+        var token = $(document).find('input[name="_token"]').val();
+        var id = $(p).find('input[name$=".id"]').val();
+        if (id) {
+            $.post(open_hours_url + '/' + id + '/delete', 
+                    {_token: token}
+                  );
+        }
+        $(p).remove();
+        update_links();
+    }
+}
+
+function update_links () {
+    $('#hours_cell').find('a[class="remove_hours"]').remove();
+    $('#hours_cell').find('a[class="append_hours"]').remove();
+    var count = $(".week_input").size()-1;
+    if (count > 1) {
+        $(".week_input").each(function() {
+                var remove_link = $(document.createElement('a')).attr('href','#').addClass('remove_hours').text('-');
+                remove_link.appendTo($(this).find("td[class='remove_hours']"));
+                remove_link.bind(
+                    'click', function(event) {
+                        remove_hours(this);
+                    }
+                );
+            }
+        );
+    }
+    var append_link = $(document.createElement('a')).attr('href','#')
+        .addClass('append_hours').text('+');
+    append_link.appendTo($("#hours_cell .week_input:last").find("td[class='remove_hours']"));
+    append_link.bind(
+            'click', function(event) {
+                append_hours();
+            }
+        );
+}
+
+function create_time_option (obj,max,step) {
+    for (var i = 0;i < max; i = i + step) {
+        var val = '00' + i;
+        val = val.slice(-2);
+        var o = document.createElement('option');
+        o.value = val;
+        o.appendChild(document.createTextNode(val));
+        $(obj).append($(o));
     }
 }
