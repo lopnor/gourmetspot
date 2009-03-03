@@ -2,6 +2,7 @@ package GourmetSpot::Controller::Review;
 
 use strict;
 use warnings;
+use utf8;
 use parent 'GourmetSpot::Base::Controller::Resource';
 use MRO::Compat;
 use DateTime;
@@ -21,6 +22,7 @@ Catalyst Controller.
 __PACKAGE__->config(
     {
         model => 'DBIC::Review',
+        outer_model => ['DBIC::Tag'],
         namespace => 'member/review',
         like_field => ['budget', 'comment'],
     }
@@ -35,9 +37,6 @@ sub form :Private {
             restrant => $restrant || undef,
         );
     }
-    $c->stash(
-        scene => [ $c->model('DBIC::Scene')->all ]
-    );
     $self->next::method($c);
 }
 
@@ -51,6 +50,51 @@ sub setup_item_params :Private {
     if ( ! $c->stash->{item} ) {
         $c->stash->{item_params}->{created_at} = $now;
         $c->stash->{item_params}->{created_by} = $c->user->id;
+    }
+}
+
+sub create_item :Private {
+    my ( $self, $c ) = @_;
+
+    $self->next::method($c);
+    $c->forward('update_tag');
+}
+
+sub update_item :Private {
+    my ( $self, $c ) = @_;
+
+    $self->next::method($c);
+    $c->forward('update_tag');
+}
+
+sub update_tag :Private {
+    my ( $self, $c ) = @_;
+    my @values = split(/\s/, $c->stash->{outer_params}->{'DBIC::Tag'}->{value});
+    my @tags = $c->stash->{item}->tags;
+    for my $tag ($c->stash->{item}->tags) {
+        if (grep {$_ eq $tag->value } @values) {
+            @values = grep {$_ ne $tag->value} @values;
+        } else {
+            $tag->map_review_tag({review_id => $c->stash->{item}->id})->delete;
+        } 
+    }
+    for my $value (@values) {
+        my $tag = $c->model('DBIC::Tag')->find_or_create(
+            {
+                value => $value,
+                created_at => $c->stash->{item}->created_by,
+                created_at => $c->stash->{item}->created_at,
+            },
+            {
+                key => 'value',
+            }
+        );
+        $c->model('DBIC::TagReview')->find_or_create(
+            {
+                tag_id => $tag->id,
+                review_id => $c->stash->{item}->id,
+            }
+        );
     }
 }
 

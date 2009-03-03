@@ -2,19 +2,27 @@
 <div id="map"></div>
 <table>
 <tr>
-    <td>店名</td>
+    <th>店名</td>
     <td>[% item.name | html %]</td>
 </tr>
 <tr>
-    <td>電話番号</td>
+    <th>電話番号</td>
     <td>[% item.tel | html %]</td>
 </tr>
 <tr>
-    <td>住所</td>
+    <th>住所</td>
     <td>[% item.address | html %]</td>
 </tr>
 <tr>
-    <td>営業時間</td>
+    <th>建物名</th>
+    <td>[% item.building | html %]</td>
+</tr>
+<tr>
+    <th>行き方</th>
+    <td>[% item.how_to_get_there | html %]</td>
+</tr>
+<tr>
+    <th>営業時間</td>
     <td>
 [% FOR oh IN item.openhours %]
 [% oh.day_of_week %]
@@ -24,6 +32,10 @@
 [% oh.opens_at | html %] ~ [% oh.closes_at | html %]
 [% END %]
     </td>
+</tr>
+<tr>
+    <th>営業時間メモ</th>
+    <td>[% item.open_hours_memo | html %]</td>
 </tr>
 </table>
 <a href="[% c.uri_for( "../review/update_or_create", { restrant_id => item.id }) %]">レビューを書く</a>

@@ -38,25 +38,6 @@ sub index :Path :Args(0) {
 
 }
 
-sub scene : Path('scene') {
-    my ( $self, $c ) = @_;
-    
-    my $scene = $c->model('DBIC::Scene')->create(
-        {
-            value => $c->req->param('value'),
-            created_by => $c->user->id,
-            created_at => DateTime->now,
-        }
-    );
-    $c->stash(
-        json_data => {
-            id => $scene->id,
-            value => $scene->value,
-        }
-    );
-    $c->forward('View::JSON');
-}
-
 =head1 AUTHOR
 
 danjou

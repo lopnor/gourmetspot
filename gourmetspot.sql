@@ -51,7 +51,7 @@ create table reset_password (
 
 create table tag (
     id      int not null primary key auto_increment,
-    value   varchar(255) not null default '',
+    value   varchar(255) not null unique default '',
     created_by int not null default 0,
     created_at datetime
 );

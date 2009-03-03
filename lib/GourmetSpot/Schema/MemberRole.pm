@@ -16,8 +16,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("member_id", "role_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 14:06:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:b0KqprDKLFnvkNODUOGYtg
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 15:20:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L8dFUU3idNs37P3vsTsy1w
 
 __PACKAGE__->belongs_to( member => 'GourmetSpot::Schema::Member', 'member_id' );
 __PACKAGE__->belongs_to( role => 'GourmetSpot::Schema::Role', 'role_id' );

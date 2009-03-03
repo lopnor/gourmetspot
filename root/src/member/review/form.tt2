@@ -34,15 +34,9 @@
     <td><input type="text" name="budget"></td>
 </tr>
 <tr>
-    <th>シーン</th>
+    <th>タグ</th>
     <td>
-        <select name="scene_id" id="review_select_scene">
-            <option value="">選択してください</option>
-[% FOR s IN scene -%]
-            <option value="[% s.id %]">[% s.value %]</option>
-[% END -%]
-            <option value="-">新しいシーンを追加...</option>
-        </select>
+        <input type="text" name="Tag.value" value="[% FOR t IN item.tags %][% t.value | html %] [% END %]">
     </td>
 </tr>
 <tr>

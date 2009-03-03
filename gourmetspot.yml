@@ -12,11 +12,9 @@ Controller::Review:
         budget:
             - rule: NOT_BLANK
               message: '予算を入力してください'
-        scene_id:
+        Tag.value:
             - rule: NOT_BLANK
-              message: 'シーンを選択してください'
-            - rule: INT
-              message: 'シーンを選択してください'
+              message: 'タグを入力してください'
         comment:
             - rule: NOT_BLANK
               message: 'ヒトコトを入力してください'

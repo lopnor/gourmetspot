@@ -35,6 +35,11 @@
     <th>営業時間</th>
     <td id="hours_cell">
     </td>
+</tr>
+<tr>
+    <th>営業時間メモ</th>
+    <td><textarea name="open_hours_memo" rows="3" cols="30" tabindex="5"></textarea></td>
+</tr>
 <tr>
     <th></th>
     <td>

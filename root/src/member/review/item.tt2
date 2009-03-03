@@ -26,8 +26,12 @@
     </td>
 </tr>
 <tr>
-    <th>シーン</th>
-    <td>[% item.scene.value | html %]</td>
+    <th>タグ</th>
+    <td>
+    [% FOR t IN item.tags %]
+    [% t.value | html %]
+    [% END %]
+    </td>
 </tr>
 <tr>
     <th>ヒトコト</th>

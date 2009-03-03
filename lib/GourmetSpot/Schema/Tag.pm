@@ -23,11 +23,14 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("value", ["value"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 14:06:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MGd7NEQ4xzgSCX+bRUSL+A
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 15:20:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WncyoJDHQNMGBmf4tMgqIQ
 
+__PACKAGE__->has_many('map_review_tag' => 'GourmetSpot::Schema::TagReview' => 'tag_id');
+__PACKAGE__->many_to_many('reviews' => 'map_review_tag' => 'review');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

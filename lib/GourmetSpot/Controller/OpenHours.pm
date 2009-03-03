@@ -2,6 +2,7 @@ package GourmetSpot::Controller::OpenHours;
 
 use strict;
 use warnings;
+use utf8;
 use parent 'GourmetSpot::Base::Controller::Resource';
 
 use MRO::Compat;
