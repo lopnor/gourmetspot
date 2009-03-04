@@ -9,7 +9,7 @@
 </ul>
 </div>
 [% END -%]
-<form method="POST">
+<form method="POST" action="?">
 <table class="data">
 <tr>
     <th>店名</th>
