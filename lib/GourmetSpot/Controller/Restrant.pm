@@ -48,9 +48,9 @@ sub update_openhours :Private {
     for my $item (@{$c->stash->{outer_params}->{'DBIC::OpenHours'}}) {
         $item or next;
         $item->{restrant_id} = $c->stash->{item}->id;
-        $item->{day_of_week} = !$item->{day_of_week} ? '' :
+        $item->{day_of_week} = 
             ref $item->{day_of_week} ? join(',', @{$item->{day_of_week}}) : 
-                $item->{day_of_week} ;
+                ($item->{day_of_week} || '');
         $item->{holiday} ||= 0;
         $item->{pre_holiday} ||= 0;
         for (qw(opens_at closes_at)) {
@@ -59,7 +59,11 @@ sub update_openhours :Private {
                 delete $item->{"${_}_minute"} || '00',
             );
         }
-        $c->model('DBIC::OpenHours')->update_or_create($item);
+        if ($item->{holiday} || $item->{pre_holiday} || $item->{day_of_week}) {
+            $c->model('DBIC::OpenHours')->update_or_create($item);
+        } else {
+            $c->model('DBIC::OpenHOurs')->find($item->{id})->delete if $item->{id};
+        }
     }
 }
 
