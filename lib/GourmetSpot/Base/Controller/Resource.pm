@@ -138,7 +138,7 @@ sub delete :Chained('item_load') :PathPart('delete') Args(0) {
     
     if ( $c->req->method eq 'POST' && $self->validate_token($c) ) {
         $c->forward('delete_item');
-        return $c->res->redirect($c->uri_for('./'));
+        return $c->res->redirect($c->uri_for());
     }
     $c->forward('create_token');
     $c->forward( $self->{default_view} || $c->view );

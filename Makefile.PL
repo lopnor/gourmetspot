@@ -37,13 +37,15 @@ requires 'Email::MIME::Modifier';
 requires 'Email::Send';
 requires 'Module::Pluggable';
 requires 'Path::Class';
+requires 'Hash::Merge::Simple';
 
 requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
 catalyst;
 
-build_requires 'Test::WWW::Mechanize::Catalyst' => '0.500';
+test_requires 'Test::WWW::Mechanize::Catalyst' => '0.500';
+test_requires 'SQL::Translator';
 
 install_script glob('script/*.pl');
 auto_install;
