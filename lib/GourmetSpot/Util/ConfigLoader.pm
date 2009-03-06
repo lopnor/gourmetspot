@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use FindBin;
-use Catalyst::Utils;
+use Hash::Merge::Simple ();
 use YAML;
 use Path::Class qw/file dir/;
 
@@ -17,7 +17,7 @@ sub load {
             YAML::LoadFile( $bin->parent->file($cfg) );
         } or next;
 
-        $config = Catalyst::Utils::merge_hashes($config, $c);
+        $config = Hash::Merge::Simple::merge($config, $c);
     }
     $config;
 }

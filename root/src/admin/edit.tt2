@@ -1,7 +1,8 @@
+[% META title='ユーザー編集' %]
 <form method="POST">
 mail: <input type="text" name="mail"><br>
 nickname: <input type="text" name="nickname"><br>
 password: <input type="password" name="password"><br>
-<input type="submit">
+<input type="submit" name="edit" value="edit">
 <input type="submit" name="delete" value="delete">
 </form>
