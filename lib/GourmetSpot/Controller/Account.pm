@@ -83,7 +83,7 @@ sub invite :Path('invite') {
     );
     if ($invitation_count >= 3) {
         $c->flash->{error} = '3人以上招待できません！';
-        return $c->res->redirect($c->uri_for());
+        return $c->res->redirect($c->uri_for('./'));
     }
         
     $q->param('caller_name' => $c->user->nickname) 
@@ -139,7 +139,7 @@ sub invite_complete :Private {
         );
         $c->forward( $c->view('Email') );
         $c->flash->{message} = '招待状をお送りしました！';
-        $c->res->redirect($c->uri_for());
+        $c->res->redirect($c->uri_for('./'));
     }
 }
 
@@ -218,7 +218,7 @@ sub join_complete :Private {
                 mail => $member->mail,
                 password => $password,
             });
-        $c->res->redirect($c->uri_for());
+        $c->res->redirect($c->uri_for('./'));
     }
 }
 
@@ -252,12 +252,12 @@ sub password_guest :Private {
         );
         if (!$reset) {
             $c->flash->{error} = 'パスワードの再設定URLが正しくありません。もう一度やってみてください。';
-            return $c->res->redirect($c->uri_for('password'));
+            return $c->res->redirect($c->uri_for('./password'));
         }
         if ($reset->expires_at->epoch < DateTime->now(time_zone => 'Asia/Tokyo')->epoch) {
             $reset->delete;
             $c->flash->{error} = 'パスワードの再設定URLが期限切れです。もう一度やってみてください。';
-            return $c->res->redirect('password');
+            return $c->res->redirect('./password');
         }
         if ($c->req->method eq 'POST') {
             $c->forward('password_reset', [ $reset ]);
@@ -325,7 +325,7 @@ sub password_reset :Private {
             $reset->delete;
         }
         $c->flash->{message} = 'パスワードを設定しました';
-        return $c->res->redirect($c->uri_for());
+        return $c->res->redirect($c->uri_for('./'));
     }
 }
 
@@ -348,7 +348,7 @@ sub edit_commit :Private {
         $hash->{nickname} = $q->param('nickname') if $q->param('nickname');
         if (length %{$hash}) {
             $c->user->update( $hash );
-            $c->res->redirect($c->uri_for());
+            $c->res->redirect($c->uri_for('./'));
         }
     }
 }

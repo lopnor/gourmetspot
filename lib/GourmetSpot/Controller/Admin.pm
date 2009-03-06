@@ -58,7 +58,7 @@ sub add :Path('add') {
                 nickname => $q->param('nickname'),
                 password => $c->compute_password( $q->param('password') ),
             });
-        $c->res->redirect($c->uri_for(''));
+        $c->res->redirect($c->uri_for('./'));
     }
     $c->stash->{template} = 'admin/edit.tt2';
 }
@@ -81,7 +81,7 @@ sub edit :Path('edit') :Args(1) {
             }
             $member->update($hash);
         }
-        $c->res->redirect($c->uri_for());
+        $c->res->redirect($c->uri_for('./'));
     }
     $c->forward($c->view);
     $c->fillform( {

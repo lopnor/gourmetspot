@@ -1,3 +1,7 @@
+create database gourmetspot default charset utf8;
+
+use gourmetspot;
+
 create table member (
     id          int not null primary key auto_increment,
     nickname    varchar(32) not null default '',
