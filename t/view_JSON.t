@@ -2,5 +2,5 @@ use strict;
 use warnings;
 use Test::More tests => 1;
 
-BEGIN { use_ok 'GourmetClub::View::JSON' }
+BEGIN { use_ok 'GourmetSpot::View::JSON' }
 

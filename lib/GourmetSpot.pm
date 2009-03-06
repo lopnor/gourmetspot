@@ -2,6 +2,8 @@ package GourmetSpot;
 
 use strict;
 use warnings;
+use 5.8.1;
+
 use YAML;
 
 use Catalyst::Runtime '5.70';

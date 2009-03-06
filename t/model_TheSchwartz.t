@@ -2,5 +2,5 @@ use strict;
 use warnings;
 use Test::More tests => 1;
 
-BEGIN { use_ok 'GourmetClub::Model::TheSchwartz' }
+BEGIN { use_ok 'GourmetSpot::Model::TheSchwartz' }
 

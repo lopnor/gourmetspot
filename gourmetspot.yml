@@ -1,5 +1,4 @@
 --- 
-name: GourmetSpot
 Controller::Restrant:
     form:
         name:
@@ -57,6 +56,7 @@ View::JSON:
     allow_callback: 1
     expose_stash: json_data
 default_view: TTSite
+name: GourmetSpot
 session: 
     data_field: session_data
     dbic_class: DBIC::Session

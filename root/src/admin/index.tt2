@@ -1,3 +1,4 @@
+[% META title='管理画面' %]
 <ul>
 <li><a href="[% c.uri_for('add') %]">add</a></li>
 [% FOR m IN member %]
