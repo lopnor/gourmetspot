@@ -2,6 +2,7 @@ package GourmetSpot::View::TTSite;
 
 use strict;
 use base 'Catalyst::View::TT';
+use GourmetSpot;
 
 __PACKAGE__->config({
     INCLUDE_PATH => [

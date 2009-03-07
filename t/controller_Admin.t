@@ -1,11 +1,10 @@
 use t::Util;
-use Test::More tests => 30;
+use Test::More tests => 29;
 
 #use_ok test (4 tests)
 BEGIN { use_ok 'Test::WWW::Mechanize::Catalyst', 'GourmetSpot' }
 BEGIN { use_ok 'GourmetSpot::Controller::Admin' }
 BEGIN { use_ok 'GourmetSpot::Schema' }
-BEGIN { use_ok 'GourmetSpot::Util::ConfigLoader' }
 
 my $admin = +{
     mail => 'admin+'.time.'@soffritto.org',

@@ -7,7 +7,7 @@ use DBI;
 use Data::Dumper;
 use Digest::SHA1 qw/sha1_base64/;
 use File::Spec::Functions;
-use GourmetSpot::Util::ConfigLoader;
+use GourmetSpot::Util;
 use GourmetSpot::Schema;
 use Test::WWW::Mechanize::Catalyst qw/GourmetSpot/;
 
@@ -39,7 +39,7 @@ END {
 
 sub setup_database {
     my ( $class, $caller ) = @_;
-    my $config = GourmetSpot::Util::ConfigLoader->load;
+    my $config = GourmetSpot::Util->load_config;
     my $connect_info = $config->{'Model::DBIC'}->{connect_info};
     my @dsn = split(/;=/,(split(':', $connect_info->[0]))[2]);
     my %dsn = scalar @dsn == 1 ? (database => @dsn) : @dsn;
@@ -65,15 +65,14 @@ sub setup_user {
     } else {
         $args = shift;
     }
-    my $config = GourmetSpot::Util::ConfigLoader->load;
+    my $config = GourmetSpot::Util->load_config;
     my $schema = GourmetSpot::Schema->connect(
         @{ $config->{'Model::DBIC'}->{connect_info} }
     );
-    my $salt = $config->{'Plugin::Authentication'}{realms}{members}{credential}{password_pre_salt};
     my $member = $schema->resultset('Member')->create(
         {
             mail => $args->{mail},
-            password => sha1_base64($salt . $args->{password}),
+            password => GourmetSpot::Util->compute_password($args->{password}),
             nickname => $args->{nickname},
         }
     );
@@ -109,7 +108,7 @@ sub setup_user_and_login {
 
 sub teardown_database {
     my ( $class, $caller ) = @_;
-    my $config = GourmetSpot::Util::ConfigLoader->load;
+    my $config = GourmetSpot::Util->load_config;
     my $dbh = DBI->connect(@{$config->{'Model::DBIC'}->{connect_info}}) or die $@;
     for my $table (@{$dbh->selectall_arrayref('show tables')}) {
         $dbh->do("drop table $table->[0]");

@@ -3,6 +3,7 @@ package GourmetSpot::Controller::Admin;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
+use GourmetSpot::Util;
 
 
 =head1 NAME
@@ -56,7 +57,7 @@ sub add :Path('add') {
         my $member = $model->create({
                 mail => $q->param('mail'),
                 nickname => $q->param('nickname'),
-                password => $c->compute_password( $q->param('password') ),
+                password => GourmetSpot::Util->compute_password( $q->param('password') , $c),
             });
         $c->res->redirect($c->uri_for(''));
     }
@@ -76,7 +77,7 @@ sub edit :Path('edit') :Args(1) {
             my $hash = {};
             for (qw(mail nickname password)) {
                 my $value = $q->param($_);
-                $value = $c->compute_password( $value ) if $_ eq 'password';
+                $value = GourmetSpot::Util->compute_password( $value, $c ) if $_ eq 'password';
                 $hash->{$_} = $value if length $q->param($_);
             }
             $member->update($hash);

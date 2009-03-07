@@ -1,4 +1,5 @@
 *_local.yml
+cover_db_view
 META.yml
 Makefile
 Makefile.old

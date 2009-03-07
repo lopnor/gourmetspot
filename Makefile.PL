@@ -35,7 +35,7 @@ requires 'Digest::SHA1';
 requires 'Email::MIME';
 requires 'Email::MIME::Modifier';
 requires 'Email::Send';
-requires 'Module::Pluggable';
+requires 'Module::Pluggable' => '3.8';
 requires 'Path::Class';
 requires 'Hash::Merge::Simple';
 
@@ -45,7 +45,6 @@ requires 'Config::General'; # This should reflect the config file format you've 
 catalyst;
 
 test_requires 'Test::WWW::Mechanize::Catalyst' => '0.500';
-test_requires 'SQL::Translator';
 
 install_script glob('script/*.pl');
 auto_install;

@@ -6,6 +6,7 @@ use utf8;
 use parent 'Catalyst::Controller';
 use DateTime;
 use Digest::SHA1 qw(sha1_base64);
+use GourmetSpot::Util;
 
 =head1 NAME
 
@@ -197,7 +198,7 @@ sub join_complete :Private {
                 caller_id => $invitation->caller_id,
                 mail => $invitation->mail,
                 nickname => $c->req->param('nickname'),
-                password => $c->compute_password($password),
+                password => GourmetSpot::Util->compute_password($password, $c),
             }
         );
         $invitation->update({
@@ -314,7 +315,7 @@ sub password_reset :Private {
         my $password = $c->req->param('password');
         $member->update(
             {
-                password => $c->compute_password($password),
+                password => GourmetSpot::Util->compute_password($password, $c),
             }
         );
         if ( !$c->user && $reset ) {

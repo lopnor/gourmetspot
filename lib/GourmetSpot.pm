@@ -37,7 +37,6 @@ use Catalyst qw/
 
                 Unicode
                 /;
-use Digest::SHA1 qw(sha1_base64);
 
 our $VERSION = '0.01';
 
@@ -63,19 +62,6 @@ __PACKAGE__->config(
 
 # Start the application
 __PACKAGE__->setup();
-
-sub compute_password {
-    my ( $self, $raw ) = @_;
-    my $config = $self->config->{'Plugin::Authentication'}
-                                ->{realms}
-                                ->{members}
-                                ->{credential};
-    return sha1_base64(
-        ($config->{password_pre_salt} || '')
-        . $raw
-        . ($config->{password_post_salt} || '')
-    );
-}
 
 =head1 NAME
 
