@@ -1,7 +1,9 @@
 use t::Util;
-use Test::More tests => 25;
+use Test::More tests => 47;
 
+# use_ok (2 tests)
 BEGIN { use_ok 'GourmetSpot::Controller::Account' }
+BEGIN { use_ok 'GourmetSpot::Worker' }
 
 my $user = +{
     mail => 'test@soffritto.org',
@@ -79,7 +81,50 @@ my $mech = setup_user_and_login($user);
     }
 }
 
-# invite (4 tests)
+# login redirection (4 tests)
+{
+    $mech->get_ok('/account/logout');
+    is $mech->uri->path, '/';
+    $mech->get_ok('/account');
+    is $mech->uri->path, '/account/login';
+}
+
+# forgot password (18 tests)
+{
+    my $mail_path = config->{'Worker::Mailer'}{mailer_args}[0];
+    unlink $mail_path;
+    $mech->follow_link_ok({text => 'ログイン'});
+    $mech->follow_link_ok({text => 'パスワードを忘れたら'});
+    $mech->form_number(1);
+    ok $mech->click_button(value => 'パスワードをリセットする');
+    $mech->content_like(qr/メールアドレスを入力してください/);
+    $mech->form_number(1);
+    $mech->field(mail => $user->{mail});
+    ok $mech->click_button(value => 'パスワードをリセットする');
+    $mech->content_like(qr/入力いただいたメールアドレスの登録があれば、パスワードをリセットする手順をメールでお伝えします。/);
+    ok my $worker = GourmetSpot::Worker->schwartz;
+    isa_ok $worker, 'TheSchwartz';
+    $worker->set_verbose(1);
+    ok $worker->work_once();
+    ok -r $mail_path;
+    open my $fh , '<', $mail_path;
+    binmode($fh, ':encoding(iso-2022-jp)');
+    my $mail = do {local $/; <$fh>};
+    close $fh;
+    ok my ($uri) = $mail =~ m{http://localhost(/account/password\?nonce=.+\&id=\d+?)};
+    $mech->get_ok($uri);
+    $mech->content_like(qr/パスワードの再設定/);
+    $mech->content_like(qr/$user->{mail}/);
+    $user->{password} = 'forgotandset';
+    $mech->form_number(1);
+    $mech->field(password => $user->{password});
+    $mech->field(password_confirm => $user->{password});
+    ok $mech->click_button(value => 'パスワードを設定する');
+    $mech->content_like(qr/パスワードを設定しました/);
+    $mech->content_like(qr/$user->{nickname}さんのページ/);
+}
+
+# invite (5 tests)
 {
     $mech->get_ok('/account');
     $mech->follow_link_ok({text => '招待する'});

@@ -1,5 +1,5 @@
 use t::Util;
-use Test::More tests => 29;
+use Test::More tests => 46;
 
 #use_ok test (4 tests)
 BEGIN { use_ok 'Test::WWW::Mechanize::Catalyst', 'GourmetSpot' }
@@ -52,9 +52,9 @@ my $mech = Test::WWW::Mechanize::Catalyst->new;
     is $mech->value('mail'), $new_user->{mail};
     is $mech->value('nickname'), $new_user->{nickname};
 
-    # login with new user (9 tests)
+    my $mech_user = Test::WWW::Mechanize::Catalyst->new;
+    # login with new user (11 tests)
     {
-        my $mech_user = Test::WWW::Mechanize::Catalyst->new;
         $mech_user->get_ok('/');
         $mech_user->follow_link_ok({text => 'ログイン'});
         $mech_user->title_like(qr/ログイン/);
@@ -72,6 +72,58 @@ my $mech = Test::WWW::Mechanize::Catalyst->new;
         $mech_user->follow_link_ok({text => 'トップページ'});
         $mech_user->title_is( '美食倶楽部（仮）' );
         $mech_user->follow_link_ok({text => "$new_user->{nickname}さんのページ"});
+        $mech_user->get('/admin');
+
+        # this user doesn't have admin role.
+        is $mech_user->status, 403;
+        $mech_user->content_like(qr/forbidden/);
+    }
+
+    # modify user (5 tests)
+    {
+        $new_user->{nickname} = $new_user->{nickname}.'を変更';
+        ok $mech->submit_form_ok(
+            {
+                form_number => 1,
+                fields => {
+                    nickname => $new_user->{nickname},
+                }
+            }
+        );
+        $mech->follow_link_ok({text_regex => qr/$new_user->{nickname}/});
+        $mech->form_number(1);
+        is $mech->value('nickname'), $new_user->{nickname};
+        $mech_user->get_ok('/member');
+        $mech_user->content_like( qr/$new_user->{nickname}さんのページ/ );
+    }
+
+    # modify user password (8 tests)
+    {
+        $new_user->{password} = $new_user->{password}.'change';
+        ok $mech->submit_form_ok(
+            {
+                form_number => 1,
+                fields => {
+                    password => $new_user->{password},
+                }
+            }
+        );
+        $mech->follow_link_ok({text_regex => qr/$new_user->{nickname}/});
+        $mech->form_number(1);
+        is $mech->value('password'), '';
+        $mech_user->get_ok('/member');
+        $mech_user->follow_link_ok({text => 'ログアウト'});
+        $mech_user->follow_link_ok({text => 'ログイン'});
+        $mech_user->submit_form_ok(
+            {
+                form_number => 1,
+                fields => {
+                    mail => $new_user->{mail},
+                    password => $new_user->{password},
+                }
+            }
+        );
+        $mech_user->content_like( qr/$new_user->{nickname}さんのページ/ );
     }
 
     # delete user (2 tests)

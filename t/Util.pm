@@ -6,10 +6,10 @@ use Test::More;
 use DBI;
 use Data::Dumper;
 use Digest::SHA1 qw/sha1_base64/;
+use FindBin;
 use File::Spec::Functions;
 use GourmetSpot::Util;
 use GourmetSpot::Schema;
-use Test::WWW::Mechanize::Catalyst qw/GourmetSpot/;
 
 sub import {
     my ( $class, %args ) = @_;
@@ -18,10 +18,14 @@ sub import {
     warnings->import;
     utf8->import;
 
-    for (qw(teardown_database setup_user setup_user_and_login)) {
+    for (qw(teardown_database setup_user setup_user_and_login config)) {
         no strict 'refs';
         *{"$caller\::$_"} = \&{$_};
     }
+
+    $ENV{CATALYST_CONFIG} = "$FindBin::Bin/config";
+    require Test::WWW::Mechanize::Catalyst;
+    Test::WWW::Mechanize::Catalyst->import('GourmetSpot');
 
     $class->setup_database($caller);
 }
@@ -113,6 +117,10 @@ sub teardown_database {
     for my $table (@{$dbh->selectall_arrayref('show tables')}) {
         $dbh->do("drop table $table->[0]");
     }
+}
+
+sub config {
+    return GourmetSpot::Util->load_config;
 }
 
 1;

@@ -281,27 +281,32 @@ sub password_guest :Private {
 sub password_request :Private {
     my ( $self, $c ) = @_;
     my $mail = $c->req->param('mail');
-    my $member = $c->model('DBIC::Member')->find({mail => $mail});
-    if ($member) {
-        my $reset = $c->model('DBIC::ResetPassword')->create(
-            {
-                member_id => $member->id,
-                expires_at => DateTime->now(time_zone => 'Asia/Tokyo')->add(minutes => 30),
-                nonce => sha1_base64( $member->mail . time . rand ),
-            }
-        );
-        $c->stash(
-            email => {
-                to => $member->mail,
-                template => 'password.tt2',
-            },
-            member => $member,
-            reset  => $reset,
-        );
-        $c->forward( $c->view('Email') );
+    unless ($mail) {
+        $c->stash->{error} = 'メールアドレスを入力してください。';
+        return $c->forward($c->view);
+    } else {
+        my $member = $c->model('DBIC::Member')->find({mail => $mail});
+        if ($member) {
+            my $reset = $c->model('DBIC::ResetPassword')->create(
+                {
+                    member_id => $member->id,
+                    expires_at => DateTime->now(time_zone => 'Asia/Tokyo')->add(minutes => 30),
+                    nonce => sha1_base64( $member->mail . time . rand ),
+                }
+            );
+            $c->stash(
+                email => {
+                    to => $member->mail,
+                    template => 'password.tt2',
+                },
+                member => $member,
+                reset  => $reset,
+            );
+            $c->forward( $c->view('Email') );
+        }
+        $c->flash->{message} = '入力いただいたメールアドレスの登録があれば、パスワードをリセットする手順をメールでお伝えします。';
+        return $c->res->redirect($c->uri_for('/'));
     }
-    $c->flash->{message} = '入力いただいたメールアドレスの登録があれば、パスワードをリセットする手順をメールでお伝えします。';
-    return $c->res->redirect($c->uri_for('/'));
 }
 
 sub password_reset :Private {

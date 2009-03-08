@@ -18,8 +18,7 @@ Catalyst Controller.
 
 =cut
 
-
-=head2 index 
+=head2 auto
 
 =cut
 
@@ -38,6 +37,10 @@ sub auto :Private {
     return 1;
 }
 
+=head2 index 
+
+=cut
+
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
     my $model = $c->model('DBIC::Member');
@@ -47,6 +50,10 @@ sub index :Path :Args(0) {
         member => [ $rs->all ],
     );
 }
+
+=head2 add
+
+=cut
 
 sub add :Path('add') {
     my ( $self, $c ) = @_;
@@ -63,6 +70,10 @@ sub add :Path('add') {
     }
     $c->stash->{template} = 'admin/edit.tt2';
 }
+
+=head2 edit
+
+=cut 
 
 sub edit :Path('edit') :Args(1) {
     my ( $self, $c, $id ) = @_;

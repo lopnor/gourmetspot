@@ -10,9 +10,6 @@ sub is_available {
 
 sub send {
     my ($class, $message, %arg) = @_;
-    if (ref $arg{databases} eq 'HASH') {
-        $arg{databases} = [ $arg{databases} ] ;
-    }
     require TheSchwartz;
 
     my $the_schwartz = TheSchwartz->new(%arg);

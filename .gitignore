@@ -1,4 +1,5 @@
 *_local.yml
+cover_db
 cover_db_view
 META.yml
 Makefile
@@ -6,3 +7,5 @@ Makefile.old
 blib
 inc
 pm_to_blib
+t/00_allload.t
+t/config/sentmail.txt
