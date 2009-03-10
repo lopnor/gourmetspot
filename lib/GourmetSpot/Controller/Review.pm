@@ -31,13 +31,18 @@ __PACKAGE__->config(
 sub form :Private {
     my ( $self, $c ) = @_;
 
-    if (my $restrant_id = $c->req->param('restrant_id')) {
-        my $restrant = $c->model('DBIC::Restrant')->find($restrant_id);
-        $c->stash(
-            restrant => $restrant || undef,
-        );
+    my $restrant = $c->stash->{item};
+    if (! $restrant && (my $restrant_id = $c->req->param('restrant_id'))) {
+        $restrant = $c->model('DBIC::Restrant')->find($restrant_id);
     }
-    $self->next::method($c);
+    if ($restrant) {
+        $c->stash(
+            restrant => $restrant,
+        );
+        $self->next::method($c);
+    } else {
+        $c->res->redirect($c->uri_for());
+    }
 }
 
 sub setup_item_params :Private {
@@ -47,10 +52,15 @@ sub setup_item_params :Private {
     my $now = DateTime->now;
     $c->stash->{search_params}->{created_by} = $c->user->id;
     $c->stash->{item_params}->{modified_at} = $now;
-    if ( ! $c->stash->{item} ) {
-        $c->stash->{item_params}->{created_at} = $now;
-        $c->stash->{item_params}->{created_by} = $c->user->id;
-    }
+    $c->stash->{item_params}->{created_at} = $now;
+    $c->stash->{item_params}->{created_by} = $c->user->id;
+}
+
+sub setup_item :Private {
+    my ( $self, $c, $id) = @_;
+    delete $c->stash->{item_params}->{created_at};
+    delete $c->stash->{item_params}->{created_by};
+    $self->next::method($c, $id);
 }
 
 sub create_item :Private {

@@ -1,3 +1,4 @@
+[% META title="招待する" %]
 <form method="POST">
 <table>
 <tr>

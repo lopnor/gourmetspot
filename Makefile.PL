@@ -38,6 +38,7 @@ requires 'Email::Send';
 requires 'Module::Pluggable' => '3.8';
 requires 'Path::Class';
 requires 'Hash::Merge::Simple';
+requires 'Data::Visitor::Callback';
 
 requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen
@@ -45,6 +46,11 @@ requires 'Config::General'; # This should reflect the config file format you've 
 catalyst;
 
 test_requires 'Test::WWW::Mechanize::Catalyst' => '0.500';
+test_requires 'DBI';
+test_requires 'FindBin';
+test_requires 'File::Spec::Functions';
+
+tests('t/*.t t/*/*.t');
 
 install_script glob('script/*.pl');
 auto_install;

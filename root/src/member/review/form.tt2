@@ -3,7 +3,7 @@
 [% IF c.req.method == 'POST' && c.form.has_error -%]
 <div class="error message">
 <ul>
-[% FOR message IN c.form.messages('member/review_edit') -%]
+[% FOR message IN c.form.messages(c.action.reverse) -%]
 <li>[% message | html %]</li>
 [% END -%]
 </ul>

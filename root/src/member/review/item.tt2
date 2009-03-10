@@ -26,6 +26,10 @@
     </td>
 </tr>
 <tr>
+    <th>予算</th>
+    <td>[% item.budget | html %]</td>
+</tr>
+<tr>
     <th>タグ</th>
     <td>
     [% FOR t IN item.tags %]

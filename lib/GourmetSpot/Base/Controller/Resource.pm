@@ -14,6 +14,7 @@ __PACKAGE__->config(
         like_fields => [],
         form => undef,
         default_view => undef,
+        preserve_token => 0,
     }
 );
 
@@ -27,7 +28,7 @@ sub COMPONENT {
         my $config = $c->config->{validator};
         my $messages = $config->{messages};
         for my $param ( keys %$profile ) {
-            my $rules = $profile->{$param} || [];
+            my $rules = $profile->{$param} ? $profile->{$param} : [];
 
             my $i = 0;
             for my $rule (@$rules) {
@@ -77,7 +78,12 @@ sub item_load :Chained :PathPrefix :CaptureArgs(1) {
 
 sub noitem_load :Chained :PathPrefix :CaptureArgs(0) { }
 
-sub item :Chained('item_load') :PathPart('') :Args(0) { }
+sub item :Chained('item_load') :PathPart('') :Args(0) { 
+    my ( $self, $c ) = @_;
+    unless ($c->res->output) {
+        $c->forward($self->{default_view} ? $self->{default_view} : $c->view);
+    }
+}
 
 sub index :Chained('noitem_load') :PathPart('') :Args(0) {
     my ( $self, $c ) = @_;
@@ -86,7 +92,7 @@ sub index :Chained('noitem_load') :PathPart('') :Args(0) {
         {
             order_by => 'id desc',
             rows => 10,
-            page => $c->req->param('page') || 1,
+            page => $c->req->param('page') ? $c->req->param('page') : 1,
         },
     );
 
@@ -95,7 +101,7 @@ sub index :Chained('noitem_load') :PathPart('') :Args(0) {
         pager => $rs->pager,
         json_data => [ map { +{$_->get_columns} } $rs->all ],
     );
-    $c->forward($self->{default_view} || $c->view);
+    $c->forward($self->{default_view} ? $self->{default_view} : $c->view);
     $c->fillform;
 }
 
@@ -141,7 +147,7 @@ sub delete :Chained('item_load') :PathPart('delete') Args(0) {
         return $c->res->redirect($c->uri_for());
     }
     $c->forward('create_token');
-    $c->forward( $self->{default_view} || $c->view );
+    $c->forward( $self->{default_view} ? $self->{default_view} : $c->view );
     $c->fillform;
 }
 
@@ -189,7 +195,7 @@ sub form :Private {
     $c->stash(
         template => $self->path_prefix . "/form.tt2",
     );
-    $c->forward( $self->{default_view} || $c->view );
+    $c->forward( $self->{default_view} ? $self->{default_view} : $c->view );
     my $hash = $c->stash->{item} ? { $c->stash->{item}->get_columns }
                                  : $c->req->params;
     $hash->{_token} = $c->req->param('_token');
@@ -204,9 +210,11 @@ sub create_token :Private {
 
 sub validate_token {
     my ( $self, $c ) = @_;
-#    my $token = delete $c->session->{_token};
-    my $token = $c->session->{_token};
-    return $token && ($c->req->param('_token') eq $token);
+    $c->req->param('_token') or return;
+    my $token = $self->{preserve_token} ? $c->session->{_token} 
+        : delete $c->session->{_token};
+    $token or return;
+    return $c->req->param('_token') eq $token;
 }
 
 sub setup_item :Private {

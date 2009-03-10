@@ -21,7 +21,7 @@
         <input type="hidden" name="nickname">
         <input type="hidden" name="_token">
         <input type="submit" name="join" value="参加する">
-        <input type="submit" value="登録内容を書き直す">
+        <input type="submit" name="rewrite" value="登録内容を書き直す">
     </td>
 </tr>
 </table>

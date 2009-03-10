@@ -15,6 +15,7 @@ sub work {
 
     my $sender = Email::Send->new($class->config);
     my $result = $sender->send($message);
+    undef $sender;
     if ($result) {
         $job->completed();
     } else {

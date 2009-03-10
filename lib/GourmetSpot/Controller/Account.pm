@@ -56,7 +56,7 @@ sub login :Path('login') {
                     password => $c->req->param('password'),
                 })
         ) {
-            my $uri = $c->session->{backurl} || $c->uri_for('/member/');
+            my $uri = $c->session->{backurl} ? $c->session->{backurl} : $c->uri_for('/member/');
             $c->res->redirect($uri);
         } else {
             $c->stash->{error} = 
@@ -236,9 +236,10 @@ sub password :Path('password') {
             template => 'account/password_reset.tt2',
             member => $c->user,
         );
-        $c->forward($c->view);
-        $c->fillform;
     }
+    $c->forward('create_token');
+    $c->forward($c->view);
+    $c->fillform;
 }
 
 sub password_guest :Private {
@@ -267,24 +268,17 @@ sub password_guest :Private {
             template => 'account/password_reset.tt2',
             member => $reset->member,
         );
-        $c->forward($c->view);
-        $c->fillform;
     } else {
         if ( $c->req->method eq 'POST') {
-            if ($c->req->param('request')) {
-                return $c->forward('password_request');
-            }
+            return $c->forward('password_request');
         }
     }
 }
 
 sub password_request :Private {
     my ( $self, $c ) = @_;
-    my $mail = $c->req->param('mail');
-    unless ($mail) {
-        $c->stash->{error} = 'メールアドレスを入力してください。';
-        return $c->forward($c->view);
-    } else {
+    if (! $c->form->has_error && $self->validate_token($c) ) {
+        my $mail = $c->req->param('mail');
         my $member = $c->model('DBIC::Member')->find({mail => $mail});
         if ($member) {
             my $reset = $c->model('DBIC::ResetPassword')->create(
@@ -312,26 +306,28 @@ sub password_request :Private {
 sub password_reset :Private {
     my ( $self, $c, $reset ) = @_;
 
-    if ($c->req->param('password') ne $c->req->param('password_confirm')) {
-        $c->form->set_invalid('password_confirm', 'SAME_AS_PASSWORD');
-    }
-    if (!$c->form->has_error) {
-        my $member = $c->user || $reset->member;
-        my $password = $c->req->param('password');
-        $member->update(
-            {
-                password => GourmetSpot::Util->compute_password($password, $c),
-            }
-        );
-        if ( !$c->user && $reset ) {
-            $c->authenticate( {
-                    mail => $reset->member->mail,
-                    password => $password,
-                });
-            $reset->delete;
+    if ($self->validate_token($c)) {
+        if ($c->req->param('password') ne $c->req->param('password_confirm')) {
+            $c->form->set_invalid('password_confirm', 'SAME_AS_PASSWORD');
         }
-        $c->flash->{message} = 'パスワードを設定しました';
-        return $c->res->redirect($c->uri_for());
+        if (!$c->form->has_error) {
+            my $member = $c->user ? $c->user : $reset->member;
+            my $password = $c->req->param('password');
+            $member->update(
+                {
+                    password => GourmetSpot::Util->compute_password($password, $c),
+                }
+            );
+            if ( !$c->user ) {
+                $c->authenticate( {
+                        mail => $reset->member->mail,
+                        password => $password,
+                    });
+                $reset->delete;
+            }
+            $c->flash->{message} = 'パスワードを設定しました';
+            return $c->res->redirect($c->uri_for());
+        }
     }
 }
 
@@ -349,13 +345,12 @@ sub edit :Path('edit') {
 sub edit_commit :Private {
     my ( $self, $c ) = @_;
     if (!$c->form->has_error && $self->validate_token($c)) {
-        my $q = $c->req;
-        my $hash = {};
-        $hash->{nickname} = $q->param('nickname') if $q->param('nickname');
-        if (length %{$hash}) {
-            $c->user->update( $hash );
-            $c->res->redirect($c->uri_for());
-        }
+        $c->user->update(
+            {
+                nickname => $c->req->param('nickname'),
+            }
+        );
+        $c->res->redirect($c->uri_for());
     }
 }
 
@@ -381,6 +376,7 @@ sub create_token :Private {
 sub validate_token {
     my ( $self, $c ) = @_;
     my $token = delete $c->session->{_token} or return;
+    $c->req->param('_token') or return;
     return $c->req->param('_token') eq $token;
 }
 

@@ -2,6 +2,7 @@ package t::Util;
 use strict;
 use warnings;
 use utf8;
+use Carp;
 use Test::More;
 use DBI;
 use Data::Dumper;
@@ -10,6 +11,7 @@ use FindBin;
 use File::Spec::Functions;
 use GourmetSpot::Util;
 use GourmetSpot::Schema;
+use GourmetSpot::Worker;
 
 sub import {
     my ( $class, %args ) = @_;
@@ -18,14 +20,20 @@ sub import {
     warnings->import;
     utf8->import;
 
-    for (qw(teardown_database setup_user setup_user_and_login config)) {
+    for (qw(teardown_database setup_user guest setup_user_and_login config mail_content)) {
         no strict 'refs';
         *{"$caller\::$_"} = \&{$_};
     }
 
-    $ENV{CATALYST_CONFIG} = "$FindBin::Bin/config";
+#    $ENV{CATALYST_CONFIG} = "$FindBin::Bin/config";
+    $ENV{CATALYST_CONFIG} = "t/config";
     require Test::WWW::Mechanize::Catalyst;
     Test::WWW::Mechanize::Catalyst->import('GourmetSpot');
+
+    {
+        no strict 'refs';
+        *{"Test::WWW::Mechanize::Catalyst::post_with_token_ok"} = \&post_with_token_ok;
+    }
 
     $class->setup_database($caller);
 }
@@ -110,6 +118,10 @@ sub setup_user_and_login {
     return $mech;
 }
 
+sub guest {
+    return Test::WWW::Mechanize::Catalyst->new;
+}
+
 sub teardown_database {
     my ( $class, $caller ) = @_;
     my $config = GourmetSpot::Util->load_config;
@@ -121,6 +133,40 @@ sub teardown_database {
 
 sub config {
     return GourmetSpot::Util->load_config;
+}
+
+sub mail_content {
+    my $mail_path = config->{'Worker::Mailer'}{mailer_args}[0];
+    unlink $mail_path;
+    my $mail = '';
+    {
+        local $SIG{__WARN__} = sub {};
+        my $worker = GourmetSpot::Worker->schwartz;
+        $worker->work_once;
+    }
+    if ( -r $mail_path ) {
+        open my $fh , '<', $mail_path or croak $@;
+        binmode($fh, ':encoding(iso-2022-jp)');
+        $mail = do {local $/; <$fh>};
+        close $fh;
+        unlink $mail_path;
+    }
+    return $mail;
+}
+
+sub post_with_token_ok {
+    my ($mech, $args) = @_;
+
+    my $form = $mech->form_number($args->{form_number});
+    my $token = $form->value('_token');
+    my $action = $form->action;
+    my %button = $args->{button} ? ($args->{button} => $form->value($args->{button})) : ();
+    return $mech->post_ok($action, {
+            %{$args->{fields}},
+            _token => $token,
+            %button,
+        }
+    );
 }
 
 1;
