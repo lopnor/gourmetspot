@@ -26,6 +26,15 @@ GourmetSpot::Controller::Root - Root Controller for GourmetSpot
 
 =cut
 
+sub auto :Private {
+    my ( $self, $c ) = @_;
+    if ($c->action->namespace ne 'mobile' && ! $c->req->mobile_agent->is_non_mobile) {
+        $c->res->redirect($c->uri_for('/mobile'));
+        return 0;
+    }
+    return 1;
+}
+
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 }

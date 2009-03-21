@@ -13,7 +13,7 @@
   <script type="text/javascript" src="[% c.uri_for('/static/js/jquery-1.3.1.js') %]"></script>
   <script type="text/javascript" src="[% c.uri_for('/static/js/jquery.json-1.3.js') %]"></script>
   <script type="text/javascript" src="[% c.uri_for('/static/js/gourmetclub.js', {c => date.now }) %]"></script>
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=[% c.config.googlemaps.key %]"></script>
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=[% host = c.req.uri.host; c.config.googlemaps.$host %]"></script>
   <style type="text/css">
 [% PROCESS ttsite.css %]
   </style>

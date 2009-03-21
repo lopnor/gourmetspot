@@ -1,0 +1,13 @@
+<div id="header">[% PROCESS site/mobile_header %]</div>
+
+<div id="content">
+[% IF c.flash.error or error -%]
+<div class="error message">[% c.flash.error or error %]</div>
+[% END -%]
+[% IF c.flash.message -%]
+<div class="message">[% c.flash.message %]</div>
+[% END -%]
+[% content -%]
+</div>
+
+<div id="footer">[% PROCESS site/footer %]</div>

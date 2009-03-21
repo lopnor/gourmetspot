@@ -35,6 +35,8 @@ use Catalyst qw/
                 +GourmetSpot::Util::ProfileLoader
                 FormValidator::Simple::Auto
 
+                MobileAgent
+
                 Unicode
                 /;
 

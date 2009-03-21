@@ -1,0 +1,8 @@
+<!-- BEGIN site/header -->
+<h1 class="title">[% template.title or site.title %]</h1>
+<div class="menu">
+<ul>
+<li><a href="[% c.uri_for('/') %]">トップページ</a></li>
+</ul>
+</div>
+<!-- END site/header -->

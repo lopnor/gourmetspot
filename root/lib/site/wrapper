@@ -3,6 +3,10 @@
      content;
    ELSE;
      debug("Applying HTML page layout wrappers to $template.name\n");
-     content WRAPPER site/html + site/layout;
+     IF c.req.mobile_agent.is_non_mobile;
+       content WRAPPER site/html + site/layout;
+     ELSE;
+       content WRAPPER site/mobile_html + site/mobile_layout;
+     END;
    END;
 -%]

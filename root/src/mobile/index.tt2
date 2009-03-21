@@ -1,0 +1,7 @@
+[% IF c.req.mobile_agent.is_ezweb %]
+<a href="device:location?url=[% c.uri_for('search') | url %]">検索</a>
+[% ELSIF c.req.mobile_agent.is_docomo %]
+<a href="http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&amp;msn=OPENAREAKEY&amp;posinfo=1&amp;nl=[% c.uri_for('search') | url %]">検索</a>
+[% ELSIF c.req.mobile_agent.is_softbank %]
+<a href="location:auto?url=[% c.uri_for('search') | url %]">検索</a>
+[% END %]

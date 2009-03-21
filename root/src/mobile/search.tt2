@@ -1,0 +1,7 @@
+<ul>
+[% FOR item IN list %]
+<li>[% item.name %]</li>
+[% END %]
+</ul>
+[% lat %]<br />
+[% lng %]
