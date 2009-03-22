@@ -29,6 +29,16 @@
     password_confirm:
         - self_rule: SAME_AS_PASSWORD 
           message: 'パスワードが一致しません。'
+'account/edit_commit':
+    nickname:
+        - rule: NOT_BLANK
+          message: 'ニックネームを入力してください。'
+'account/password_request':
+    mail:
+        - rule: NOT_BLANK
+          message: 'メールアドレスを入力してください。'
+        - rule: EMAIL_LOOSE
+          message: 'メールアドレスが正しくありません。'
 'account/password_reset':
     password:
         - rule: NOT_BLANK
@@ -40,18 +50,3 @@
     password_confirm:
         - self_rule: SAME_AS_PASSWORD 
           message: 'パスワードが一致しません。'
-'member/review_edit':
-    restrant_id:
-        - rule: NOT_BLANK
-          message: 'お店を指定してください。'
-    budget:
-        - rule: NOT_BLANK
-          message: '予算を入力してください。'
-    scene_id:
-        - rule: NOT_BLANK
-          message: 'シーンを選んでください。'
-        - rule: INT
-          message: 'シーンを選んでください。'
-    comment:
-        - rule: NOT_BLANK
-          message: 'ヒトコトを書いてください。'

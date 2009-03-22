@@ -26,6 +26,10 @@
     </td>
 </tr>
 <tr>
+    <th>予算</th>
+    <td>[% item.budget | html %]</td>
+</tr>
+<tr>
     <th>タグ</th>
     <td>
     [% FOR t IN item.tags %]
@@ -41,7 +45,8 @@
 <tr>
     <th></th>
     <td>
-        → <a href="[% c.uri_for( item.id, "update" ) %]">レビューを更新</a>
+        → <a href="[% c.uri_for( item.id, "update" ) %]">レビューを更新</a><br>
+        → <a href="[% c.uri_for( item.id, "delete" ) %]">レビューを削除</a>
     </td>
 </tr>
 [% END %]

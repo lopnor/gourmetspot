@@ -12,6 +12,7 @@ __PACKAGE__->config(
         model => 'DBIC::OpenHours',
         namespace => 'member/open_hours',
         default_view => 'View::JSON',
+        preserve_token => 1,
     }
 );
 

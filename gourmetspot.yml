@@ -7,6 +7,9 @@ Controller::Restrant:
         latitude:
             - rule: NOT_BLANK
               message: '場所を地図で指定してください'
+        longitude:
+            - rule: NOT_BLANK
+              message: '場所を地図で指定してください'
 Controller::Review:
     form:
         budget:
