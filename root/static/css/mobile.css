@@ -1,3 +1,19 @@
+#header {
+    background-color: #FCC800;
+    text-align: center;
+}
 h1 {
-    font-size: 12px;
+    font-size: medium;
+}
+h2 {
+    font-size: medium;
+    text-align: center;
+    background-color: #89b8df;
+}
+#copyright {
+    text-align: center;
+    background-color: #FCC800;
+}
+#mapcontrol {
+    text-align: center;
 }

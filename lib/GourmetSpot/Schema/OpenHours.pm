@@ -29,6 +29,10 @@ __PACKAGE__->set_primary_key("id");
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 15:20:18
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9iSUOEgxGsBn6cY3HsfqNA
 
+__PACKAGE__->inflate_column('day_of_week', {
+        inflate => sub { [ split( ',', $_[0] ) ] },
+        deflate => sub { join( ',', @{ $_[0] } ) },
+    });
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

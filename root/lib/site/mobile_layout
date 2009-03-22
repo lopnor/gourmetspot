@@ -10,4 +10,4 @@
 [% content -%]
 </div>
 
-<div id="footer">[% PROCESS site/footer %]</div>
+<div id="footer">[% PROCESS site/mobile_footer %]</div>

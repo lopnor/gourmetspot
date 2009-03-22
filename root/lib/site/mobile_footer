@@ -1,0 +1,6 @@
+<!-- BEGIN site/footer -->
+<hr />
+&#xE6EB;<a href="[% c.uri_for('') %]" accesskey="0">トップ</a><br />
+&#xE6EA;<a href="#top" accesskey="9">ページトップ</a><br />
+<div id="copyright">(c) [% site.copyright %]</div>
+<!-- END site/footer -->

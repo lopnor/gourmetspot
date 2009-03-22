@@ -1,27 +1,6 @@
 var map;
 var mapClickListener;
 $(function() {
-        $('#review_select_scene').change(function(){
-            if ($(this).children("option[selected]").val() == '-') {
-                var new_scene = prompt("追加するシーンを入力してください")
-                if ( new_scene ) {
-                    $.post(
-                        scene_url, 
-                        {value: new_scene},
-                        function(data) {
-                            var s = document.createElement('option');
-                            s.value = data.id;
-                            s.appendChild(document.createTextNode(data.value));
-                            $(s).insertBefore($('#review_select_scene option:selected'));
-                            $('#review_select_scene').val(data.id);
-                        },
-                        'json'
-                    );
-                } else {
-                    $(this).val('');
-                }
-            }
-        });
         $('form input[name="address"]').change(function() {
                 var geocoder = new GClientGeocoder();
                 geocoder.getLatLng(
@@ -69,6 +48,7 @@ $(function() {
                     map.setCenter(hachikoLatLng, 18);
                     mapClickListener = GEvent.addListener(
                             map, "click", function(overlay, point) {
+                                alert('here');
                                 createMarker(map, point, option);
                                 GEvent.removeListener(mapClickListener);
                                 fillLatLng(point);
@@ -84,23 +64,41 @@ $(window).unload = 'GUnload()';
 function createMarker(map, point, option) {
     var marker = new GMarker(point, option);
     map.addOverlay(marker);
+    var gsclient = new GStreetviewClient();
     var panodiv = document.createElement('div');
     $(panodiv).css({height: '200px', width: '300px'});
-    marker.openInfoWindow(panodiv);
-    setTimeout(function() {setupPanorama(marker, panodiv)}, 300);
-    if ( option.draggable ) {
-        GEvent.addListener(marker, "dragend", function() {
-                    fillLatLng(marker.getLatLng());
+    gsclient.getNearestPanoramaLatLng(point,function(latlng) {
+            if (latlng) {
+                marker.openInfoWindow(panodiv);
+                setTimeout(function() {setupPanorama(marker, panodiv)}, 500);
+                if ( option.draggable ) {
+                    GEvent.addListener(marker, "dragend", function() {
+                                fillLatLng(marker.getLatLng());
+                        gsclient.getNearestPanoramaLatLng(marker.getLatLng(),function(latlng) {
+                            if (latlng) {
+                            marker.openInfoWindow(panodiv);
+                            setTimeout(function() {setupPanorama(marker, panodiv)}, 500);
+                            }
+                            }
+                            );
+                            }
+                        );
+                    GEvent.addListener(marker, "dragstart", function() {
+                                map.closeInfoWindow();
+                            }
+                        );
+                    GEvent.addListener(marker, "click", function() {
+                        gsclient.getNearestPanoramaLatLng(marker.getLatLng(),function(latlng) {
+                            if (latlng) {
+                            marker.openInfoWindow(panodiv);
+                            setTimeout(function() {setupPanorama(marker, panodiv)}, 500);
+                            }
+                            }
+                            );
+                        }
+                        );
                 }
-            );
-        GEvent.addListener(marker, "dragstart", function() {
-                    map.closeInfoWindow();
-                }
-            );
-    }
-    GEvent.addListener(marker, "click", function() {
-            marker.openInfoWindow(panodiv);
-            setTimeout(function() {setupPanorama(marker, panodiv)}, 300);
+            }
         }
     );
 }

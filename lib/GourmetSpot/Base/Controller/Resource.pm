@@ -86,7 +86,7 @@ sub index :Chained('noitem_load') :PathPart('') :Args(0) {
         {
             order_by => 'id desc',
             rows => 10,
-            page => $c->req->param('page') || 1,
+            page => $c->req->param('_page') || 1,
         },
     );
 

@@ -90,6 +90,7 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->has_many('openhours' => 'GourmetSpot::Schema::OpenHours' => 'restrant_id');
+__PACKAGE__->has_many('reviews' => 'GourmetSpot::Schema::Review' => 'restrant_id');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
