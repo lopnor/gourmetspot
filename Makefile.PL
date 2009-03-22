@@ -38,6 +38,8 @@ requires 'Email::Send';
 requires 'Module::Pluggable' => '3.8';
 requires 'Path::Class';
 requires 'Hash::Merge::Simple';
+requires 'Geo::Google::StaticMaps::Navigation';
+requires 'Geo::Coordinates::Converter';
 
 requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen
