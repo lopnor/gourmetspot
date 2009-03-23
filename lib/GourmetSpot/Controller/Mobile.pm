@@ -45,7 +45,7 @@ sub setup_map :Private {
     my ( $self, $c, $item ) = @_;
     my $map = Geo::Google::StaticMaps::Navigation->new(
         zoom_ratio => 2,
-        key => $c->config->{googlemaps}->{$c->req->hostname},
+        key => $c->config->{googlemaps}->{$c->req->uri->host},
         center => Geo::Coordinates::Converter->new(
             lat => $c->req->param('lat') || $item->latitude,
             lng => $c->req->param('lng') || $item->longitude,

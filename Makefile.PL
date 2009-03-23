@@ -43,6 +43,7 @@ requires 'Geo::Coordinates::Converter';
 requires 'Data::Visitor::Callback';
 requires 'Catalyst::Controller::Mobile::JP';
 requires 'Catalyst::Plugin::MobileAgent';
+requires 'Catalyst::View::MobileJpFilter';
 
 requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen
