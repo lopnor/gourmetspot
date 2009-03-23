@@ -1,5 +1,5 @@
 use t::Util;
-use Test::More tests => 54;
+use Test::More tests => 58;
 use JSON;
 
 BEGIN { use_ok 'GourmetSpot::Controller::Restrant' }
@@ -102,7 +102,7 @@ my $mech = setup_user_and_login;
     $mech->content_like(qr/場所を地図で指定してください/);
 }
 
-# normal post (5 tests)
+# normal post (9 tests)
 {
     $mech->get_ok('/member/restrant/create');
     $mech->post_with_token_ok(
@@ -114,6 +114,12 @@ my $mech = setup_user_and_login;
             }
         }
     );
+    my @got = schema->resultset('OpenHours')->all;
+    is scalar @got, 1;
+    my %cols = $got[0]->get_columns;
+    ok delete $cols{restrant_id};
+    ok delete $cols{id};
+    is_deeply \%cols, $oh;
     $mech->title_like(qr/お店情報/);
     $mech->content_like(qr/$r->{name}/);
     $mech->follow_link_ok({text => '編集'});

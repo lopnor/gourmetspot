@@ -24,13 +24,23 @@
 <tr>
     <th>営業時間</td>
     <td>
+<table>
 [% FOR oh IN item.openhours %]
-[% oh.day_of_week %]
-[% IF oh.holiday %]祝[% END %]
-[% IF oh.pre_holiday %]祝前[% END %]
-:
-[% oh.opens_at | html %] ~ [% oh.closes_at | html %]
+<tr>
+<th>[% IF oh.day_of_week.Sun %]日[% END %]</th>
+<th>[% IF oh.day_of_week.Mon %]月[% END %]</th>
+<th>[% IF oh.day_of_week.Tue %]火[% END %]</th>
+<th>[% IF oh.day_of_week.Wed %]水[% END %]</th>
+<th>[% IF oh.day_of_week.Thu %]木[% END %]</th>
+<th>[% IF oh.day_of_week.Fri %]金[% END %]</th>
+<th>[% IF oh.day_of_week.Sat %]土[% END %]</th>
+<th>[% IF oh.holiday %]祝[% END %]</th>
+<th>[% IF oh.pre_holiday %]祝前[% END %]</th>
+<tr>
+<td colspan="9"> [% oh.opens_at | html %] ~ [% oh.closes_at | html %]</td>
+</tr>
 [% END %]
+</table>
     </td>
 </tr>
 <tr>

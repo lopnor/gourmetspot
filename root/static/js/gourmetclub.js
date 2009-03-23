@@ -48,7 +48,6 @@ $(function() {
                     map.setCenter(hachikoLatLng, 18);
                     mapClickListener = GEvent.addListener(
                             map, "click", function(overlay, point) {
-                                alert('here');
                                 createMarker(map, point, option);
                                 GEvent.removeListener(mapClickListener);
                                 fillLatLng(point);

@@ -20,12 +20,11 @@ sub import {
     warnings->import;
     utf8->import;
 
-    for (qw(teardown_database setup_user guest setup_user_and_login config mail_content)) {
+    for (qw(teardown_database setup_user guest setup_user_and_login config mail_content schema)) {
         no strict 'refs';
         *{"$caller\::$_"} = \&{$_};
     }
 
-#    $ENV{CATALYST_CONFIG} = "$FindBin::Bin/config";
     $ENV{CATALYST_CONFIG} = "t/config";
     require Test::WWW::Mechanize::Catalyst;
     Test::WWW::Mechanize::Catalyst->import('GourmetSpot');
@@ -51,11 +50,10 @@ END {
 
 sub setup_database {
     my ( $class, $caller ) = @_;
-    my $config = GourmetSpot::Util->load_config;
-    my $connect_info = $config->{'Model::DBIC'}->{connect_info};
+    my $connect_info = &config->{'Model::DBIC'}->{connect_info};
     my @dsn = split(/;=/,(split(':', $connect_info->[0]))[2]);
     my %dsn = scalar @dsn == 1 ? (database => @dsn) : @dsn;
-    open my $fh, catfile $config->{home}, 'gourmetspot.sql';
+    open my $fh, catfile &config->{home}, 'gourmetspot.sql';
     my $sql = do {local $/; <$fh>};
     close $fh;
     my @cmd = (
@@ -77,11 +75,7 @@ sub setup_user {
     } else {
         $args = shift;
     }
-    my $config = GourmetSpot::Util->load_config;
-    my $schema = GourmetSpot::Schema->connect(
-        @{ $config->{'Model::DBIC'}->{connect_info} }
-    );
-    my $member = $schema->resultset('Member')->create(
+    my $member = &schema->resultset('Member')->create(
         {
             mail => $args->{mail},
             password => GourmetSpot::Util->compute_password($args->{password}),
@@ -124,8 +118,7 @@ sub guest {
 
 sub teardown_database {
     my ( $class, $caller ) = @_;
-    my $config = GourmetSpot::Util->load_config;
-    my $dbh = DBI->connect(@{$config->{'Model::DBIC'}->{connect_info}}) or die $@;
+    my $dbh = DBI->connect(@{&config->{'Model::DBIC'}->{connect_info}}) or die $@;
     for my $table (@{$dbh->selectall_arrayref('show tables')}) {
         $dbh->do("drop table $table->[0]");
     }
@@ -135,8 +128,14 @@ sub config {
     return GourmetSpot::Util->load_config;
 }
 
+sub schema {
+    return GourmetSpot::Schema->connect(
+        @{ &config->{'Model::DBIC'}->{connect_info} }
+    );
+}
+
 sub mail_content {
-    my $mail_path = config->{'Worker::Mailer'}{mailer_args}[0];
+    my $mail_path = &config->{'Worker::Mailer'}{mailer_args}[0];
     unlink $mail_path;
     my $mail = '';
     {

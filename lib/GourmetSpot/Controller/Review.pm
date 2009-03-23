@@ -50,7 +50,7 @@ sub setup_item_params :Private {
     $self->next::method($c);
 
     my $now = DateTime->now;
-#    $c->stash->{search_params}->{created_by} = $c->user->id;
+    $c->stash->{search_params}->{created_by} = $c->user->id;
     $c->stash->{item_params}->{modified_at} = $now;
     $c->stash->{item_params}->{created_at} = $now;
     $c->stash->{item_params}->{created_by} = $c->user->id;
