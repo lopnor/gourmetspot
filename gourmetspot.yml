@@ -46,7 +46,7 @@ View::Email:
         charset: iso-2022-jp
         content_type: text/plain
         view: TTMail
-        from: info@gourmetclub.jp
+        from: info@gourmetspot.jp
     sender: 
         mailer: GourmetSpot::Util::Mailer
         mailer_args: 
