@@ -1,7 +1,0 @@
-[% META title='レビューを削除' %]
-<form method="POST">
-<div class="message error">本当に削除しますか?</div>
-<input type="hidden" name="_token">
-<input type="submit" value="削除する">
-<a href="[% c.uri_for( item.id ) %]">戻る</a>
-</form>
