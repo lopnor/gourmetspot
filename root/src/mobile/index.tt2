@@ -1,7 +1,8 @@
 <form action="[% c.uri_for('search') %]" method="GET">
 <input type="text" name="q" />
 <input type="submit" value="地名から検索" />
-</form><br />
+</form>
+<hr />
 [% IF c.req.mobile_agent.is_ezweb %]
 <a href="device:location?url=[% c.uri_for('search') | url %]"
 [% ELSIF c.req.mobile_agent.is_docomo %]

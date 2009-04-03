@@ -5,7 +5,7 @@ BEGIN { use_ok 'GourmetSpot::Controller::Review' }
 
 my $mech = setup_user_and_login;
 {
-    $mech->get('/member/restrant/create');
+    $mech->get('/restrant/create');
     $mech->submit_form(
         form_number => 1,
         fields => {
@@ -66,22 +66,22 @@ my $mech = setup_user_and_login;
     );
 }
 {
-    $mech->get_ok('/member/review/create');
-    is($mech->uri->path, '/member/review');
+    $mech->get_ok('/review/create');
+    is($mech->uri->path, '/review');
 }
 {
-    $mech->post_ok('/member/review/create',{restrant_id => 1});
+    $mech->post_ok('/review/create',{restrant_id => 1});
     is( scalar @{$mech->forms}, 1 );
-    is($mech->uri->path, '/member/review/create');
+    is($mech->uri->path, '/review/create');
 }
 {
-    $mech->get('/member/review');
-    my $link = $mech->find_link( url_regex => qr{/member/review/\d+$} );
+    $mech->get('/review');
+    my $link = $mech->find_link( url_regex => qr{/review/\d+$} );
     ok( $mech->find_link( url => $link->url ) );
-    $mech->follow_link_ok({url_regex => qr{/member/review/\d+}});
+    $mech->follow_link_ok({url_regex => qr{/review/\d+}});
     $mech->follow_link_ok({text => 'レビューを削除'});
     $mech->submit_form_ok({form_number => 1});
-    is( $mech->uri->path, '/member/review' );
+    is( $mech->uri->path, '/review' );
     ok( ! $mech->find_link( url => $link->url ) );
 }
 

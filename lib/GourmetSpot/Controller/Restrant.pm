@@ -23,7 +23,6 @@ __PACKAGE__->config(
     {
         'model' => 'DBIC::Restrant',
         'outer_model' => ['DBIC::OpenHours'],
-        'namespace' => 'member/restrant',
         'like_fields' => ['name'],
     }
 );
@@ -57,10 +56,10 @@ sub update_openhours :Private {
                 delete $item->{"${_}_minute"} || '00',
             );
         }
-        if ($item->{holiday} || $item->{pre_holiday} || $item->{day_of_week}) {
+        if ($item->{holiday} || $item->{pre_holiday} || scalar $item->{day_of_week}) {
             $c->model('DBIC::OpenHours')->update_or_create($item);
         } else {
-            $c->model('DBIC::OpenHOurs')->find($item->{id})->delete if $item->{id};
+            $c->model('DBIC::OpenHours')->find($item->{id})->delete if $item->{id};
         }
     }
 }

@@ -5,13 +5,7 @@ use base 'Catalyst::View::TT';
 
 __PACKAGE__->config(
     TEMPLATE_EXTENSION => '.tt2',
-    DEFAULT_ENCODING => 'utf8',
-    PROVIDERS => [
-        {
-            name => 'Encoding',
-            copy_config => [qw(DEFAULT_ENCODING INCLUDE_PATH PRE_CHOMP POST_CHOMP)],
-        }
-    ],
+    ENCODING => 'utf8',
 );
 
 =head1 NAME

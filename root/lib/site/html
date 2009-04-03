@@ -6,13 +6,12 @@
      <meta http-equiv="Content-Style-Type" content="text/css" />
      <meta http-equiv="content-script-type" content="text/javascript" />
      <script type="text/javascript">
-        var scene_url = '[% c.uri_for('/member/scene') %]';
-        var open_hours_url = '[% c.uri_for('/member/open_hours') %]';
+        var open_hours_url = '[% c.uri_for('/openhours') %]';
      </script>
   <title>[% IF template.title %][% template.title %] - [% END %][% site.title %]</title>
   <script type="text/javascript" src="[% c.uri_for('/static/js/jquery-1.3.1.js') %]"></script>
   <script type="text/javascript" src="[% c.uri_for('/static/js/jquery.json-1.3.js') %]"></script>
-  <script type="text/javascript" src="[% c.uri_for('/static/js/gourmetclub.js', {c => date.now }) %]"></script>
+  <script type="text/javascript" src="[% c.uri_for('/static/js/gourmetspot.js', {c => date.now }) %]"></script>
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=[% host = c.req.uri.host; c.config.googlemaps.$host %]"></script>
   <style type="text/css">
 [% PROCESS ttsite.css %]

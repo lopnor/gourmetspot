@@ -34,6 +34,41 @@ sub import {
         *{"Test::WWW::Mechanize::Catalyst::post_with_token_ok"} = \&post_with_token_ok;
     }
 
+    # http://www.sixapart.jp/techtalk/2006/10/dev-vox-test.html
+    {
+        no warnings 'redefine';
+        *WWW::Mechanize::is_html = sub {
+            my $self = shift;
+            return defined $self->{ct} &&
+                ($self->{ct} eq 'text/html' || $self->{ct} eq 'application/xhtml+xml');
+            };
+        my $update_html = \&WWW::Mechanize::update_html;
+        *WWW::Mechanize::update_html = sub {
+            my $self = shift;
+            my $ct = $self->ct;
+            $self->$update_html(@_);
+            $self->{ct} = $ct;
+        };
+
+        my $_match_any_image_parms = \&WWW::Mechanize::_match_any_image_parms;
+        *WWW::Mechanize::_match_any_image_parms = sub {
+            my $self = shift;
+            local $SIG{__WARN__} = sub {};
+            $self->$_match_any_image_parms(@_);
+        };
+
+        require HTTP::Message;
+        my $decoded_content = \&HTTP::Message::decoded_content;
+        *HTTP::Message::decoded_content = sub {
+            my ($self, %opt) = @_;
+            my $ct = $self->header("Content-Type");
+            $self->header("Content-Type" => 'text/html;charset=utf-8') if $ct eq 'application/xhtml+xml';
+            my $content = $self->$decoded_content(%opt);
+            $self->header("Content-Type" => $ct);
+            return $content;
+        };
+    }
+
     $class->setup_database($caller);
 }
 

@@ -10,7 +10,8 @@ use MRO::Compat;
 __PACKAGE__->config(
     {
         model => 'DBIC::OpenHours',
-        namespace => 'member/open_hours',
+#        namespace => 'member/open_hours',
+#        namespace => 'my/open_hours',
         default_view => 'View::JSON',
         preserve_token => 1,
     }

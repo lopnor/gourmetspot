@@ -72,14 +72,12 @@ sub search :Path('search') :Args(0) {
     if ( my $address = $c->req->param('q') ) {
         my $geo = $c->model('Geo')->get({q => $address})->parse_response;
         if ($geo->{Response}{Status}{code} == 200) {
-            warn $geo->{Response}{Status}{code};
             my @coordinates = split(',', $geo->{Response}{Placemark}{Point}{coordinates});
             $point = Geo::Coordinates::Converter->new(
                 lat => $coordinates[1],
                 lng => $coordinates[0],
                 datum => 'wgs84',
             );
-            warn $point;
             $c->stash(
                 address => $address,
             );

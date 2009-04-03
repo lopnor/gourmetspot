@@ -2,7 +2,6 @@ package GourmetSpot::View::MobileJpFilter;
 use strict;
 use warnings;
 use base 'Catalyst::View::MobileJpFilter';
-use GourmetSpot;
 
 __PACKAGE__->config(
     {

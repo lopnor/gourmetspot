@@ -56,13 +56,13 @@ my $mech = setup_user_and_login;
 
 # get list (2 tests)
 {
-    $mech->get_ok('/member/restrant');
+    $mech->get_ok('/restrant');
     $mech->follow_link_ok({text => '新しいお店を登録する'});
 }
 
 # post without token (2 tests)
 {
-    $mech->post_ok('/member/restrant/create', {
+    $mech->post_ok('/restrant/create', {
             %$r,
             %{oh2form([ $oh ])},
         }
@@ -72,7 +72,7 @@ my $mech = setup_user_and_login;
 
 # post with invalid token (2 tests)
 {
-    $mech->post_ok('/member/restrant/create', {
+    $mech->post_ok('/restrant/create', {
             _token => 'hogehoge',
             %$r,
             %{oh2form([ $oh ])},
@@ -84,7 +84,7 @@ my $mech = setup_user_and_login;
 
 # form error (5 tests)
 {
-    $mech->get_ok('/member/restrant/create');
+    $mech->get_ok('/restrant/create');
     $mech->post_with_token_ok(
         {
             form_number => 1,
@@ -104,7 +104,7 @@ my $mech = setup_user_and_login;
 
 # normal post (9 tests)
 {
-    $mech->get_ok('/member/restrant/create');
+    $mech->get_ok('/restrant/create');
     $mech->post_with_token_ok(
         {
             form_number => 1,
@@ -127,11 +127,11 @@ my $mech = setup_user_and_login;
 
 # error update (7 tests)
 {
-    $mech->get_ok('/member/restrant');
+    $mech->get_ok('/restrant');
     $mech->title_like(qr/お店検索/);
-    my $link = $mech->find_link(url_regex => qr{/member/restrant/\d+});
-    my ($id) = $link->URI->path =~ m{/member/restrant/(\d+)$};
-    $mech->get('/member/open_hours/', {restrant_id => $id});
+    my $link = $mech->find_link(url_regex => qr{/restrant/\d+});
+    my ($id) = $link->URI->path =~ m{/restrant/(\d+)$};
+    $mech->get('/openhours/', {restrant_id => $id});
     my $json = from_json($mech->content);
 
     $mech->get_ok($link->url);
@@ -152,11 +152,11 @@ my $mech = setup_user_and_login;
 
 # normal update (5 tests)
 {
-    $mech->get_ok('/member/restrant');
+    $mech->get_ok('/restrant');
     $mech->title_like(qr/お店検索/);
-    my $link = $mech->find_link(url_regex => qr{/member/restrant/\d+});
-    my ($id) = $link->URI->path =~ m{/member/restrant/(\d+)$};
-    $mech->get('/member/open_hours/', {restrant_id => $id});
+    my $link = $mech->find_link(url_regex => qr{/restrant/\d+});
+    my ($id) = $link->URI->path =~ m{/restrant/(\d+)$};
+    $mech->get('/openhours/', {restrant_id => $id});
     my $json = from_json($mech->content);
 
     $mech->get_ok($link->url);
@@ -175,11 +175,11 @@ my $mech = setup_user_and_login;
 
 # normal update (5 tests)
 {
-    $mech->get_ok('/member/restrant');
+    $mech->get_ok('/restrant');
     $mech->title_like(qr/お店検索/);
-    my $link = $mech->find_link(url_regex => qr{/member/restrant/\d+});
-    my ($id) = $link->URI->path =~ m{/member/restrant/(\d+)$};
-    $mech->get('/member/open_hours/', {restrant_id => $id});
+    my $link = $mech->find_link(url_regex => qr{/restrant/\d+});
+    my ($id) = $link->URI->path =~ m{/restrant/(\d+)$};
+    $mech->get('/openhours/', {restrant_id => $id});
     my $json = from_json($mech->content);
     for (qw(day_of_week holiday pre_holiday)) {
         delete $json->[0]->{$_};
@@ -241,10 +241,10 @@ my $mech = setup_user_and_login;
 
 # update without token (5 tests)
 {
-    $mech->get_ok('/member/restrant');
-    my $link = $mech->find_link(url_regex => qr{/member/restrant/\d+});
-    my ($restrant_id) = $link->URI->path =~ m{/member/restrant/(\d+)$};
-    $mech->post_ok("/member/restrant/$restrant_id/update",
+    $mech->get_ok('/restrant');
+    my $link = $mech->find_link(url_regex => qr{/restrant/\d+});
+    my ($restrant_id) = $link->URI->path =~ m{/restrant/(\d+)$};
+    $mech->post_ok("/restrant/$restrant_id/update",
         {
             %$r,
             %{oh2form([ $oh2 ])},
@@ -257,28 +257,28 @@ my $mech = setup_user_and_login;
 
 # delete without token (5 tests)
 {
-    $mech->get_ok('/member/restrant');
-    my $link = $mech->find_link(url_regex => qr{/member/restrant/\d+});
-    my ($restrant_id) = $link->URI->path =~ m{/member/restrant/(\d+)$};
-    $mech->post_ok("/member/restrant/$restrant_id/delete");
+    $mech->get_ok('/restrant');
+    my $link = $mech->find_link(url_regex => qr{/restrant/\d+});
+    my ($restrant_id) = $link->URI->path =~ m{/restrant/(\d+)$};
+    $mech->post_ok("/restrant/$restrant_id/delete");
     $mech->title_like(qr/お店を削除/);
     ok( $mech->form_number(1) );
-    $mech->get_ok("/member/restrant/$restrant_id");
+    $mech->get_ok("/restrant/$restrant_id");
 }
 
 # delete (5 tests)
 {
-    $mech->get_ok('/member/restrant');
-    my $link = $mech->find_link(url_regex => qr{/member/restrant/\d+});
-    my ($restrant_id) = $link->URI->path =~ m{/member/restrant/(\d+)$};
-    $mech->follow_link(url_regex => qr{/member/restrant/\d+});
+    $mech->get_ok('/restrant');
+    my $link = $mech->find_link(url_regex => qr{/restrant/\d+});
+    my ($restrant_id) = $link->URI->path =~ m{/restrant/(\d+)$};
+    $mech->follow_link(url_regex => qr{/restrant/\d+});
     $mech->follow_link_ok({text => '削除'});
     $mech->submit_form_ok(
         {
             form_number => 1,
         }
     );
-    is( $mech->uri->path, '/member/restrant' );
-    $mech->get("/member/restrant/$restrant_id");
+    is( $mech->uri->path, '/restrant' );
+    $mech->get("/restrant/$restrant_id");
     is( $mech->status, '404' );
 }

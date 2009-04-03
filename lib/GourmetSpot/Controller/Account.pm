@@ -56,7 +56,7 @@ sub login :Path('login') {
                     password => $c->req->param('password'),
                 })
         ) {
-            my $uri = $c->session->{backurl} ? $c->session->{backurl} : $c->uri_for('/member/');
+            my $uri = $c->session->{backurl} ? $c->session->{backurl} : $c->uri_for('/');
             $c->res->redirect($uri);
         } else {
             $c->stash->{error} = 

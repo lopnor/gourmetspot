@@ -31,14 +31,32 @@ sub auto :Private {
     if ($c->action->namespace ne 'mobile' && ! $c->req->mobile_agent->is_non_mobile) {
         $c->res->redirect($c->uri_for('/mobile'));
         return 0;
+    } elsif ( $c->action->namespace eq 'mobile' ) {
+        return 1;
+    } elsif ( !$c->user_in_realm('members') ) {
+        if ( $c->action->reverse eq 'index' || $c->action->namespace eq 'account' ) {
+            return 1;
+        }
+        $c->session->{backurl} = $c->req->uri;
+        $c->res->redirect($c->uri_for('/account/login'));
+        return 0;
     }
     return 1;
 }
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
+    if ( !$c->user_in_realm('members' )) {
+        $c->forward('index_for_guest');
+    }
 }
 
+sub index_for_guest :Private {
+    my ( $self, $c ) = @_;
+    $c->stash(
+        template => 'index_for_guest.tt2',
+    );
+}
 
 sub default :Path {
     my ( $self, $c ) = @_;

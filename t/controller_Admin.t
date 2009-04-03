@@ -1,5 +1,5 @@
 use t::Util;
-use Test::More tests => 46;
+use Test::More tests => 43;
 
 #use_ok test (4 tests)
 BEGIN { use_ok 'Test::WWW::Mechanize::Catalyst', 'GourmetSpot' }
@@ -21,7 +21,7 @@ my $mech = Test::WWW::Mechanize::Catalyst->new;
 
 # login (4 tests)
 {
-    $mech->get_ok('/admin');
+    $mech->get_ok('/admin/');
     $mech->title_like( qr/ログイン/ );
     $mech->submit_form_ok(
         {
@@ -53,7 +53,7 @@ my $mech = Test::WWW::Mechanize::Catalyst->new;
     is $mech->value('nickname'), $new_user->{nickname};
 
     my $mech_user = Test::WWW::Mechanize::Catalyst->new;
-    # login with new user (11 tests)
+    # login with new user (8 tests)
     {
         $mech_user->get_ok('/');
         $mech_user->follow_link_ok({text => 'ログイン'});
@@ -68,9 +68,6 @@ my $mech = Test::WWW::Mechanize::Catalyst->new;
             }
         );
         $mech_user->title_like( qr/メンバーページ/ );
-        $mech_user->content_like( qr/$new_user->{nickname}さんのページ/ );
-        $mech_user->follow_link_ok({text => 'トップページ'});
-        $mech_user->title_is( '美食倶楽部（仮）' );
         $mech_user->follow_link_ok({text => "$new_user->{nickname}さんのページ"});
         $mech_user->get('/admin');
 
@@ -93,7 +90,7 @@ my $mech = Test::WWW::Mechanize::Catalyst->new;
         $mech->follow_link_ok({text_regex => qr/$new_user->{nickname}/});
         $mech->form_number(1);
         is $mech->value('nickname'), $new_user->{nickname};
-        $mech_user->get_ok('/member');
+        $mech_user->get_ok('/');
         $mech_user->content_like( qr/$new_user->{nickname}さんのページ/ );
     }
 
@@ -111,7 +108,7 @@ my $mech = Test::WWW::Mechanize::Catalyst->new;
         $mech->follow_link_ok({text_regex => qr/$new_user->{nickname}/});
         $mech->form_number(1);
         is $mech->value('password'), '';
-        $mech_user->get_ok('/member');
+        $mech_user->get_ok('/');
         $mech_user->follow_link_ok({text => 'ログアウト'});
         $mech_user->follow_link_ok({text => 'ログイン'});
         $mech_user->submit_form_ok(

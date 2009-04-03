@@ -1,0 +1,119 @@
+[% META title="お店を登録" %]
+<div id="map" class="draggable"></div>
+[% IF c.req.method == "POST" && c.form.has_error -%]
+<div class="error message">
+<ul>
+[% FOR message IN c.form.messages(c.action.reverse) -%]
+<li>[% message | html %]</li>
+[% END -%]
+</ul>
+</div>
+[% END -%]
+<form method="POST">
+<table class="data">
+<tr>
+    <th>店名</th>
+    <td><input type="text" name="name" tabindex="1"></td>
+</tr>
+<tr>
+    <th>電話番号</th>
+    <td><input type="text" name="tel" tabindex="2"></td>
+</tr>
+<tr>
+    <th>住所</th>
+    <td><input type="text" name="address" tabindex="3"></td>
+</tr>
+<tr>
+    <th>建物名</th>
+    <td><input type="text" name="building" tabindex="4"></td>
+</tr>
+<tr>
+    <th>行き方</th>
+    <td><textarea name="how_to_get_there" rows="3" cols="30" tabindex="5"></textarea></td>
+</tr>
+<tr>
+    <th>営業時間</th>
+    <td id="hours_cell">
+    </td>
+</tr>
+<tr>
+    <th>営業時間メモ</th>
+    <td><textarea name="open_hours_memo" rows="3" cols="30" tabindex="5"></textarea></td>
+</tr>
+<tr>
+    <th></th>
+    <td>
+        <input type="hidden" name="latitude">
+        <input type="hidden" name="longitude">
+        <input type="hidden" name="panorama">
+        <input type="hidden" name="_token">
+        <input type="submit" value="登録">
+    </td>
+</tr>
+</table>
+</form>
+<script type="text/javascript">
+var init_pano = [% item.panorama or 0 %];
+var init_lat = [% item.latitude or 0 %];
+var init_lng = [% item.longitude or 0 %];
+$(function() {
+[% IF item.id %]
+    $.get(open_hours_url, 
+       {restrant_id: [% item.id %]},
+       function(data) {
+           if (data.length) {
+                $.each(data, function() {
+                    append_hours(this);
+                });
+           } else {
+               append_hours();
+           }
+       },
+       'json'
+   );
+[% ELSE %]
+append_hours();
+[% END %]
+});
+</script>
+<div id="operation_hours" class="week_input" style="display:none;">
+    <input type="hidden" name="OpenHours[].id">
+    <table>
+    <tr>
+    <th>月</th>
+    <th>火</th>
+    <th>水</th>
+    <th>木</th>
+    <th>金</th>
+    <th>土</th>
+    <th>日</th>
+    <th>祝</th>
+    <th>祝前</th>
+    </tr>
+    <tr>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Mon"></td>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Tue"></td>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Wed"></td>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Thu"></td>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Fri"></td>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Sat"></td>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Sun"></td>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].holiday" value="1"></td>
+    <td><input class="checkbox" type="checkbox" name="OpenHours[].pre_holiday" value="1"></td>
+    </tr>
+    <tr>
+    <td colspan="8">
+    <select name="OpenHours[].opens_at_hour" class="hours">
+    </select
+    >:<select name="OpenHours[].opens_at_minute" class="minutes">
+    </select
+    >~<select name="OpenHours[].closes_at_hour" class="hours">
+    </select
+    >:<select name="OpenHours[].closes_at_minute" class="minutes">
+    </select>
+    </td>
+    <td class="remove_hours">
+    </td>
+    </tr>
+    </table>
+</div>

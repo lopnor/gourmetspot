@@ -1,4 +1,3 @@
 <!-- BEGIN site/header -->
-<a name="top"></a>
-<h1 class="title">[% template.title or site.title %]</h1>
+<h1 class="title"><a name="top">[% template.title or site.title %]</a></h1>
 <!-- END site/header -->

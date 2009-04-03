@@ -16,7 +16,7 @@ my $oh = {
 
 # create restrant (4 tests)
 {
-    $mech->get_ok('/member/restrant/create');
+    $mech->get_ok('/restrant/create');
     $mech->post_with_token_ok(
         {
             form_number => 1,
@@ -42,9 +42,9 @@ my $oh = {
 # get_json and delete (20 tests)
 {
     $mech->follow_link_ok({text_regex => qr/編集/});
-    my ($restrant_id) = $mech->uri->path =~ m{/member/restrant/(\d+)/update};
+    my ($restrant_id) = $mech->uri->path =~ m{/restrant/(\d+)/update};
     ok $restrant_id;
-    $mech->get_ok('/member/open_hours', {restrant_id => $restrant_id});
+    $mech->get_ok('/openhours', {restrant_id => $restrant_id});
     ok my $json = from_json($mech->content);
     is ref $json, 'ARRAY';
     is scalar @$json, 1;
@@ -53,7 +53,7 @@ my $oh = {
         %$oh,
         restrant_id => $restrant_id,
     };
-    $mech->get_ok("/member/open_hours/$oh_id");
+    $mech->get_ok("/openhours/$oh_id");
     ok my $json2 = from_json($mech->content);
     is ref $json2, 'HASH';
     is_deeply $json2, {
@@ -61,18 +61,18 @@ my $oh = {
         restrant_id => $restrant_id,
         id => $oh_id,
     };
-    $mech->get_ok("/member/open_hours/$oh_id/delete");
+    $mech->get_ok("/openhours/$oh_id/delete");
     is( scalar @{$mech->forms}, 0 );
-    $mech->get_ok("/member/open_hours/$oh_id");
+    $mech->get_ok("/openhours/$oh_id");
 
-    $mech->post_ok("/member/open_hours/$oh_id/delete");
+    $mech->post_ok("/openhours/$oh_id/delete");
     is( scalar @{$mech->forms}, 0 );
-    $mech->get_ok("/member/open_hours/$oh_id");
+    $mech->get_ok("/openhours/$oh_id");
 
-    $mech->get_ok("/member/restrant/$restrant_id/update");
+    $mech->get_ok("/restrant/$restrant_id/update");
     $mech->form_number(1);
     my $token = $mech->value('_token');
-    $mech->post_ok("/member/open_hours/$oh_id/delete", {_token => $token});
-    $mech->get("/member/open_hours/$oh_id");
+    $mech->post_ok("/openhours/$oh_id/delete", {_token => $token});
+    $mech->get("/openhours/$oh_id");
     is( $mech->status, 404 );
 }

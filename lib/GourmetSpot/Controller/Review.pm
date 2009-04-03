@@ -23,7 +23,8 @@ __PACKAGE__->config(
     {
         model => 'DBIC::Review',
         outer_model => ['DBIC::Tag'],
-        namespace => 'member/review',
+#        namespace => 'member/review',
+#        namespace => 'my/review',
         like_field => ['budget', 'comment'],
     }
 );

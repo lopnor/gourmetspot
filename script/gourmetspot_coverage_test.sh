@@ -13,8 +13,9 @@ find lib -name "*.pm" | sed "s/lib\//   /;s/\.pm//;s/\//::/g" >> t/00_allload.t
 echo "
 );
 
-plan tests => scalar (@modules);
+plan tests => scalar (@modules) + 1;
 
+use_ok('Catalyst::Test', 'GourmetSpot');
 use_ok \$_ for @modules;
 " >> t/00_allload.t
 

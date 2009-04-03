@@ -58,7 +58,6 @@ h1.title {
 div.message {
     border: 1px solid [% site.rgb.grey2 %];
     background-color: [% site.col.head %];
-    text-align: center;
     padding: 4px;
     margin: 10px 50px;
 }
@@ -69,6 +68,10 @@ div.message {
 
 .error {
     color: [% site.col.error %];
+}
+
+.message li {
+    list-style-type: none;
 }
 
 form {

@@ -1,0 +1,60 @@
+[% META title="レビューを書く" %]
+<div id="map"></div>
+[% IF c.req.method == 'POST' && c.form.has_error -%]
+<div class="error message">
+<ul>
+[% FOR message IN c.form.messages(c.action.reverse) -%]
+<li>[% message | html %]</li>
+[% END -%]
+</ul>
+</div>
+[% END -%]
+<form method="POST" action="?">
+<table class="data">
+<tr>
+    <th>店名</th>
+    <td>
+        [% item.restrant.name OR restrant.name | html %]
+    </td>
+</tr>
+<tr>
+    <th>電話番号</th>
+    <td>
+        [% item.restrant.tel OR restrant.tel | html %]
+    </td>
+</tr>
+<tr>
+    <th>住所</th>
+    <td>
+        [% item.restrant.address OR restrant.address | html %]
+    </td>
+</tr>
+<tr>
+    <th>予算</th>
+    <td><input type="text" name="budget"></td>
+</tr>
+<tr>
+    <th>タグ</th>
+    <td>
+        <input type="text" name="Tag.value" value="[% FOR t IN item.tags %][% t.value | html %] [% END %]">
+    </td>
+</tr>
+<tr>
+    <th>ヒトコト</th>
+    <td><textarea name="comment" rows="5" cols="30"></textarea></td>
+</tr>
+<tr>
+    <th></th>
+    <td>
+        <input type="hidden" name="_token">
+        <input type="hidden" name="restrant_id" value="[% restrant.id | html %]">
+        <input type="submit" value="登録">
+    </td>
+</tr>
+</table>
+</form>
+<script>
+var init_pano = [% item.restrant.panorama or restrant.panorama or 0 %];
+var init_lat = [% item.restrant.latitude or restrant.latitude or 0 %];
+var init_lng = [% item.restrant.longitude or restrant.longitude or 0 %];
+</script>
