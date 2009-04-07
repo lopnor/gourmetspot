@@ -1,6 +1,11 @@
 <h2>[% address | html %]付近のお店情報</h2>
-<ul>
 [% FOR item IN list %]
-<li><a href="[% c.uri_for('restrant', item.id) %]">[% item.name %]</a></li>
+<div>
+<a href="[% c.uri_for('restrant', item.id) %]">[% item.name %]</a>
+<div class="tags">
+[% FOR t IN item.tags %]
+<span class="tag">[% t.value | html %]</span>
 [% END %]
-</ul>
+</div>
+</div>
+[% END %]

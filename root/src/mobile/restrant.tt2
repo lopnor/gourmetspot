@@ -1,17 +1,41 @@
 <h2>[% item.name | html %]</h2>
-&#xE663;[% item.address | html %]<br />
-[% IF item.tel %]&#xE687;<a href="tel:[% item.tel | html %]">[% item.tel | html %]</a><br />[% END %]
-&#xE733;[% item.how_to_get_there | html %]<br />
+<div id="address">&#xE663;[% item.address _ item.building | html %]</div>
+[% IF item.tel -%]
+<div id="tel">&#xE687; <a href="tel:[% item.tel | html %]">[% item.tel | html %]</a></div>
+[% END -%]
+<div id="how_to_get_there">&#xE733;[% item.how_to_get_there | html %]</div>
+[% IF item.openhours -%]
+<div class="openhours">
+&#xE6BA; 営業時間
+<table>
+[% FOR oh IN item.openhours %]
+<tr>
+<th>[% IF oh.day_of_week.Sun %]日[% END %]</th>
+<th>[% IF oh.day_of_week.Mon %]月[% END %]</th>
+<th>[% IF oh.day_of_week.Tue %]火[% END %]</th>
+<th>[% IF oh.day_of_week.Wed %]水[% END %]</th>
+<th>[% IF oh.day_of_week.Thu %]木[% END %]</th>
+<th>[% IF oh.day_of_week.Fri %]金[% END %]</th>
+<th>[% IF oh.day_of_week.Sat %]土[% END %]</th>
+<th>[% IF oh.holiday %]祝[% END %]</th>
+<th>[% IF oh.pre_holiday %]祝前[% END %]</th>
+<tr>
+<td colspan="9"> [% oh.opens_at | html %] ~ [% oh.closes_at | html %]</td>
+</tr>
+[% END %]
+</table>
+</div>
+[% END -%]
 [% IF item.reviews %]
-<hr />
-レビュー
+<h3>レビュー</h3>
 [% FOR r IN item.reviews %]
-<blockquote>
-    [% r.comment | html %]
-</blockquote>
+<div class="review">
+<div class="tags">[% FOR t IN r.tags %]<span class="tag">&#xE689; [% t.value | html %]</span> [% END %]</div>
+[% IF r.budget %]<div class="budget">&#xE6D6; [% r.budget | html %]</div>[% END -%]
+<div class="comment">&#xE719; [% r.comment | html %]</div>
+</div>
 [% END %]
 [% END %]
-<hr />
 <img src="[% map.url | html %]" width="[% map.width | html %]" height="[% map.height | html %]" /><br />
 &#xE6E3;<a href="[% c.uri_for('map', item.id, map.north.params ) | html %]" accesskey="2">↑</a
 >&#xE6E9;<a href="[% c.uri_for('map', item.id, map.south.params ) | html %]" accesskey="8">↓</a

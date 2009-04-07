@@ -26,8 +26,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 15:20:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9iSUOEgxGsBn6cY3HsfqNA
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-07 09:43:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0giAOI0jR1VKQK+xFldFFw
 
 __PACKAGE__->inflate_column('day_of_week', {
         inflate => sub { +{ map {($_ => 1)} split( ',', $_[0] ) } },

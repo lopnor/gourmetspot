@@ -26,8 +26,8 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("value", ["value"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-03-03 15:20:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WncyoJDHQNMGBmf4tMgqIQ
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-07 09:43:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Hczdj1BJUJL/OyuYAe1WLw
 
 __PACKAGE__->has_many('map_review_tag' => 'GourmetSpot::Schema::TagReview' => 'tag_id');
 __PACKAGE__->many_to_many('reviews' => 'map_review_tag' => 'review');

@@ -1,19 +1,42 @@
+body {
+    font-size: small;
+}
 #header {
     background-color: #FCC800;
     text-align: center;
 }
 h1 {
     font-size: medium;
+    font-weight: normal;
+    color: #FFFFFF;
 }
 h2 {
     font-size: medium;
+    font-weight: normal;
     text-align: center;
     background-color: #89b8df;
+    color: #FFFFFF;
+}
+h3 {
+    font-size: small;
+    font-weight: normal;
+    text-align: center;
+    background-color: #FCC800;
+    color: #FFFFFF;
+}
+table {
+    font-size: small;
+}
+th {
+    font-weight: normal;
 }
 #copyright {
     text-align: center;
     background-color: #FCC800;
 }
 #mapcontrol {
+    text-align: center;
+}
+#searchbox {
     text-align: center;
 }

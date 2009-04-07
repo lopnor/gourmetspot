@@ -1,12 +1,14 @@
+<div id="searchbox">
+<a href="[% IF c.req.mobile_agent.is_ezweb -%]
+device:location?url=[% c.uri_for('search') | url -%]
+[% ELSIF c.req.mobile_agent.is_docomo -%]
+[% 'http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl=' _ c.uri_for('search') | html -%]
+[% ELSIF c.req.mobile_agent.is_softbank -%]
+location:auto?url=[% c.uri_for('search') | url -%]
+[% END -%]">現在地点から検索</a>
+</div>
+
 <form action="[% c.uri_for('search') %]" method="GET">
-<input type="text" name="q" />
+<input type="text" name="q" size="10"/>
 <input type="submit" value="地名から検索" />
 </form>
-<hr />
-[% IF c.req.mobile_agent.is_ezweb %]
-<a href="device:location?url=[% c.uri_for('search') | url %]"
-[% ELSIF c.req.mobile_agent.is_docomo %]
-<a href="[% 'http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl=' _ c.uri_for('search') | html %]"
-[% ELSIF c.req.mobile_agent.is_softbank %]
-<a href="location:auto?url=[% c.uri_for('search') | url %]"
-[% END %]>現在地点から検索</a>

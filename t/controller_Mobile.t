@@ -1,6 +1,6 @@
 use t::Util;
 use Encode;
-use Test::More tests => 31;
+use Test::More tests => 37;
 use Data::Dumper;
 
 BEGIN { use_ok 'GourmetSpot::Controller::Mobile' }
@@ -23,12 +23,21 @@ my $restrant = {
 {
     my $mech = guest;
     for my $agent (
-        'DoCoMo/2.0 N04A(c100;TB;W30H20)',
-        'KDDI-SN3A UP.Browser/6.2.0.7.3.129 (GUI) MMP/2.0',
-        'SoftBank/1.0/911T/TJ002 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1',
+        {'User-Agent' => 'DoCoMo/2.0 N04A(c100;TB;W30H20)'},
+        {
+            'User-Agent' => 'KDDI-SN3A UP.Browser/6.2.0.7.3.129 (GUI) MMP/2.0',
+            'X-UP-DEVCAP-SCREENPIXELS' => '229,325',
+            'X-UP-DEVCAP-SCREENDEPTH' => '16,RGB565',
+        },
+        {
+            'User-Agent' => 'SoftBank/1.0/911T/TJ002 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1',
+            'X-JPHONE-DISPLAY' => '800*480',
+            'X-JPHONE-COLOR' => 'C262144',
+        },
     ) {
-        diag("User-Agent: ", $agent);
-        $mech->agent($agent);
+#        diag("User-Agent: ", $agent->{'User-Agent'});
+        $mech->add_header($_ => $agent->{$_}) for keys %$agent;
+#        $mech->agent($agent);
         $mech->get_ok('/mobile');
         is $mech->uri->path, '/mobile';
         ok $mech->find_link(text => '現在地点から検索');
@@ -45,7 +54,8 @@ my $restrant = {
         $mech->content_like(qr{$restrant->{name}});
         ok $mech->find_link(url => "tel:$restrant->{tel}");
         ok my $image = $mech->find_image(url_regex => qr{^http://maps.google.com/staticmap});
-        diag $image->url;
-        is $image->width, $image->height, "image widht is: ". $image->width;
+        is $image->width, $image->height;
+        $mech->follow_link_ok({text => 'out'});
+        $mech->follow_link_ok({text => '→'});
     }
 }
