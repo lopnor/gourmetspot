@@ -80,7 +80,7 @@ sub update_item :Private {
 
 sub update_tag :Private {
     my ( $self, $c ) = @_;
-    my @values = split(/\s/, $c->stash->{outer_params}->{'DBIC::Tag'}->{value});
+    my @values = grep {length($_)} split(/\s/, $c->stash->{outer_params}->{'DBIC::Tag'}->{value});
     my @tags = $c->stash->{item}->tags;
     for my $tag ($c->stash->{item}->tags) {
         if (grep {$_ eq $tag->value } @values) {

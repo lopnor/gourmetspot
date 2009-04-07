@@ -67,79 +67,45 @@ sub setup_map :Private {
 
 sub search :Path('search') :Args(0) {
     my ( $self, $c ) = @_;
-
     my $point;
+    my $mapapi = $c->model('Map');
     if ( my $address = $c->req->param('q') ) {
-        my $geo = $c->model('Geo')->get({q => $address})->parse_response;
-        if ($geo->{Response}{Status}{code} == 200) {
-            my @coordinates = split(',', $geo->{Response}{Placemark}{Point}{coordinates});
-            $point = Geo::Coordinates::Converter->new(
-                lat => $coordinates[1],
-                lng => $coordinates[0],
-                datum => 'wgs84',
+        my @points = $mapapi->geocode($address);
+        if (scalar @points == 1) {
+            $point = $points[0];
+        } else {
+            $c->stash(
+                candidates => \@points,
             );
+        }
+        $c->stash(
+            address => $address,
+        );
+    } else {
+        $point = $mapapi->gps_to_coordinates($c->req);
+        if ( $point ) {
+            my $address = $mapapi->reverse_geocode($point);
             $c->stash(
                 address => $address,
             );
         }
-    } else {
-        if ( $c->req->mobile_agent->is_docomo ) {
-            if ($c->req->param('LAT') && $c->req->param('LON')) {
-                $point = Geo::Coordinates::Converter->new(
-                    lat => $c->req->param('LAT'),
-                    lng => $c->req->param('LON'),
-                    datum => $c->req->param('GEO'),
-                );
-            }
-        } elsif ( $c->req->mobile_agent->is_ezweb ) {
-            if ($c->req->param('lat') && $c->req->param('lon')) {
-                $point = Geo::Coordinates::Converter->new(
-                    lat => $c->req->param('lat'),
-                    lng => $c->req->param('lon'),
-                    datum => $c->req->param('datum'),
-                );
-            }
-        } elsif ( $c->req->mobile_agent->is_softbank ) {
-            if ($c->req->param('pos') =~ m{N([\d\.]+)E([\d\.]+)}) {
-                $point = Geo::Coordinates::Converter->new(
-                    lat => $1,
-                    lng => $2,
-                    datum => $c->req->param('geo'),
-                );
-            }
-        }
-        if ( $point ) {
-            $point->convert(wgs84 => 'degree');
-
-            my $geo = $c->model('Geo')->get({ll => join(',', $point->lat, $point->lng)})->parse_response;
-            if ($geo->{Response}{Status}{code} == 200) {
-                $c->stash(
-                    address => $geo->{Response}{Placemark}{p1}{address}
-                );
-            }
-        }
     }
-
     if ($point) {
-
-        my $distance = sprintf("((acos(sin((%s*pi()/180)) * sin((latitude * pi()/180)) + cos((%s*pi()/180)) * cos((latitude * pi()/180)) * cos(((%s - longitude )*pi()/180)))) *180*60*1853/pi())",
-            $point->lat,
-            $point->lat,
-            $point->lng
-        );
-        my $rs = $c->model('DBIC::Restrant')->search(
-            {},
+        my $rs = $c->model('Restrant')->search_with_coordinates(
             {
-                '+select' => [
-                    "$distance as distance",
-                ],
-                order_by => 'distance',
-                rows => 5,
-                page => 1,
+                resultset => $c->model('DBIC::Restrant'),
+                coordinates => $point,
+            }
+        );
+        my @tags = $c->model('Restrant')->tags_nearby(
+            {
+                resultset => $c->model('DBIC::Restrant'),
+                coordinates => $point,
             }
         );
         $c->stash(
             list => [ $rs->all ],
+            tags => \@tags,
             lat => $point->lat,
             lng => $point->lng,
         );

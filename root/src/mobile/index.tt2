@@ -5,10 +5,9 @@ device:location?url=[% c.uri_for('search') | url -%]
 [% 'http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl=' _ c.uri_for('search') | html -%]
 [% ELSIF c.req.mobile_agent.is_softbank -%]
 location:auto?url=[% c.uri_for('search') | url -%]
-[% END -%]">現在地点から検索</a>
-</div>
-
+[% END -%]">現在地点から検索</a><br />
 <form action="[% c.uri_for('search') %]" method="GET">
 <input type="text" name="q" size="10"/>
 <input type="submit" value="地名から検索" />
 </form>
+</div>

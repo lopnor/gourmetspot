@@ -1,11 +1,50 @@
+[% IF list -%]
 <h2>[% address | html %]付近のお店情報</h2>
-[% FOR item IN list %]
-<div>
-<a href="[% c.uri_for('restrant', item.id) %]">[% item.name %]</a>
+[% FOR item IN list -%]
+<div class="restrant[% 'odd' IF (loop.count % 2) == 1 %]">
+&#xE66F;<a href="[% c.uri_for('restrant', item.id) %]">[% item.name | html %]</a><br />
+[% IF item.address %]&#xE663; [% item.address | html %]<br />[% END %]
+[% IF item.reviews %]
 <div class="tags">
-[% FOR t IN item.tags %]
-<span class="tag">[% t.value | html %]</span>
-[% END %]
+[% FOR t IN c.model('Restrant').tags_grouped(item).slice(0,2) -%]
+[% IF t -%]
+<span class="tag">&#xE689; [% t.value | html %]</span>
+[% END -%]
+[% END -%]
 </div>
+&#xE6D6; 平均[% c.model('Restrant').average_budget(item) OR '????' | html -%]円<br />
+[% END -%]
 </div>
-[% END %]
+[% END -%]
+[% IF tags -%]
+<div class="tags">
+<h3>&#xE689;タグで絞り込み</h3>
+[% FOR t IN tags.slice(0,5) -%]
+[% IF t -%]
+<div class="tag">&#xE689; <a href="[% c.uri_for('tag', t.id, {lat => lat, lng => lng}) | html %]">[% t.value | html %]([% t.count %])</a></div>
+[% END -%]
+[% END -%]
+</div>
+[% END -%]
+[% ELSE %]
+<h2>[% address | html %]の候補一覧</h2>
+[% FOR p IN candidates -%]
+<div class="point">
+<a href="[% c.uri_for('search', {lon => p.lng, lat => p.lat, datum => 'wgs84'}) | html %]">[% p.address %]</a>
+</div>
+[% END -%]
+[% END -%]
+<div id="searchbox">
+<h3>もう一度検索する</h3>
+<a href="[% IF c.req.mobile_agent.is_ezweb -%]
+device:location?url=[% c.uri_for('search') | url -%]
+[% ELSIF c.req.mobile_agent.is_docomo -%]
+[% 'http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl=' _ c.uri_for('search') | html -%]
+[% ELSIF c.req.mobile_agent.is_softbank -%]
+location:auto?url=[% c.uri_for('search') | url -%]
+[% END -%]">現在地点から検索</a><br />
+<form action="[% c.uri_for('search') %]" method="GET">
+<input type="text" name="q" size="10"/>
+<input type="submit" value="地名から検索" />
+</form>
+</div>

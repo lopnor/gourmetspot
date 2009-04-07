@@ -21,12 +21,4 @@ __PACKAGE__->config(
     }
 );
 
-sub process {
-    my $self = shift;
-    my $c = shift;
-    $self->next::method( $c, @_);
-
-    return 1;
-}
-
 1;

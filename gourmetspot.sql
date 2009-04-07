@@ -81,7 +81,7 @@ create table open_hours (
 create table review (
     id          int not null primary key auto_increment,
     restrant_id int not null default 0,
-    budget      varchar(32) not null default '',
+    budget      int not null default 0,
     comment     text,
     created_by  int not null default 0,
     created_at  datetime,

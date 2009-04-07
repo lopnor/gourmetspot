@@ -19,6 +19,7 @@
 <th>[% IF oh.day_of_week.Sat %]土[% END %]</th>
 <th>[% IF oh.holiday %]祝[% END %]</th>
 <th>[% IF oh.pre_holiday %]祝前[% END %]</th>
+</tr>
 <tr>
 <td colspan="9"> [% oh.opens_at | html %] ~ [% oh.closes_at | html %]</td>
 </tr>

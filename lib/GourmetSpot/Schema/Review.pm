@@ -13,7 +13,7 @@ __PACKAGE__->add_columns(
   "restrant_id",
   { data_type => "INT", default_value => 0, is_nullable => 0, size => 11 },
   "budget",
-  { data_type => "VARCHAR", default_value => "", is_nullable => 0, size => 32 },
+  { data_type => "INT", default_value => 0, is_nullable => 0, size => 11 },
   "comment",
   {
     data_type => "TEXT",
@@ -41,8 +41,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-07 09:43:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AyHAdDXA5MQbVpErgNPV0A
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-07 22:49:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wIkpNIfmyiCToTq4NGJgog
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime));
 

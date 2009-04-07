@@ -16,8 +16,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("tag_id", "review_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-07 09:43:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5YLRkO18pykFYWu5iDrGHw
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-07 22:49:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tDmxvMAqDuCOb8rLMjaKXg
 
 __PACKAGE__->belongs_to( tag => 'GourmetSpot::Schema::Tag', 'tag_id');
 __PACKAGE__->belongs_to( review => 'GourmetSpot::Schema::Review', 'review_id');

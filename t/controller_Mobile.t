@@ -23,7 +23,8 @@ my $restrant = {
 {
     my $mech = guest;
     for my $agent (
-        {'User-Agent' => 'DoCoMo/2.0 N04A(c100;TB;W30H20)'},
+#        {'User-Agent' => 'DoCoMo/2.0 N04A(c100;TB;W30H20)'},
+        {'User-Agent' => 'DoCoMo/2.0 SH901iC(c100;TB;W24H12)'},
         {
             'User-Agent' => 'KDDI-SN3A UP.Browser/6.2.0.7.3.129 (GUI) MMP/2.0',
             'X-UP-DEVCAP-SCREENPIXELS' => '229,325',

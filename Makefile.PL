@@ -22,6 +22,10 @@ requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::Model::DBIC::Schema';
 requires 'Catalyst::Model::Adaptor';
 requires 'Catalyst::View::JSON';
+requires 'Catalyst::Controller::Mobile::JP';
+requires 'Catalyst::Plugin::MobileAgent';
+requires 'Catalyst::View::MobileJpFilter';
+
 requires 'DBIx::Class';
 requires 'DBIx::Class::Schema';
 requires 'DBIx::Class::InflateColumn::DateTime';
@@ -41,9 +45,7 @@ requires 'Hash::Merge::Simple';
 requires 'Geo::Google::StaticMaps::Navigation';
 requires 'Geo::Coordinates::Converter';
 requires 'Data::Visitor::Callback';
-requires 'Catalyst::Controller::Mobile::JP';
-requires 'Catalyst::Plugin::MobileAgent';
-requires 'Catalyst::View::MobileJpFilter';
+requires 'Moose';
 
 requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen

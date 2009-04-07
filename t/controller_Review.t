@@ -41,7 +41,7 @@ my $mech = setup_user_and_login;
         {
             form_number => 1,
             fields => {
-                budget => '1000円くらい',
+                budget => '1000',
                 'Tag.value' => '会社 サンプル',
                 comment => 'コメントです',
             }
@@ -49,7 +49,7 @@ my $mech = setup_user_and_login;
     );
     $mech->content_like(qr/レビュー/);
     $mech->content_like(qr/コメントです/);
-    $mech->content_like(qr/1000円くらい/);
+    $mech->content_like(qr/1000/);
     $mech->content_like(qr/会社/);
     $mech->content_like(qr/サンプル/);
     $mech->follow_link_ok({text => 'レビューを更新'});
@@ -58,7 +58,7 @@ my $mech = setup_user_and_login;
         {
             form_number => 1,
             fields => {
-                budget => '2000円',
+                budget => '2000',
                 'Tag.value' => '会社 sample',
                 comment => 'comment',
             }
