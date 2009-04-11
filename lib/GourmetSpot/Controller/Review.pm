@@ -86,7 +86,7 @@ sub update_tag :Private {
         if (grep {$_ eq $tag->value } @values) {
             @values = grep {$_ ne $tag->value} @values;
         } else {
-            $tag->map_review_tag({review_id => $c->stash->{item}->id})->delete;
+            $tag->map_tag_review({review_id => $c->stash->{item}->id})->delete;
         } 
     }
     for my $value (@values) {
