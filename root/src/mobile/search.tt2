@@ -1,6 +1,7 @@
 [% IF list -%]
 <h2>[% address | html %]付近のお店情報</h2>
-[% FOR item IN list -%]
+[% FOR item IN list.slice(0,5) -%]
+[% NEXT UNLESS item %]
 <div class="restrant[% 'odd' IF (loop.count % 2) == 1 %]">
 &#xE66F;<a href="[% c.uri_for('restrant', item.id) %]">[% item.name | html %]</a><br />
 [% IF item.address %]&#xE663; [% item.address | html %]<br />[% END %]
@@ -19,10 +20,9 @@
 [% IF tags -%]
 <div class="tags">
 <h3>&#xE689;タグで絞り込み</h3>
-[% FOR t IN tags.slice(0,5) -%]
-[% IF t -%]
-<div class="tag">&#xE689; <a href="[% c.uri_for('tag', t.id, {lat => lat, lng => lng}) | html %]">[% t.value | html %]([% t.count %])</a></div>
-[% END -%]
+[% FOR t IN tags_nearby -%]
+[% NEXT UNLESS t -%]
+<div class="tag">&#xE689; <a href="[% empty = []; new_tag = empty.merge(tags, [ t.id ]); c.uri_for('search', {lat => lat, lng => lng, datum => 'wgs84', tag_id => new_tag }) | html %]">[% t.value | html %]([% t.count %])</a></div>
 [% END -%]
 </div>
 [% END -%]
@@ -30,7 +30,7 @@
 <h2>[% address | html %]の候補一覧</h2>
 [% FOR p IN candidates -%]
 <div class="point">
-<a href="[% c.uri_for('search', {lon => p.lng, lat => p.lat, datum => 'wgs84'}) | html %]">[% p.address %]</a>
+<a href="[% c.uri_for('search', {lng => p.lng, lat => p.lat, datum => 'wgs84'}) | html %]">[% p.address %]</a>
 </div>
 [% END -%]
 [% END -%]

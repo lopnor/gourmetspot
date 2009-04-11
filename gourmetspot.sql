@@ -89,8 +89,9 @@ create table review (
 );
 
 create table tag_review (
-    tag_id  int,
-    review_id int,
+    tag_id  int not null default 0,
+    review_id int not null default 0,
+    restrant_id int not null default 0,
     primary key(tag_id, review_id)
 );
 

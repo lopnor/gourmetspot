@@ -104,6 +104,7 @@ sub update_tag :Private {
             {
                 tag_id => $tag->id,
                 review_id => $c->stash->{item}->id,
+                restrant_id => $c->stash->{item}->restrant_id,
             }
         );
     }

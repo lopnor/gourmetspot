@@ -9,48 +9,70 @@ sub search_with_coordinates {
     
     my $distance = $self->distance_for_mysql({point => $args->{coordinates}});
 
+    my $cond = {$distance => { '<' => 5000} };
+
+    my @restrant_id = $self->ids_narrow_down_by_tags($args);
+    if (@restrant_id) {
+        $cond->{id} = {in => \@restrant_id};
+    }
+
     my $rs = $args->{resultset}->search(
-        {
-            $distance => { '<' => 5000},
-        },
+        $cond,
         {
             '+select' => [
                 "$distance as distance",
             ],
             order_by => 'distance',
             rows => $args->{rows} || 5,
-#            prefetch => ['reviews'],
+            prefetch => 'map_restrant_tag',
         }
     );
 
+}
+
+sub ids_narrow_down_by_tags {
+    my ($self, $args) = @_;
+    my @restrant_id;
+    if ($args->{tag_id}) {
+        for my $id (@{$args->{tag_id}}) {
+            my $cond = scalar @restrant_id ? {id => {in => \@restrant_id}} : {};
+            my @related = $args->{resultset}->search( $cond, {select => 'id'})
+                ->search_related('map_restrant_tag' => { tag_id => $id})->all;
+            @restrant_id = map {$_->restrant_id} @related;
+        }
+    }
+    return @restrant_id;
 }
 
 sub tags_nearby {
     my ($self, $args) = @_;
 
     my $distance = $self->distance_for_mysql({point => $args->{coordinates}});
+    my $cond = { $distance => { '<' => 5000 } };
+    my @restrant_id = $self->ids_narrow_down_by_tags($args);
+    if (@restrant_id) {
+        $cond->{id} = {in => \@restrant_id};
+    }
 
     my @restrants = $args->{resultset}->search(
+        $cond,
         {
-            $distance => { '<' => 5000},
-        },
-        {
-            prefetch => 'reviews',
+            prefetch => 'map_restrant_tag',
         },
     )->all;
 
-    return $self->tags_grouped(@restrants);
+    return $self->tags_grouped(\@restrants, $args->{tag_id});
 }
 
 sub tags_grouped {
-    my ($self, @rows) = @_;
-
-    my @tags = map {$_->tags} map {$_->reviews} @rows;
+    my ($self, $rows, $existing) = @_;
+    $rows = [ $rows ] unless ref $rows eq 'ARRAY';
+    my @tags = map {$_->tags} @$rows;
     my %ret;
-    for (@tags) {
-        $ret{$_->value} ||= $_;
-        $ret{$_->value}->{count}++;
-
+    for my $t (@tags) {
+        next if grep {$_ == $t->id} @$existing;
+        $ret{$t->value} ||= $t;
+        $ret{$t->value}->{count}++;
     }
     return sort {$b->{count} <=> $a->{count}} values %ret;
 }

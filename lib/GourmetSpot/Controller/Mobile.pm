@@ -91,21 +91,18 @@ sub search :Path('search') :Args(0) {
         }
     }
     if ($point) {
-        my $rs = $c->model('Restrant')->search_with_coordinates(
-            {
-                resultset => $c->model('DBIC::Restrant'),
-                coordinates => $point,
-            }
-        );
-        my @tags = $c->model('Restrant')->tags_nearby(
-            {
-                resultset => $c->model('DBIC::Restrant'),
-                coordinates => $point,
-            }
-        );
+        my @tag_id = $c->req->param('tag_id');
+        my $arg = {
+            resultset => $c->model('DBIC::Restrant'),
+            coordinates => $point,
+            tag_id => $c->req->param('tag_id') ? [ @tag_id ] : undef,
+        };
+        my $rs = $c->model('Restrant')->search_with_coordinates($arg);
+        my @tags_nearby = $c->model('Restrant')->tags_nearby($arg);
         $c->stash(
             list => [ $rs->all ],
-            tags => \@tags,
+            tags => \@tag_id,
+            tags_nearby => \@tags_nearby,
             lat => $point->lat,
             lng => $point->lng,
         );

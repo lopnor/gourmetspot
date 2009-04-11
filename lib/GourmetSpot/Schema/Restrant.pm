@@ -73,8 +73,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-07 22:49:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZNCSvJSdgEk4pygmGoN9VQ
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-11 10:30:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mMCjLMCvCZIghMYLwL37XQ
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime));
  
@@ -91,6 +91,8 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->has_many('openhours' => 'GourmetSpot::Schema::OpenHours' => 'restrant_id');
 __PACKAGE__->has_many('reviews' => 'GourmetSpot::Schema::Review' => 'restrant_id');
+__PACKAGE__->has_many('map_restrant_tag' => 'GourmetSpot::Schema::TagReview' => 'restrant_id');
+__PACKAGE__->many_to_many(tags => 'map_restrant_tag' => 'tag');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

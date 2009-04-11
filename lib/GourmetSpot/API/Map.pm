@@ -1,51 +1,63 @@
 package GourmetSpot::API::Map;
 use Moose;
 use utf8;
+use charnames ':full';
+use YAML::Syck;
 use Geo::Coordinates::Converter;
 use WebService::Simple;
 use Geo::Google::StaticMaps::Navigation;
+use Lingua::JA::Kana;
+use Geography::JapanesePrefectures::Unicode;
 
 has apikey => (
     isa => 'Str',
     is  => 'ro',
 );
 
+has municipal_data_file => (
+    isa => 'Str',
+    is => 'ro',
+);
+
+has municipal_data => (
+    isa => 'HashRef',
+    is => 'ro',
+    lazy => 1,
+    default => sub {
+        my ($self) = @_;
+        local $YAML::Syck::ImplicitUnicode = 1;
+        return YAML::Syck::LoadFile($self->municipal_data_file);
+    },
+);
+
 sub reverse_geocode {
     my ($self, $coordinates) = @_;
-    my $api = $self->_get_geoapi;
-    my $res = $api->get(
+    my $geo = $self->_get_geo(
         {ll => join(',', $coordinates->lat, $coordinates->lng)}
     );
-    if ($res->is_success) {
-        my $geo = eval {$res->parse_response->documentElement};
-        if ($geo && $geo->getElementsByTagName('code')->shift->textContent eq '200') {
-            my ($nearest) = $self->_get_placemarks($geo);
-            return $self->_address($nearest);
-        }
+    if ($geo && $geo->getElementsByTagName('code')->shift->textContent eq '200') {
+        my ($nearest) = $self->_get_placemarks($geo);
+        return $self->_address($nearest);
     }
 }
 
 sub geocode {
     my ($self, $address) = @_;
-    my $api = $self->_get_geoapi;
-    my $res = $api->get({q => $address});
-    if ($res->is_success) {
-        my $geo = eval {$res->parse_response->documentElement};
-        if ($geo && $geo->getElementsByTagName('code')->shift->textContent eq '200') {
-            my @points;
-            for my $p ($self->_get_placemarks($geo)) {
-                my @coordinates = split(',', $p->getElementsByTagName('coordinates')->shift->textContent);
-                my $point = Geo::Coordinates::Converter->new(
-                    lat => $coordinates[1],
-                    lng => $coordinates[0],
-                    datum => 'wgs84',
-                );
-                $point->convert(wgs84 => 'degree') if $point;
-                $point->{address} = $self->_address($p);
-                push @points, $point;
-            }
-            return @points;
+    my $geo = $self->_get_geo({q => $address});
+    if ($geo && $geo->getElementsByTagName('code')->shift->textContent eq '200') {
+        my @points;
+        for my $p ($self->_get_placemarks($geo)) {
+            my @coordinates = split(',', $p->getElementsByTagName('coordinates')->shift->textContent);
+            my $point = Geo::Coordinates::Converter->new(
+                lat => $coordinates[1],
+                lng => $coordinates[0],
+                datum => 'wgs84',
+            );
+            $point->convert(wgs84 => 'degree') if $point;
+            $point->{address} = $self->_address($p);
+            push @points, $point;
         }
+        return @points;
     }
 }
 
@@ -65,7 +77,7 @@ sub gps_to_coordinates {
         $point = eval {
             Geo::Coordinates::Converter->new(
                 lat => $self->_find_param($query, qr{lat|LAT}),
-                lng => $self->_find_param($query, qr{lon|LON}),
+                lng => $self->_find_param($query, qr{lon|LON|lng}),
                 datum => $self->_find_param($query, qr{datum|GEO}),
             )
         };
@@ -113,8 +125,8 @@ sub _find_param {
     map {$query->param($_) } grep {$_ =~ $regex} $query->param;
 }
 
-sub _get_geoapi {
-    my ($self) = @_;
+sub _get_geo {
+    my ($self, $args) = @_;
     my $api = WebService::Simple->new(
         base_url => 'http://maps.google.com/maps/geo',
         response_parser => 'XML::LibXML',
@@ -123,6 +135,10 @@ sub _get_geoapi {
             gl => 'jp',
         }
     );
+    my $res = $api->get($args);
+    if ($res->is_success) {
+        return eval {$res->parse_response->documentElement};
+    }
 }
 
 sub _address {
@@ -131,16 +147,26 @@ sub _address {
     if ($area) {
         my @address;
         for (qw(AdministrativeAreaName SubAdministrativeAreaName LocalityName DependentLocalityName)) {
-            my $item = $area->getElementsByTagName($_)->shift;
-            push @address, $item->textContent if $item;
+            my $item = $area->getElementsByTagName($_)->shift or next;
+            my $address = $self->_normalize_address($item->textContent);
+            push @address, $address;
         }
         return join(' ', @address);
     } else {
         my $address = $elem->getElementsByTagName('address')->shift->textContent;
-        if ($address =~ s/ station Japan//) {
-            return $address;
-        }
+        return $self->_normalize_address($address);
     }
+}
+
+sub _normalize_address {
+    my ($self, $arg) = @_;
+    $arg =~ s/(?: station Japan| Prefecture)$//;
+    my ($japanese) = map {$_->{name}} 
+                    grep {$_->{roman} eq $arg} 
+                    @{Geography::JapanesePrefectures::Unicode->prefectures_infos};
+    return $japanese if $japanese;
+    my $m = $self->municipal_data->{$arg};
+    return $m || $arg;
 }
 
 sub _get_placemarks {
@@ -151,12 +177,6 @@ sub _get_placemarks {
 sub _get_accuracy {
     my ($self, $elem) = @_;
     return $elem->getElementsByTagName('AddressDetails')->shift->getAttribute('Accuracy');
-}
-
-sub _find_prefecture {
-    my ($self, $arg) = @_;
-    warn $arg;
-    return $arg;
 }
 
 1;
