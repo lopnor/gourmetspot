@@ -6,7 +6,6 @@ use YAML::Syck;
 use Geo::Coordinates::Converter;
 use WebService::Simple;
 use Geo::Google::StaticMaps::Navigation;
-use Lingua::JA::Kana;
 use Geography::JapanesePrefectures::Unicode;
 
 has apikey => (
