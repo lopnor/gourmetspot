@@ -31,7 +31,7 @@
 </tr>
 <tr>
     <th>予算</th>
-    <td><input type="text" name="budget"></td>
+    <td><input type="text" name="budget" size="6">円</td>
 </tr>
 <tr>
     <th>タグ</th>

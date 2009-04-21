@@ -136,3 +136,7 @@ label {
     margin: 0px;
     padding: 0px;
 }
+
+#content div.menu {
+    clear: both;
+}

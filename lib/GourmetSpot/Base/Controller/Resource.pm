@@ -15,6 +15,8 @@ __PACKAGE__->config(
         form => undef,
         default_view => undef,
         preserve_token => 0,
+        rows => 10,
+        order_by => 'id desc',
     }
 );
 
@@ -90,8 +92,8 @@ sub index :Chained('noitem_load') :PathPart('') :Args(0) {
     my $rs = $c->model($self->{model})->search(
         $c->stash->{search_params},
         {
-            order_by => 'id desc',
-            rows => 10,
+            order_by => $self->{order_by},
+            rows => $self->{rows},
             page => $c->req->param('_page') ? $c->req->param('_page') : 1,
         },
     );

@@ -5,8 +5,6 @@ use warnings;
 use utf8;
 use parent 'GourmetSpot::Base::Controller::Resource';
 
-use MRO::Compat;
-
 __PACKAGE__->config(
     {
         model => 'DBIC::OpenHours',

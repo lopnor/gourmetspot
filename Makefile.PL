@@ -34,6 +34,7 @@ requires 'Catalyst::View::Email::Template';
 requires 'TheSchwartz::Worker';
 requires 'Class::Data::Inheritable';
 requires 'YAML';
+requires 'YAML::Syck';
 requires 'DateTime';
 requires 'Digest::SHA1';
 requires 'Email::MIME';
@@ -46,6 +47,7 @@ requires 'Geo::Google::StaticMaps::Navigation';
 requires 'Geo::Coordinates::Converter';
 requires 'Data::Visitor::Callback';
 requires 'Moose';
+requires 'Geography::JapanesePrefectures';
 
 requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen

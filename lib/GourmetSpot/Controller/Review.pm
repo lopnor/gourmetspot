@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use utf8;
 use parent 'GourmetSpot::Base::Controller::Resource';
-use MRO::Compat;
 use DateTime;
 
 =head1 NAME
@@ -23,8 +22,6 @@ __PACKAGE__->config(
     {
         model => 'DBIC::Review',
         outer_model => ['DBIC::Tag'],
-#        namespace => 'member/review',
-#        namespace => 'my/review',
         like_field => ['budget', 'comment'],
     }
 );

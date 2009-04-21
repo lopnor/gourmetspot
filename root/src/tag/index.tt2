@@ -1,0 +1,6 @@
+<ul>
+[% FOR item IN list %]
+[% NEXT UNLESS item.value %]
+<li><a href="[% c.uri_for('', item.id ) %]">[% item.value %]</a> ([% item.restrants_rs.count %])</li>
+[% END %]
+</ul>

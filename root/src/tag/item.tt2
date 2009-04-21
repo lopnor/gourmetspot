@@ -1,0 +1,7 @@
+[% item.value %]
+<ul>
+[% r_rs = item.restrants_rs({}, {group_by => 'id'}) %]
+[% WHILE (r = r_rs.next) %]
+<li><a href="[% c.uri_for('/restrant', r.id) %]">[% r.name %]</a> ([% r.reviews_rs.count %]) [% r.address | html %]</li>
+[% END %]
+</ul>

@@ -27,6 +27,7 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->has_many(map_member_role => 'GourmetSpot::Schema::MemberRole' => 'member_id');
 __PACKAGE__->many_to_many(roles => 'map_member_role' => 'role');
+__PACKAGE__->has_many(reviews => 'GourmetSpot::Schema::Review' => 'created_by');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

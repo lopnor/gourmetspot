@@ -5,6 +5,7 @@
 [% IF c.user_in_realm('members') -%]
 <li><a href="[% c.uri_for('/') %]">[% c.user.nickname | html %]さんのページ</a></li>
 <li><a href="[% c.uri_for('/review') %]">レビュー</a></li>
+<li><a href="[% c.uri_for('/tag') %]">タグ</a></li>
 <li><a href="[% c.uri_for('/restrant') %]">お店</a></li>
 <li><a href="[% c.uri_for('/account/logout') %]">ログアウト</a></li>
 [% ELSE -%]

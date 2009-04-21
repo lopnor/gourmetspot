@@ -1,0 +1,6 @@
+[% item.nickname | html %]さん
+<ul>
+[% FOR r IN item.reviews %]
+<li><a href="[% c.uri_for('/restrant', r.id) %]">[% r.restrant.name | html %]</a></li>
+[% END %]
+</ul>
