@@ -45,7 +45,7 @@ sub map :Path('map') :Args(1) {
 
 sub setup_ugo2 :Private {
     my ( $self, $c ) = @_;
-    my $ugo2 = URI->new('http://b07.ugo2.jp');
+    my $ugo2 = URI->new('http://b07.ugo2.jp/');
     my $uri = $c->req->uri;
     $ugo2->query_form(
         u => $self->{ugo2}->{u},
