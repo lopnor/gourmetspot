@@ -2,5 +2,8 @@
 <hr />
 &#xE6EB;<a href="[% c.uri_for('') %]" accesskey="0">トップ</a><br />
 &#xE6EA;<a href="#top" accesskey="9">ページトップ</a><br />
-<div id="copyright">(c) [% site.copyright %]</div>
+<div id="copyright">
+(c) [% site.copyright %]
+<img src="[% ugo2 | html %]" width="1" height="1">
+</div>
 <!-- END site/footer -->

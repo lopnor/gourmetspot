@@ -5,6 +5,7 @@ use warnings;
 use parent 'Catalyst::Controller::Mobile::JP';
 use Geo::Coordinates::Converter;
 use Geo::Google::StaticMaps::Navigation;
+use URI::Escape;
 
 sub auto :Private {
     my ( $self, $c ) = @_;
@@ -13,6 +14,7 @@ sub auto :Private {
         $c->res->redirect($c->uri_for('/'));
         return 0;
     }
+    $c->forward('setup_ugo2');
     return 1;
 }
 
@@ -38,6 +40,34 @@ sub map :Path('map') :Args(1) {
     $c->forward('setup_map', [ $item ]);
     $c->stash(
         item => $item,
+    );
+}
+
+sub setup_ugo2 :Private {
+    my ( $self, $c ) = @_;
+    my $ugo2 = URI->new('http://b07.ugo2.jp');
+    my $uri = $c->req->uri;
+    $ugo2->query_form(
+        u => $self->{ugo2}->{u},
+        h => $self->{ugo2}->{h},
+        guid => 'ON',
+        ut => $self->{ugo2}->{ut},
+        qM => uri_escape(
+            join('|',
+                $c->req->referer,
+                'Az',
+                $uri->port,
+                $uri->host,
+                $uri->path_query,
+                'P'
+            )
+        ),
+        ch => 'UTF-8',
+        sb => 'gourmetspot.jp',
+    );
+
+    $c->stash(
+        ugo2 => $ugo2,
     );
 }
 
