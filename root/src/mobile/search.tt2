@@ -1,5 +1,13 @@
 [% IF list -%]
-<h2>[% address | html %]付近のお店情報</h2>
+<h2>[% address | html %]付近のお店情報
+[% IF tags.size > 0 %]
+<br />タグ: 
+[% FOR t IN tags %]
+[% c.model('DBIC::Tag').find(t).value %]
+[% ' ＞ ' UNLESS loop.count == loop.size %]
+[% END %]
+[% END %]
+</h2>
 [% FOR item IN list.slice(0,5) -%]
 [% NEXT UNLESS item %]
 <div class="restrant[% 'odd' IF (loop.count % 2) == 1 %]">
