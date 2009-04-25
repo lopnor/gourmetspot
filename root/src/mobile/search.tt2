@@ -1,5 +1,5 @@
 [% IF list -%]
-<h2>[% address | html %]付近のお店情報
+<div class="h2"><h2>[% address | html %]付近のお店情報
 [% IF tags.size > 0 %]
 <br />タグ: 
 [% FOR t IN tags %]
@@ -7,7 +7,7 @@
 [% ' ＞ ' UNLESS loop.count == loop.size %]
 [% END %]
 [% END %]
-</h2>
+</h2></div>
 [% FOR item IN list.slice(0,5) -%]
 [% NEXT UNLESS item %]
 <div class="restrant[% 'odd' IF (loop.count % 2) == 1 %]">
@@ -28,7 +28,7 @@
 [% IF list.size > 1 -%]
 [% IF tags -%]
 <div class="tags">
-<h3>&#xE689;タグで絞り込み</h3>
+<div class="h3"><h3>&#xE689;タグで絞り込み</h3></div>
 [% FOR t IN tags_nearby -%]
 [% NEXT UNLESS t -%]
 <div class="tag">&#xE689; <a href="[% empty = []; new_tag = empty.merge(tags, [ t.id ]); c.uri_for('search', {lat => lat, lng => lng, datum => 'wgs84', tag_id => new_tag }) | html %]">[% t.value | html %]([% t.count %])</a></div>
@@ -45,7 +45,7 @@
 [% END -%]
 [% END -%]
 <div id="searchbox">
-<h3>もう一度検索する</h3>
+<div class="h3"><h3>もう一度検索する</h3></div>
 <a href="[% IF c.req.mobile_agent.is_ezweb -%]
 device:location?url=[% c.uri_for('search') | url -%]
 [% ELSIF c.req.mobile_agent.is_docomo -%]

@@ -1,4 +1,6 @@
+<div class="h2">
 <h2>[% item.name | html %]周辺の地図</h2>
+</div>
 <img src="[% map.url | html %]" width="[% map.width | html %]" height="[% map.height | html %]" /><br />
 &#xE6E3;<a href="[% c.uri_for('map', item.id, map.north.params ) | html %]" accesskey="2">↑</a
 >&#xE6E9;<a href="[% c.uri_for('map', item.id, map.south.params ) | html %]" accesskey="8">↓</a

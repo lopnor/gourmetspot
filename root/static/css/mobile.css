@@ -23,18 +23,22 @@ h1 {
     font-weight: normal;
     color: #FFFFFF;
 }
+div.h2 {
+    background-color: #89b8df;
+}
 h2 {
     font-size: small;
     font-weight: normal;
     text-align: center;
-    background-color: #89b8df;
     color: #FFFFFF;
+}
+div.h3 {
+    background-color: #FCC800;
 }
 h3 {
     font-size: small;
     font-weight: normal;
     text-align: center;
-    background-color: #FCC800;
     color: #FFFFFF;
 }
 table {

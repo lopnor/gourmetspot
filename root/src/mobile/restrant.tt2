@@ -1,4 +1,4 @@
-<h2>[% item.name | html %]</h2>
+<div class="h2"><h2>[% item.name | html %]</h2></div>
 <div id="address">&#xE663;[% item.address _ item.building | html %]</div>
 [% IF item.tel -%]
 <div id="tel">&#xE687; <a href="tel:[% item.tel | html %]">[% item.tel | html %]</a></div>
@@ -28,7 +28,7 @@
 </div>
 [% END -%]
 [% IF item.reviews %]
-<h3>レビュー</h3>
+<div class="h3"><h3>レビュー</h3></div>
 [% FOR r IN item.reviews %]
 <div class="review">
 <div class="tags">[% FOR t IN r.tags %]<span class="tag">&#xE689; [% t.value | html %]</span> [% END %]</div>
