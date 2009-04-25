@@ -24,10 +24,8 @@ sub search_with_coordinates {
             ],
             order_by => 'distance',
             rows => $args->{rows} || 5,
-            prefetch => 'map_restrant_tag',
         }
     );
-
 }
 
 sub ids_narrow_down_by_tags {
