@@ -26,7 +26,8 @@ sub index :Path :Args(0) {
 sub restrant :Path('restrant') :Args(1) {
     my ( $self, $c, $id ) = @_;
 
-    my $item = $c->model('DBIC::Restrant')->find($id);
+    my $item = $c->model('DBIC::Restrant')->find($id)
+        or return $c->res->redirect($c->uri_for());
     $c->forward('setup_map', [ $item ]);
     $c->stash(
         item => $item,
@@ -36,7 +37,8 @@ sub restrant :Path('restrant') :Args(1) {
 sub map :Path('map') :Args(1) {
     my ( $self, $c, $id ) = @_;
 
-    my $item = $c->model('DBIC::Restrant')->find($id);
+    my $item = $c->model('DBIC::Restrant')->find($id)
+        or return $c->res->redirect($c->uri_for());
     $c->forward('setup_map', [ $item ]);
     $c->stash(
         item => $item,
