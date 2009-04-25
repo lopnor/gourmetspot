@@ -5,10 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Cache-Control" content="no-cache" />
 <meta http-equiv="Pragma" content="no-cache" />
-<title>[% title ? title : c.config.name | html %]</title>
+<title>[% title ? title : site.title | html %]</title>
 <link rel="stylesheet" type="text/css" href="/static/css/mobile.css" />
 </head>
 <body>
 [% content %]
+[% IF ugo2 %]<img src="[% ugo2 | html %]" width="1" height="1" />[% END %]
 </body>
 </html>

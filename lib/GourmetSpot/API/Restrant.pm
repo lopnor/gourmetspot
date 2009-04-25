@@ -54,12 +54,7 @@ sub tags_nearby {
         $cond->{id} = {in => \@restrant_id};
     }
 
-    my @restrants = $args->{resultset}->search(
-        $cond,
-        {
-            prefetch => 'map_restrant_tag',
-        },
-    )->all;
+    my @restrants = $args->{resultset}->search($cond)->all;
 
     return $self->tags_grouped(\@restrants, $args->{tag_id});
 }
@@ -71,8 +66,12 @@ sub tags_grouped {
     my %ret;
     for my $t (@tags) {
         next if grep {$_ == $t->id} @$existing;
-        $ret{$t->value} ||= $t;
-        $ret{$t->value}->{count}++;
+        $ret{$t->value} and next;
+        $ret{$t->value} = $t;
+        $ret{$t->value}->{count} = $t->map_tag_review_rs(
+            {restrant_id => {in => [ map {$_->id} @$rows ]} },
+            {group_by => 'restrant_id'}
+        )->count;
     }
     return sort {$b->{count} <=> $a->{count}} values %ret;
 }

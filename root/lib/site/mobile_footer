@@ -4,6 +4,5 @@
 &#xE6EA;<a href="#top" accesskey="9">ページトップ</a><br />
 <div id="copyright">
 (c) [% site.copyright %]
-<img src="[% ugo2 | html %]" width="1" height="1">
 </div>
 <!-- END site/footer -->

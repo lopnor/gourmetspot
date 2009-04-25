@@ -157,7 +157,7 @@ sub join :Path('join') {
     ) or return $c->res->redirect('/');
     if ( $invitation->member_id ) {
         $c->flash->{error} = '既に登録済みのようです';
-        $c->res->redirect('/');
+        return $c->res->redirect('/');
     }
 
     if ( $c->req->method eq 'POST') {

@@ -25,7 +25,7 @@ sub COMPONENT {
 
     my $self = $class->next::method($c, $args);
 
-    if ( my $profile = $args->{form} ) {
+    if ( my $profile = $self->{form} ) {
         my $prefix = $self->path_prefix($c);
         my $config = $c->config->{validator};
         my $messages = $config->{messages};

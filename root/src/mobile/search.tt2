@@ -17,6 +17,7 @@
 [% END -%]
 </div>
 [% END -%]
+[% IF list.size > 1 -%]
 [% IF tags -%]
 <div class="tags">
 <h3>&#xE689;タグで絞り込み</h3>
@@ -25,6 +26,7 @@
 <div class="tag">&#xE689; <a href="[% empty = []; new_tag = empty.merge(tags, [ t.id ]); c.uri_for('search', {lat => lat, lng => lng, datum => 'wgs84', tag_id => new_tag }) | html %]">[% t.value | html %]([% t.count %])</a></div>
 [% END -%]
 </div>
+[% END -%]
 [% END -%]
 [% ELSE %]
 <h2>[% address | html %]の候補一覧</h2>
