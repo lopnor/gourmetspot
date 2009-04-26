@@ -1,4 +1,4 @@
-[% META title="参加する" -%]
+[% META title="美食倶楽部（仮）に参加する" -%]
 [% IF c.form.has_error -%]
 <div class="error message">
 <ul>
@@ -6,6 +6,11 @@
 <li>[% message | html %]</li>
 [% END -%]
 </ul>
+</div>
+[% ELSE %]
+<div class="message">
+ようこそ美食倶楽部（仮）へ！<br>
+以下の内容を設定して美食倶楽部（仮）に参加しましょう！
 </div>
 [% END -%]
 <form method="POST" action="[% c.uri_for('join') %]">
