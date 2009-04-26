@@ -1,34 +1,12 @@
 [% META title="招待する" %]
+<div class="message">
+    以下の内容で招待メールを送信します。よろしいですか？
+</div>
+<pre>
+[% INCLUDE email/invitation.tt2 %]
+</pre>
 <form method="POST">
 <table>
-<tr>
-    <th> あなたのお名前 </th>
-    <td> 
-        [% c.req.param('caller_name') %] 
-        <input type="hidden" name="caller_name">
-    </td>
-</tr>
-<tr>
-    <th> 招待する方のお名前 </th>
-    <td> 
-        [% c.req.param('name') %] 
-        <input type="hidden" name="name">
-    </td>
-</tr>
-<tr>
-    <th> メールアドレス </th>
-    <td> 
-        [% c.req.param('mail') %] 
-        <input type="hidden" name="mail">
-    </td>
-</tr>
-<tr>
-    <th> メッセージ </th>
-    <td> 
-        <pre>[% c.req.param('message') %] </pre>
-        <input type="hidden" name="message">
-    </td>
-</tr>
 <tr>
     <th></th>
     <td>

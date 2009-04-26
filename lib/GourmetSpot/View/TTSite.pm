@@ -2,12 +2,12 @@ package GourmetSpot::View::TTSite;
 
 use strict;
 use base 'Catalyst::View::TT';
-use GourmetSpot;
 
 __PACKAGE__->config({
     INCLUDE_PATH => [
         GourmetSpot->path_to( 'root', 'src' ),
-        GourmetSpot->path_to( 'root', 'lib' )
+        GourmetSpot->path_to( 'root', 'lib' ),
+        GourmetSpot->path_to( 'root' ),
     ],
     PRE_PROCESS  => 'config/main',
     WRAPPER      => 'site/wrapper',

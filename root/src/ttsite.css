@@ -215,3 +215,8 @@ label {
     clear: both;
     margin: 10px;
 }
+pre {
+    padding: 4px;
+    margin: 10px 50px;
+    border: 1px solid [% site.rgb.grey2 %];
+}
