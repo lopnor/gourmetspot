@@ -4,7 +4,10 @@ Subject: 美食倶楽部（仮）へのお誘い
 
 [% c.req.param('caller_name') | html %]さんより美食倶楽部（仮）への招待状をお送りします。
 
+以下は[% c.req.param('caller_name') | html %]さんからのメッセージです。
+--- ---
 [% c.req.param('message') | html %]
+--- ---
 
 以下のリンクから美食倶楽部（仮）にご参加ください。
 [% c.uri_for('/account/join', {nonce => invitation.nonce, id => invitation.id}) %]
