@@ -10,6 +10,10 @@
 <tr>
     <th></th>
     <td>
+        <input type="hidden" name="caller_name">
+        <input type="hidden" name="name">
+        <input type="hidden" name="mail">
+        <input type="hidden" name="message">
         <input type="hidden" name="_token">
         <input type="submit" name="invite" value="確認して送信">
         <input type="submit" name="rewrite" value="招待文を書き直す">
