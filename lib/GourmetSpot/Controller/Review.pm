@@ -90,7 +90,7 @@ sub update_tag :Private {
         my $tag = $c->model('DBIC::Tag')->find_or_create(
             {
                 value => $value,
-                created_at => $c->stash->{item}->created_by,
+                created_by => $c->stash->{item}->created_by,
                 created_at => $c->stash->{item}->created_at,
             },
             {

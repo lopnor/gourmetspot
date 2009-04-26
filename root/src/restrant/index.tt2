@@ -4,15 +4,11 @@
 <input type="submit" value="お店を検索">
 → <a href="[% c.uri_for('create') %]">新しいお店を登録する</a>
 </form>
-<table>
+<ul>
 [% FOR r IN list %]
-<tr>
-    <td> <a href="[% c.uri_for(r.id) %]">[% r.name %]</a> </td>
-    <td>[% r.address | html %]</td>
-    <td> → <a href="[% c.uri_for('../review/update_or_create', { restrant_id => r.id }) %]">レビューを書く</a></td>
-</tr>
+    <li> <a href="[% c.uri_for(r.id) %]">[% r.name %]</a> ([% r.reviews_rs.count %]) [% r.address | html %]</li>
 [% END %]
-</table>
+</ul>
 [% IF pager.previous_page %]
 <a href="[% c.uri_for('', {name => c.req.param('name') or '', _page => pager.previous_page}) %]">&lt; 前</a>
 [% ELSE %]

@@ -65,7 +65,7 @@ function createMarker(map, point, option) {
     map.addOverlay(marker);
     var gsclient = new GStreetviewClient();
     var panodiv = document.createElement('div');
-    $(panodiv).css({height: '200px', width: '300px'});
+    $(panodiv).css({height: '200px', width: '270px'});
     gsclient.getNearestPanoramaLatLng(point,function(latlng) {
             if (latlng) {
                 marker.openInfoWindow(panodiv);

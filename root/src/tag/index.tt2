@@ -1,4 +1,4 @@
-<ul>
+<ul class="tags">
 [% FOR item IN list %]
 [% NEXT UNLESS item.value %]
 [% r_rs = item.restrants_rs({}, {group_by => 'id'}) %]

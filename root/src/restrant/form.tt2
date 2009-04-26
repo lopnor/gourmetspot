@@ -1,5 +1,4 @@
 [% META title="お店を登録" %]
-<div id="map" class="draggable"></div>
 [% IF c.req.method == "POST" && c.form.has_error -%]
 <div class="error message">
 <ul>
@@ -9,6 +8,8 @@
 </ul>
 </div>
 [% END -%]
+<div id="data">
+<div id="leftcol">
 <form method="POST">
 <table class="data">
 <tr>
@@ -116,4 +117,7 @@ append_hours();
     </td>
     </tr>
     </table>
+</div>
+</div>
+<div id="map" class="draggable"></div>
 </div>

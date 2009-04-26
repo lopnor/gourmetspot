@@ -1,30 +1,22 @@
 [% META title="お店情報" %]
-<div id="map"></div>
-<table>
-<tr>
-    <th>店名</td>
-    <td>[% item.name | html %]</td>
-</tr>
-<tr>
-    <th>電話番号</td>
-    <td>[% item.tel | html %]</td>
-</tr>
-<tr>
-    <th>住所</td>
-    <td>[% item.address | html %]</td>
-</tr>
-<tr>
-    <th>建物名</th>
-    <td>[% item.building | html %]</td>
-</tr>
-<tr>
-    <th>行き方</th>
-    <td>[% item.how_to_get_there | html %]</td>
-</tr>
-<tr>
-    <th>営業時間</td>
-    <td>
-<table>
+<h2>[% item.name | html %]</h2>
+
+<div class="info">
+    <div class="tel">[% item.tel | html %]</div>
+[% IF item.how_to_get_there -%]
+    <div class="how_to_get_there">[% item.how_to_get_there | html %]</div>
+[% END -%]
+    <div class="address">[% item.address _ ' ' _ item.building | html %]</div>
+</div>
+<div class="menu">
+<a href="[% c.uri_for( "../review/update_or_create", { restrant_id => item.id }) %]">レビューを書く</a>
+<a href="[% c.uri_for( item.id, 'update' ) %]">編集</a>
+<a href="[% c.uri_for( item.id, 'delete' ) %]">削除</a>
+</div>
+<div id="data">
+<div id="leftcol">
+<table class="openhours">
+<tr><th colspan="10">営業時間</th></tr>
 [% FOR oh IN item.openhours %]
 <tr>
 <th>[% IF oh.day_of_week.Sun %]日[% END %]</th>
@@ -36,33 +28,32 @@
 <th>[% IF oh.day_of_week.Sat %]土[% END %]</th>
 <th>[% IF oh.holiday %]祝[% END %]</th>
 <th>[% IF oh.pre_holiday %]祝前[% END %]</th>
-<tr>
-<td colspan="9"> [% oh.opens_at | html %] ~ [% oh.closes_at | html %]</td>
+<td class="time"> [% oh.opens_at | html %] ~ [% oh.closes_at | html %]</td>
 </tr>
 [% END %]
-</table>
-    </td>
-</tr>
+[% IF item.open_hours_memo -%]
+<tr><th colspan="10">営業時間メモ</th></tr>
 <tr>
-    <th>営業時間メモ</th>
-    <td>[% item.open_hours_memo | html %]</td>
+    <td colspan="10">[% item.open_hours_memo | html %]</td>
 </tr>
+[% END -%]
 </table>
-<div class="menu">
-<a href="[% c.uri_for( "../review/update_or_create", { restrant_id => item.id }) %]">レビューを書く</a>
-<a href="[% c.uri_for( item.id, 'update' ) %]">編集</a>
-<a href="[% c.uri_for( item.id, 'delete' ) %]">削除</a>
-</div>
 
 [% FOR r IN item.reviews %]
 <div class="review">
-予算: [% r.budget %]<br>
-タグ: [% FOR t IN r.tags %] <a href="[% c.uri_for('/tag', t.id) %]">[% t.value | html %]</a>[% END %]<br>
-コメント: [% r.comment | html %]<br>
-by: <a href="[% c.uri_for('/member', r.member.id ) %]">[% r.member.nickname | html %]</a>
+<div class="reviewer">
+<a href="[% c.uri_for('/member', r.member.id ) %]">[% r.member.nickname | html %]さん</a>のレビュー
+</div>
+<div class="review-content">
+予算: [% r.budget %]円くらい<br>
+[% FOR t IN r.tags %] <a href="[% c.uri_for('/tag', t.id) %]">[% t.value | html %]</a>[% END %]<br>
+<div class="comment">[% r.comment | html | html_line_break %]</div>
+</div>
 </div>
 [% END %]
-
+</div>
+<div id="map"></div>
+</div>
 <script type="text/javascript">
 var init_pano = [% item.panorama or 0 %];
 var init_lat = [% item.latitude or 0 %];

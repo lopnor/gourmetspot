@@ -55,6 +55,19 @@ h1.title {
     margin: 0px;
 }
 
+h2 {
+    text-align: center;
+}
+
+div.info {
+    text-align: center;
+}
+
+div.info .tel {
+    font-size: 120%;
+    color: [% site.rgb.red %];
+}
+
 div.message {
     border: 1px solid [% site.rgb.grey2 %];
     background-color: [% site.col.head %];
@@ -70,8 +83,35 @@ div.message {
     color: [% site.col.error %];
 }
 
+ul.tags li {
+    list-style-type: none;
+    display: inline;
+    white-space: nowrap;
+}
+
 .message li {
     list-style-type: none;
+}
+
+span.tag_candidate {
+    font-size: 70%;
+    padding: 2px;
+    background-color: [% site.col.head %];
+    border: 1px solid [% site.rgb.grey2 %];
+}
+
+div.review {
+    width: 400px;
+    margin: 10px;
+    border: 1px solid [% site.rgb.grey2 %];
+}
+div.reviewer {
+    padding: 5px;
+    background-color: [% site.col.head %];
+    border-bottom: 1px solid [% site.rgb.grey2 %];
+}
+div.review-content {
+    padding: 5px;
 }
 
 form {
@@ -95,7 +135,7 @@ table {
 }
 
 table.data {
-    width: 350px;
+    width: 420px;
 }
 
 table.data th {
@@ -103,14 +143,37 @@ table.data th {
 }
 
 table.data textarea {
-    width: 200px;
+    width: 340px;
+    height: 150px;
     font-size: 80%;
 }
+input.tag {
+    width: 340px;
+}
 
-#map {
-    float: right;
+table.openhours {
+    width: 400;
+    margin: 10px;
+}
+
+table.openhours th {
+    width: 15px;
+    background-color: [% site.col.head %];
+    text-align: center;
+}
+
+table.openhours td, table.openhours th {
+    padding: 3px;
+    border: 1px solid [% site.rgb.grey2 %];
+}
+table.openhours td.time,table.openhours th {
+    white-space: nowrap;
+}
+
+div#map {
+    float: left;
     margin: 0px;
-    width: 550px;
+    width: 500px;
     height: 400px;
 }
 
@@ -130,6 +193,17 @@ label {
     font-size: 80%;
 }
 
+#data {
+    margin: auto;
+    width: 90%;
+    min-width: 930px;
+}
+
+#leftcol {
+    float: left;
+    max-width: 450px;
+}
+
 .week_input th, .week_input td {
     text-align: center;
     font-size: 80%;
@@ -139,4 +213,5 @@ label {
 
 #content div.menu {
     clear: both;
+    margin: 10px;
 }

@@ -1,56 +1,35 @@
 [% META title="レビュー" %]
-<div id="map"></div>
-<table class="data">
-<tr>
-    <th>店名</th>
-    <td>
-        [% item.restrant.name | html %]
-    </td>
-</tr>
-<tr>
-    <th>電話番号</th>
-    <td>[% item.restrant.tel | html %]</td>
-</tr>
-<tr>
-    <th>住所</th>
-    <td>[% item.restrant.address | html %]</td>
-</tr>
-<tr>
-    <th>行き方</th>
-    <td>[% item.restrant.how_to_get_there | html %]</td>
-</tr>
-<tr>
-    <th></th>
-    <td>
-        → <a href="[% c.uri_for( "../restrant", item.restrant.id, "update" ) %]">お店情報を編集</a>
-    </td>
-</tr>
-<tr>
-    <th>予算</th>
-    <td>[% item.budget | html %]</td>
-</tr>
-<tr>
-    <th>タグ</th>
-    <td>
-    [% FOR t IN item.tags %]
-    [% t.value | html %]
-    [% END %]
-    </td>
-</tr>
-<tr>
-    <th>ヒトコト</th>
-    <td>[% item.comment | html %]</td>
-</tr>
+<h2>[% item.restrant.name | html %]</h2>
+
+<div class="info">
+    <div class="tel">[% item.restrant.tel | html %]</div>
+[% IF item.restrant.how_to_get_there  -%]
+    <div class="how_to_get_there">[% item.restrant.how_to_get_there | html %]</div>
+[% END -%]
+    <div class="address">[% item.restrant.address _ ' ' _ item.restrant.building  %]</div>
+</div>
 [% IF item.created_by == c.user.id %]
-<tr>
-    <th></th>
-    <td>
-        → <a href="[% c.uri_for( item.id, "update" ) %]">レビューを更新</a><br>
-        → <a href="[% c.uri_for( item.id, "delete" ) %]">レビューを削除</a>
-    </td>
-</tr>
+<div class="menu">
+<a href="[% c.uri_for( '/restrant', item.restrant.id ) %]">お店のページ</a>
+<a href="[% c.uri_for( item.id, "update" ) %]">レビューを更新</a>
+<a href="[% c.uri_for( item.id, "delete" ) %]">レビューを削除</a>
+</div>
 [% END %]
-</table>
+<div id="data">
+<div id="leftcol">
+<div class="review">
+<div class="reviewer">
+<a href="[% c.uri_for('/member', item.member.id ) %]">[% item.member.nickname | html %]さん</a>のレビュー
+</div>
+<div class="review-content">
+予算: [% item.budget %]円くらい<br>
+[% FOR t IN item.tags %] <a href="[% c.uri_for('/tag', t.id) %]">[% t.value | html %]</a>[% END %]<br>
+<div class="comment">[% item.comment | html | html_line_break %]</div>
+</div>
+</div>
+</div>
+<div id="map"></div>
+</div>
 <script>
 var init_pano = [% item.restrant.panorama or 0 %];
 var init_lat = [% item.restrant.latitude or 0 %];

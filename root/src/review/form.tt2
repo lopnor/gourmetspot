@@ -1,5 +1,13 @@
 [% META title="レビューを書く" %]
-<div id="map"></div>
+<h2>[% item.restrant.name OR restrant.name | html %]</h2>
+
+<div class="info">
+    <div class="tel">[% item.restrant.tel OR restrant.tel | html %]</div>
+[% IF item.restrant.how_to_get_there || restrant.how_to_get_there -%]
+    <div class="how_to_get_there">[% item.restrant.how_to_get_there OR restrant.how_to_get_there | html %]</div>
+[% END -%]
+    <div class="address">[% item.restrant.address OR restrant.address _ ' ' _ item.restrant.building OR restrant.building | html %]</div>
+</div>
 [% IF c.req.method == 'POST' && c.form.has_error -%]
 <div class="error message">
 <ul>
@@ -9,26 +17,10 @@
 </ul>
 </div>
 [% END -%]
+<div id="data">
+<div id="leftcol">
 <form method="POST" action="?">
 <table class="data">
-<tr>
-    <th>店名</th>
-    <td>
-        [% item.restrant.name OR restrant.name | html %]
-    </td>
-</tr>
-<tr>
-    <th>電話番号</th>
-    <td>
-        [% item.restrant.tel OR restrant.tel | html %]
-    </td>
-</tr>
-<tr>
-    <th>住所</th>
-    <td>
-        [% item.restrant.address OR restrant.address | html %]
-    </td>
-</tr>
 <tr>
     <th>予算</th>
     <td><input type="text" name="budget" size="6">円</td>
@@ -36,12 +28,28 @@
 <tr>
     <th>タグ</th>
     <td>
-        <input type="text" name="Tag.value" value="[% FOR t IN item.tags %][% t.value | html %] [% END %]">
+        <input type="text" class="tag" name="Tag.value" value="[% FOR t IN item.tags %][% t.value | html %] [% END %]">
+    </td>
+</tr>
+<tr>
+    <th></th>
+    <td>
+        <span class="tag_candidate" id="tag_1">一人で</span>
+        <span class="tag_candidate" id="tag_5">カップルで</span>
+        <span class="tag_candidate" id="tag_6">グループで</span>
+        <span class="tag_candidate" id="tag_9">昼に</span>
+        <span class="tag_candidate" id="tag_3">夜に</span>
+        <span class="tag_candidate" id="tag_4">24時以降に</span>
+        <span class="tag_candidate" id="tag_7">アングラ</span>
+        <span class="tag_candidate" id="tag_11">おしゃれ</span>
+        <span class="tag_candidate" id="tag_12">きれい</span>
+        <span class="tag_candidate" id="tag_8">美味しい</span>
+        <span class="tag_candidate" id="tag_10">接客良い</span>
     </td>
 </tr>
 <tr>
     <th>ヒトコト</th>
-    <td><textarea name="comment" rows="5" cols="30"></textarea></td>
+    <td><textarea name="comment"></textarea></td>
 </tr>
 <tr>
     <th></th>
@@ -53,7 +61,26 @@
 </tr>
 </table>
 </form>
-<script>
+</div>
+<div id="map"></div>
+</div>
+<script type="text/javascript">
+    $(".tag_candidate").click(function(){
+        var input = $('input.tag');
+        var tag = $(this).html();
+        var content = input.val();
+        var re = new RegExp(tag);
+        if (content.match(re)) {
+            content = content.replace(re,'');
+        } else {
+            content = content + ' ' + tag;
+        }
+        content = content.replace(/\s{2,}/,' ');
+        content = content.replace(/^\s/,'');
+        input.val(content);
+    });
+</script>
+<script type="text/javascript">
 var init_pano = [% item.restrant.panorama or restrant.panorama or 0 %];
 var init_lat = [% item.restrant.latitude or restrant.latitude or 0 %];
 var init_lng = [% item.restrant.longitude or restrant.longitude or 0 %];
