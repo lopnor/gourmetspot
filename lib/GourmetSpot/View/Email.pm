@@ -55,6 +55,7 @@ sub process {
     if ( ! $email->header('From') ) {
         $email->header_set('From' => $default_from);
     }
+    $email->header_set('From' => $self->encode_from($email->header('From')));
 
     if ( $email ) {
         my $return = $self->mailer->send($email);
@@ -63,6 +64,15 @@ sub process {
         croak "$return" if !$return;
     } else {
         croak "Unable to create message";
+    }
+}
+
+sub encode_from {
+    my ($self, $from) = @_;
+    if ($from =~ m{^(.+)( <.+>)$}) {
+        return Encode::encode('MIME-Header-ISO_2022_JP', $1) . $2; 
+    } else {
+        return $from;
     }
 }
 

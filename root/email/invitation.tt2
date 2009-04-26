@@ -1,4 +1,5 @@
 Subject: 美食倶楽部（仮）へのお誘い
+From: 美食倶楽部（仮） <info@gourmetspot.jp>
 
 [% c.req.param('name') | html %]さま、
 
