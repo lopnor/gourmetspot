@@ -126,7 +126,7 @@ function setupPanorama(marker, div) {
         if (marker.getLatLng().equals(new GLatLng(init_lat,init_lng))) {
             option = {
                 latlng: new GLatLng(init_pano.latlng.lat, init_pano.latlng.lng),
-                pov: init_pano.pov,
+                pov: init_pano.pov
             };
         }
     }
@@ -137,12 +137,12 @@ function setupPanorama(marker, div) {
                 var option = {
                     latlng: {
                         lat: loc.latlng.lat() || 0,
-                        lng: loc.latlng.lng() || 0,
+                        lng: loc.latlng.lng() || 0
                     },
                     pov: {
                         yaw: loc.pov.yaw || 0,
                         pitch: loc.pov.pitch || 0,
-                        zoom: loc.pov.zoom || 0,
+                        zoom: loc.pov.zoom || 0
                     }
                 };
                 input.val($.toJSON(option));
