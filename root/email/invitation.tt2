@@ -13,6 +13,9 @@ From: 美食倶楽部（仮） <info@gourmetspot.jp>
 以下のリンクから美食倶楽部（仮）にご参加ください。
 [% c.uri_for('/account/join', {nonce => invitation.nonce, id => invitation.id}) %]
 
+※このメールに返信しても[% c.req.param('caller_name') %]さんには届きませんので
+ご注意ください。
+
 --
 美食倶楽部（仮）
 [% c.uri_for('/') %]
