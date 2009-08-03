@@ -29,11 +29,11 @@ my $oh = {
                 latitude => '35.662191',
                 longitude => '139.681317',
                 panorama => ' {"latlng": {"lat": 35.662128, "lng": 139.681612}, "pov": {"yaw": 226.85486732456948, "pitch": 14.019279372900145, "zoom": 1}}',
-                'OpenHours[0].day_of_week' => [split(',', $oh->{day_of_week})],
-                'OpenHours[0].opens_at_hour' => (split(':',$oh->{opens_at}))[0],
-                'OpenHours[0].opens_at_minute' => (split(':',$oh->{opens_at}))[1],
-                'OpenHours[0].closes_at_hour' => (split(':',$oh->{closes_at}))[0],
-                'OpenHours[0].closes_at_minute' => (split(':',$oh->{closes_at}))[1],
+                'openhours[0].day_of_week' => [split(',', $oh->{day_of_week})],
+                'openhours[0].opens_at_hour' => (split(':',$oh->{opens_at}))[0],
+                'openhours[0].opens_at_minute' => (split(':',$oh->{opens_at}))[1],
+                'openhours[0].closes_at_hour' => (split(':',$oh->{closes_at}))[0],
+                'openhours[0].closes_at_minute' => (split(':',$oh->{closes_at}))[1],
             }
         }
     );

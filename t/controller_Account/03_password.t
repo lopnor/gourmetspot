@@ -90,7 +90,7 @@ my $mech = setup_user_and_login($user);
     {
         no strict 'refs';
         no warnings 'redefine';
-        local *{"DateTime::now"} = sub {shift->from_epoch(epoch => time - (60 * 35))};
+        local *{"DateTime::now"} = sub {shift->from_epoch(epoch => time - (60 * 35), time_zone => 'Asia/Tokyo')};
         $guest->submit_form_ok(
             {
                 form_number => 1,

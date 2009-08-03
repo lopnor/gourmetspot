@@ -6,24 +6,24 @@ create table member (
     caller_id   int not null default 0,
     key (mail),
     key (caller_id)
-) engine innodb;
+) engine=innodb default charset=utf8;
 
 create table role (
     id      int not null primary key auto_increment,
     role    varchar(32) not null default ''
-);
+) engine=innodb default charset=utf8;
 
 create table member_role (
     member_id   int,
     role_id     int,
     primary key(member_id, role_id)
-);
+) engine=innodb default charset=utf8;
 
 create table session (
     id              char(72) primary key,
     session_data    text,
     expires         int
-) engine innodb;
+) engine=innodb default charset=utf8;
 
 create table invitation (
     id          int not null primary key auto_increment,
@@ -35,7 +35,7 @@ create table invitation (
     joined_at   datetime,
     key (caller_id),
     key (nonce)
-);
+) engine=innodb default charset=utf8;
     
 create table reset_password (
     id          int not null primary key auto_increment,
@@ -43,14 +43,14 @@ create table reset_password (
     nonce       char(27) not null default '',
     expires_at  datetime,
     key (nonce)
-);
+) engine=innodb default charset=utf8;
 
 create table tag (
     id      int not null primary key auto_increment,
     value   varchar(255) not null unique default '',
     created_by int not null default 0,
     created_at datetime
-);
+) engine=innodb default charset=utf8;
 
 create table restrant (
     id      int not null primary key auto_increment,
@@ -66,7 +66,7 @@ create table restrant (
     created_by int not null default 0,
     created_at datetime,
     modified_at datetime
-);
+) engine=innodb default charset=utf8;
 
 create table open_hours (
     id int not null primary key auto_increment,
@@ -76,7 +76,7 @@ create table open_hours (
     pre_holiday enum('true','false','masked') not null default 'false',
     opens_at    time,
     closes_at   time
-);
+) engine=innodb default charset=utf8;
 
 create table review (
     id          int not null primary key auto_increment,
@@ -86,13 +86,11 @@ create table review (
     created_by  int not null default 0,
     created_at  datetime,
     modified_at datetime
-);
+) engine=innodb default charset=utf8;
 
 create table tag_review (
     tag_id  int not null default 0,
     review_id int not null default 0,
     restrant_id int not null default 0,
     primary key(tag_id, review_id)
-);
-
--- vim: set ft=mysql
+) engine=innodb default charset=utf8;

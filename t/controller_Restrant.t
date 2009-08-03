@@ -13,14 +13,14 @@ sub oh2form {
         scalar %$_ or next;
         $form = {
             %$form,
-            'OpenHours['.$c.'].id' => $_->{id} || undef,
-            'OpenHours['.$c.'].holiday' => $_->{holiday} || undef,
-            'OpenHours['.$c.'].pre_holiday' => $_->{pre_holiday} || undef,
-            'OpenHours['.$c.'].day_of_week' => [split(',', $_->{day_of_week} || '')],
-            'OpenHours['.$c.'].opens_at_hour' => $_->{opens_at} ? (split(':',$_->{opens_at}))[0] : '',
-            'OpenHours['.$c.'].opens_at_minute' => $_->{opens_at} ? (split(':',$_->{opens_at}))[1] : '',
-            'OpenHours['.$c.'].closes_at_hour' => $_->{closes_at} ? (split(':',$_->{closes_at}))[0] : '',
-            'OpenHours['.$c.'].closes_at_minute' => $_->{closes_at} ? (split(':',$_->{closes_at}))[1] : '',
+            'openhours['.$c.'].id' => $_->{id} || undef,
+            'openhours['.$c.'].holiday' => $_->{holiday} || undef,
+            'openhours['.$c.'].pre_holiday' => $_->{pre_holiday} || undef,
+            'openhours['.$c.'].day_of_week' => [split(',', $_->{day_of_week} || '')],
+            'openhours['.$c.'].opens_at_hour' => $_->{opens_at} ? (split(':',$_->{opens_at}))[0] : '',
+            'openhours['.$c.'].opens_at_minute' => $_->{opens_at} ? (split(':',$_->{opens_at}))[1] : '',
+            'openhours['.$c.'].closes_at_hour' => $_->{closes_at} ? (split(':',$_->{closes_at}))[0] : '',
+            'openhours['.$c.'].closes_at_minute' => $_->{closes_at} ? (split(':',$_->{closes_at}))[1] : '',
         };
     }
     return $form;

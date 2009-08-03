@@ -43,11 +43,11 @@ __PACKAGE__->load_components(qw(InflateColumn::DateTime));
 __PACKAGE__->add_columns(
     created_at => {
         data_type => 'datetime',
-        extra => {timezone => 'Asia/Tokyo'},
+        timezone => 'Asia/Tokyo',
     },
     joined_at => {
         data_type => 'datetime',
-        extra => {timezone => 'Asia/Tokyo'},
+        timezone => 'Asia/Tokyo',
     },
 );
 

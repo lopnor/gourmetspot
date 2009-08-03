@@ -2,11 +2,11 @@ package GourmetSpot;
 
 use strict;
 use warnings;
-use 5.8.1;
+use 5.008001;
 
 use YAML;
 
-use Catalyst::Runtime '5.70';
+use Catalyst::Runtime '5.80';
 
 # Set flags and add plugins for the application
 #

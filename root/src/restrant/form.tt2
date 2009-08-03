@@ -78,7 +78,7 @@ append_hours();
 });
 </script>
 <div id="operation_hours" class="week_input" style="display:none;">
-    <input type="hidden" name="OpenHours[].id">
+    <input type="hidden" name="openhours[].id">
     <table>
     <tr>
     <th>月</th>
@@ -92,25 +92,25 @@ append_hours();
     <th>祝前</th>
     </tr>
     <tr>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Mon"></td>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Tue"></td>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Wed"></td>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Thu"></td>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Fri"></td>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Sat"></td>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].day_of_week" value="Sun"></td>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].holiday" value="1"></td>
-    <td><input class="checkbox" type="checkbox" name="OpenHours[].pre_holiday" value="1"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].day_of_week" value="Mon"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].day_of_week" value="Tue"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].day_of_week" value="Wed"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].day_of_week" value="Thu"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].day_of_week" value="Fri"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].day_of_week" value="Sat"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].day_of_week" value="Sun"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].holiday" value="1"></td>
+    <td><input class="checkbox" type="checkbox" name="openhours[].pre_holiday" value="1"></td>
     </tr>
     <tr>
     <td colspan="8">
-    <select name="OpenHours[].opens_at_hour" class="hours">
+    <select name="openhours[].opens_at_hour" class="hours">
     </select
-    >:<select name="OpenHours[].opens_at_minute" class="minutes">
+    >:<select name="openhours[].opens_at_minute" class="minutes">
     </select
-    >~<select name="OpenHours[].closes_at_hour" class="hours">
+    >~<select name="openhours[].closes_at_hour" class="hours">
     </select
-    >:<select name="OpenHours[].closes_at_minute" class="minutes">
+    >:<select name="openhours[].closes_at_minute" class="minutes">
     </select>
     </td>
     <td class="remove_hours">

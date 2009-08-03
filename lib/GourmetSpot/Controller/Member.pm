@@ -1,7 +1,7 @@
 package GourmetSpot::Controller::Member;
 use strict;
 use warnings;
-use parent 'GourmetSpot::Base::Controller::Resource';
+use parent 'GourmetSpot::ControllerBase::Resource';
 
 __PACKAGE__->config(
     {

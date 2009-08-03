@@ -33,7 +33,7 @@ __PACKAGE__->load_components(qw(InflateColumn::DateTime));
 __PACKAGE__->add_columns(
     expires_at => {
         data_type => 'datetime',
-        extra => {timezone => 'Asia/Tokyo'},
+        timezone => 'Asia/Tokyo',
     },
 );
 

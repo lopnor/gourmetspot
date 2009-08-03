@@ -69,6 +69,7 @@ sub import {
         };
     }
 
+    $class->teardown_database($caller);
     $class->setup_database($caller);
 }
 

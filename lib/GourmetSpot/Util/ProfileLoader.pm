@@ -26,7 +26,7 @@ sub setup {
 
         $config->{profiles} = $profiles;
     }
-    $c->NEXT::setup(@_);
+    $c->next::method;
 }
 
 1;

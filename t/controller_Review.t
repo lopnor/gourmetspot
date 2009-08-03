@@ -1,5 +1,5 @@
 use t::Util;
-use Test::More tests => 28;
+use Test::More tests => 27;
 
 BEGIN { use_ok 'GourmetSpot::Controller::Review' }
 
@@ -17,11 +17,11 @@ my $mech = setup_user_and_login;
             latitude => '35.662191',
             longitude => '139.681317',
             panorama => ' {"latlng": {"lat": 35.662128, "lng": 139.681612}, "pov": {"yaw": 226.85486732456948, "pitch": 14.019279372900145, "zoom": 1}}',
-            'OpenHours[0].day_of_week' => 'Mon,Wed,Fri',
-            'OpenHours[0].opens_at_hour' => '10',
-            'OpenHours[0].opens_at_minute' => '30',
-            'OpenHours[0].closes_at_hour' => '17',
-            'OpenHours[0].closes_at_minute' => '25',
+            'openhours[0].day_of_week' => 'Mon,Wed,Fri',
+            'openhours[0].opens_at_hour' => '10',
+            'openhours[0].opens_at_minute' => '30',
+            'openhours[0].closes_at_hour' => '17',
+            'openhours[0].closes_at_minute' => '25',
         },
     );
 }
@@ -36,13 +36,13 @@ my $mech = setup_user_and_login;
     is( scalar @{$mech->forms}, 1 );
     $mech->content_like(qr/予算を入力してください/);
     $mech->content_like(qr/タグを入力してください/);
-    $mech->content_like(qr/ヒトコトを入力してください/);
+#    $mech->content_like(qr/ヒトコトを入力してください/);
     $mech->submit_form_ok(
         {
             form_number => 1,
             fields => {
                 budget => '1000',
-                'Tag.value' => '会社 サンプル',
+                'tags[].value' => '会社 サンプル',
                 comment => 'コメントです',
             }
         }
@@ -59,7 +59,7 @@ my $mech = setup_user_and_login;
             form_number => 1,
             fields => {
                 budget => '2000',
-                'Tag.value' => '会社 sample',
+                'tags[].value' => '会社 sample',
                 comment => 'comment',
             }
         }

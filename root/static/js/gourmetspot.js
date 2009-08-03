@@ -165,7 +165,6 @@ function setupPanorama(marker, div) {
 
 var hours_count = 0;
 function append_hours(data) {
-    hours_count = hours_count + 1;
     var mydiv = $("#operation_hours")
         .clone()   
         .removeAttr('id')
@@ -175,6 +174,7 @@ function append_hours(data) {
                 'name', $(this).attr('name').replace(/\[\]/,"["+hours_count+"]")
                 )
             });
+    hours_count = hours_count + 1;
     $('#hours_cell').append(mydiv);
     mydiv.find('select[class="hours"]').each(function() {
             create_time_option(this,31,1);
@@ -185,9 +185,11 @@ function append_hours(data) {
         }
     );
     if (data) {
-        $.each(data.day_of_week.split(','), function() {
+        if (data.day_of_week) {
+            $.each(data.day_of_week.split(','), function() {
                 mydiv.find('input[value='+this+']').attr('checked', true);
-        });
+            });
+        }
         mydiv.find('input[name$=.id]').val(data.id);
         mydiv.find('input[name$=.holiday]').attr('checked', data.holiday);
         mydiv.find('input[name$=.pre_holiday]').attr('checked', data.pre_holiday);

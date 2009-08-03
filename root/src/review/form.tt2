@@ -28,7 +28,7 @@
 <tr>
     <th>タグ</th>
     <td>
-        <input type="text" class="tag" name="Tag.value" value="[% FOR t IN item.tags %][% t.value | html %] [% END %]">
+        <input type="text" class="tag" name="tags[].value" value="[% FOR t IN item.tags %][% t.value | html %] [% END %]">
     </td>
 </tr>
 <tr>

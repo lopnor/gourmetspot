@@ -3,7 +3,7 @@ package GourmetSpot::Controller::Review;
 use strict;
 use warnings;
 use utf8;
-use parent 'GourmetSpot::Base::Controller::Resource';
+use parent 'GourmetSpot::ControllerBase::Resource';
 use DateTime;
 
 =head1 NAME
@@ -21,8 +21,21 @@ Catalyst Controller.
 __PACKAGE__->config(
     {
         model => 'DBIC::Review',
-        outer_model => ['DBIC::Tag'],
         like_field => ['budget', 'comment'],
+        form => {
+            budget => [
+                {
+                    rule => 'NOT_BLANK',
+                    message => '予算を入力してください',
+                },
+            ],
+            'tags[].value' => [
+                {
+                    rule => 'NOT_BLANK',
+                    message => 'タグを入力してください',
+                }
+            ],
+        },
     }
 );
 
@@ -61,51 +74,51 @@ sub setup_item :Private {
     $self->next::method($c, $id);
 }
 
-sub create_item :Private {
-    my ( $self, $c ) = @_;
-
-    $self->next::method($c);
-    $c->forward('update_tag');
-}
-
-sub update_item :Private {
-    my ( $self, $c ) = @_;
-
-    $self->next::method($c);
-    $c->forward('update_tag');
-}
-
-sub update_tag :Private {
-    my ( $self, $c ) = @_;
-    my @values = grep {length($_)} split(/\s/, $c->stash->{outer_params}->{'DBIC::Tag'}->{value});
-    my @tags = $c->stash->{item}->tags;
-    for my $tag ($c->stash->{item}->tags) {
-        if (grep {$_ eq $tag->value } @values) {
-            @values = grep {$_ ne $tag->value} @values;
-        } else {
-            $tag->map_tag_review({review_id => $c->stash->{item}->id})->delete;
-        } 
-    }
-    for my $value (@values) {
-        my $tag = $c->model('DBIC::Tag')->find_or_create(
-            {
-                value => $value,
-                created_by => $c->stash->{item}->created_by,
-                created_at => $c->stash->{item}->created_at,
-            },
-            {
-                key => 'value',
-            }
-        );
-        $c->model('DBIC::TagReview')->find_or_create(
-            {
-                tag_id => $tag->id,
-                review_id => $c->stash->{item}->id,
-                restrant_id => $c->stash->{item}->restrant_id,
-            }
-        );
-    }
-}
+#sub create_item :Private {
+#    my ( $self, $c ) = @_;
+#
+#    $self->next::method($c);
+#    $c->forward('update_tag');
+#}
+#
+#sub update_item :Private {
+#    my ( $self, $c ) = @_;
+#
+#    $self->next::method($c);
+#    $c->forward('update_tag');
+#}
+#
+#sub update_tag :Private {
+#    my ( $self, $c ) = @_;
+#    my @values = grep {length($_)} split(/\s/, $c->stash->{outer_params}->{tags}->{value});
+#    my @tags = $c->stash->{item}->tags;
+#    for my $tag ($c->stash->{item}->tags) {
+#        if (grep {$_ eq $tag->value } @values) {
+#            @values = grep {$_ ne $tag->value} @values;
+#        } else {
+#            $tag->map_tag_review({review_id => $c->stash->{item}->id})->delete;
+#        } 
+#    }
+#    for my $value (@values) {
+#        my $tag = $c->model('DBIC::Tag')->find_or_create(
+#            {
+#                value => $value,
+#                created_by => $c->stash->{item}->created_by,
+#                created_at => $c->stash->{item}->created_at,
+#            },
+#            {
+#                key => 'value',
+#            }
+#        );
+#        $c->model('DBIC::TagReview')->find_or_create(
+#            {
+#                tag_id => $tag->id,
+#                review_id => $c->stash->{item}->id,
+#                restrant_id => $c->stash->{item}->restrant_id,
+#            }
+#        );
+#    }
+#}
 
 =head2 index
 

@@ -10,3 +10,5 @@ pm_to_blib
 t/00_allload.t
 t/config/sentmail.txt
 *.sw?
+sentmail
+*~

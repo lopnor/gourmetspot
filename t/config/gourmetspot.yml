@@ -1,23 +1,4 @@
 --- 
-Controller::Restrant:
-    form:
-        name:
-            - rule: NOT_BLANK
-              message: 'お店の名前を入力してください'
-        latitude:
-            - rule: NOT_BLANK
-              message: '場所を地図で指定してください'
-Controller::Review:
-    form:
-        budget:
-            - rule: NOT_BLANK
-              message: '予算を入力してください'
-        Tag.value:
-            - rule: NOT_BLANK
-              message: 'タグを入力してください'
-        comment:
-            - rule: NOT_BLANK
-              message: 'ヒトコトを入力してください'
 Model::TheSchwartz: 
     args: 
         databases: 
@@ -48,8 +29,8 @@ View::Email:
         mailer: GourmetSpot::Util::Mailer
         mailer_args: 
             databases: 
-                dsn: dbi:mysql:theschwartz
-                user: root
+                - dsn: dbi:mysql:theschwartz
+                  user: root
     stash_key: email
     template_prefix: email
 View::JSON: 
