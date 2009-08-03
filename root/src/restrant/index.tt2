@@ -10,13 +10,17 @@
 [% END %]
 </ul>
 [% IF pager.previous_page %]
-<a href="[% c.uri_for('', {name => c.req.param('name') or '', _page => pager.previous_page}) %]">&lt; 前</a>
+<a href="[% c.req.uri_with({ _page => pager.previous_page}) %]">&lt; 前</a>
 [% ELSE %]
 &lt; 前
 [% END %]
-|
+[% FOR p IN pager.pages_in_navigation %]
+[% IF p == pager.current_page %][% p %][% ELSE %]
+<a href="[% c.req.uri_with({_page => p}) %]">[% p %]</a>
+[% END %]
+[% END %]
 [% IF pager.next_page %]
-<a href="[% c.uri_for('', {name => c.req.param('name') or '', _page => pager.next_page}) %]">次 &gt;</a>
+<a href="[% c.req.uri_with({_page => pager.next_page}) %]">次 &gt;</a>
 [% ELSE %]
 次 &gt;
 [% END %]

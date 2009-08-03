@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use utf8;
 use parent 'GourmetSpot::ControllerBase::Resource';
+use Data::Page::Navigation;
 
 =head1 NAME
 
@@ -20,6 +21,7 @@ Catalyst Controller.
 __PACKAGE__->config(
     {
         'model' => 'DBIC::Restrant',
+        rows => 40,
         'like_fields' => ['name'],
         form => {
             name => [
