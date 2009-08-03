@@ -6,7 +6,7 @@ use parent 'GourmetSpot::ControllerBase::Resource';
 __PACKAGE__->config(
     {
         model => 'DBIC::Tag',
-        rows => 0,
+        rows => 'all',
     }
 );
 

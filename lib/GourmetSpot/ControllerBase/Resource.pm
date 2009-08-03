@@ -119,7 +119,7 @@ sub index :Chained('noitem_load') :PathPart('') :Args(0) {
 
     $c->stash(
         list => [ $rs->all ],
-        pager => $rs->pager,
+        pager => $c->stash->{search_attr}->{rows} ? $rs->pager : undef,
     );
     $c->forward($c->view);
     $c->fillform;
@@ -132,11 +132,11 @@ sub setup_search_attr :Private {
         $order .= " desc" if $c->req->param('_desc');
     }
     my $attr = {
-        order_by => $order || 'id desc',
+        order_by => $order || $self->{order} || 'id desc',
         rows => $c->req->param('_rows') ||$self->{rows},
         page => $c->req->param('_page') || 1,
     };
-    if ($c->req->param('_rows') && $c->req->param('_rows') eq 'all') {
+    if ($attr->{rows} eq 'all') {
         delete $attr->{rows};
         delete $attr->{page};
     }
