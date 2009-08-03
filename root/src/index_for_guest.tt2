@@ -3,6 +3,6 @@
 <tr><td> メールアドレス </td><td> <input type="text" name="mail" tabindex="1"> </td></tr>
 <tr><td> パスワード </td><td> <input type="password" name="password" tabindex="2"> </td></tr>
 <tr><td> </td><td><input type="submit" value="ログイン" tabindex="3"></td></tr>
-<tr><td colspan="2"><a href="[% c.uri_for('password') %]">パスワードを忘れたら</a> </td></tr>
+<tr><td colspan="2"><a href="[% c.uri_for('/account/password') %]">パスワードを忘れたら</a> </td></tr>
 </table>
 </form>

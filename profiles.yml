@@ -24,8 +24,8 @@
           message: 'パスワードを入力してください。'
         - rule: ASCII
           message: 'パスワードは半角英数字を入力してください。'
-        - rule: [ 'LENGTH', 8, 16 ]
-          message: 'パスワードの長さは8文字から16文字にしてください。'
+        - rule: [ 'LENGTH', 6, 16 ]
+          message: 'パスワードの長さは6文字から16文字にしてください。'
     password_confirm:
         - self_rule: SAME_AS_PASSWORD 
           message: 'パスワードが一致しません。'
@@ -45,8 +45,8 @@
           message: 'パスワードを入力してください。'
         - rule: ASCII
           message: 'パスワードは半角英数字を入力してください。'
-        - rule: [ 'LENGTH', 8, 16 ]
-          message: 'パスワードの長さは8文字から16文字にしてください。'
+        - rule: [ 'LENGTH', 6, 16 ]
+          message: 'パスワードの長さは6文字から16文字にしてください。'
     password_confirm:
         - self_rule: SAME_AS_PASSWORD 
           message: 'パスワードが一致しません。'

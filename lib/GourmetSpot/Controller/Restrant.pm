@@ -48,8 +48,13 @@ sub setup_item_params :Private {
     my ($self, $c) = @_;
     $self->next::method($c);
     if (my $outer = $c->stash->{outer_params}->{openhours}) {
-        for my $item (@{$outer}) {
-            $item or next;
+        my $i = 0;
+        while ($i <= $#{$outer}) {
+            my $item = $outer->[$i];
+            unless ($item) {
+                splice(@$outer, $i, 1);
+                next;
+            }
             if ($item->{id}) {
                 unless ($item->{holiday} || $item->{pre_holiday} || scalar $item->{day_of_week}) {
                     $item->{_delete} = 1;
@@ -64,6 +69,7 @@ sub setup_item_params :Private {
                     delete $item->{"${_}_minute"} || '00',
                 );
             }
+            $i++;
         }
     }
 }
