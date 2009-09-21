@@ -10,6 +10,7 @@ requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Plugin::Authorization::Roles';
+requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Session::Store::DBIC';
@@ -29,6 +30,7 @@ requires 'Catalyst::View::MobileJpFilter';
 requires 'DBIx::Class';
 requires 'DBIx::Class::Schema';
 requires 'DBIx::Class::InflateColumn::DateTime';
+requires 'DBIx::Class::TimeStamp';
 requires 'WebService::Simple';
 requires 'Catalyst::View::Email::Template';
 requires 'TheSchwartz::Worker';
@@ -48,6 +50,8 @@ requires 'Geo::Coordinates::Converter';
 requires 'Data::Visitor::Callback';
 requires 'Moose';
 requires 'Geography::JapanesePrefectures';
+requires 'Data::Page::Navigation';
+
 
 requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen

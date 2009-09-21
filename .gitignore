@@ -12,3 +12,4 @@ t/config/sentmail.txt
 *.sw?
 sentmail
 *~
+*.sqlite3

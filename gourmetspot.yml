@@ -2,8 +2,8 @@
 Model::TheSchwartz: 
     args: 
         databases: 
-            -
-                dsn: dbi:mysql:theschwartz
+            - dsn: dbi:mysql:theschwartz
+              user: root
 Plugin::Authentication: 
     default_realm: members
     realms: 
