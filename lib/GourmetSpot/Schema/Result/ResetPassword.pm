@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::ResetPassword;
+package GourmetSpot::Schema::Result::ResetPassword;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime Core));
 __PACKAGE__->table("reset_password");
@@ -39,7 +39,7 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->belongs_to( 
     'member', 
-    'GourmetSpot::Schema::Member',
+    'GourmetSpot::Schema::Result::Member',
     'member_id' 
 );
 

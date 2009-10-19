@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::Session;
+package GourmetSpot::Schema::Result::Session;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components("Core");
 __PACKAGE__->table("session");

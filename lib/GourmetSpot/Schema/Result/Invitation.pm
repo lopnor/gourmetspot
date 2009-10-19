@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::Invitation;
+package GourmetSpot::Schema::Result::Invitation;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime TimeStamp Core));
 __PACKAGE__->table("invitation");
@@ -11,6 +11,7 @@ __PACKAGE__->add_columns(
     id => { 
         data_type => "INT", 
         default_value => undef, 
+        is_auto_increment => 1,
         is_nullable => 0, 
         size => 11 
     },

@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::Tag;
+package GourmetSpot::Schema::Result::Tag;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime TimeStamp Core));
 __PACKAGE__->table("tag");
@@ -11,6 +11,7 @@ __PACKAGE__->add_columns(
     id => { 
         data_type => "INT", 
         default_value => undef,
+        is_auto_increment => 1,
         is_nullable => 0,
         size => 11 
     },
@@ -40,7 +41,7 @@ __PACKAGE__->add_unique_constraint("value", ["value"]);
 
 __PACKAGE__->has_many(
     'map_tag_review',
-    'GourmetSpot::Schema::TagReview',
+    'GourmetSpot::Schema::Result::TagReview',
     'tag_id'
 );
 __PACKAGE__->many_to_many(

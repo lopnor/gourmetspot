@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::Review;
+package GourmetSpot::Schema::Result::Review;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime TimeStamp Core));
 __PACKAGE__->table("review");
@@ -11,6 +11,7 @@ __PACKAGE__->add_columns(
     id => { 
         data_type => "INT", 
         default_value => undef, 
+        is_auto_increment => 1,
         is_nullable => 0, 
         size => 11 
     },
@@ -61,17 +62,17 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->belongs_to(
     'restrant',
-    'GourmetSpot::Schema::Restrant',
+    'GourmetSpot::Schema::Result::Restrant',
     'restrant_id'
 );
 __PACKAGE__->belongs_to(
     'member',
-    'GourmetSpot::Schema::Member',
+    'GourmetSpot::Schema::Result::Member',
     'created_by'
 );
 __PACKAGE__->has_many(
     'map_review_tag',
-    'GourmetSpot::Schema::TagReview',
+    'GourmetSpot::Schema::Result::TagReview',
     'review_id'
 );
 __PACKAGE__->many_to_many(

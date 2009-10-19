@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::OpenHours;
+package GourmetSpot::Schema::Result::OpenHours;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime Core));
 __PACKAGE__->table("open_hours");

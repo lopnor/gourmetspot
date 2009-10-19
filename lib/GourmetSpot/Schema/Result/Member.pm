@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::Member;
+package GourmetSpot::Schema::Result::Member;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components("Core");
 __PACKAGE__->table("member");
@@ -42,8 +42,8 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("id");
 
-__PACKAGE__->has_many(map_member_role => 'GourmetSpot::Schema::MemberRole' => 'member_id');
+__PACKAGE__->has_many(map_member_role => 'GourmetSpot::Schema::Result::MemberRole' => 'member_id');
 __PACKAGE__->many_to_many(roles => 'map_member_role' => 'role');
-__PACKAGE__->has_many(reviews => 'GourmetSpot::Schema::Review' => 'created_by');
+__PACKAGE__->has_many(reviews => 'GourmetSpot::Schema::Result::Review' => 'created_by');
 
 1;

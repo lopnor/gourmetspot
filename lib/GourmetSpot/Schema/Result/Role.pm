@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::Role;
+package GourmetSpot::Schema::Result::Role;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components("Core");
 __PACKAGE__->table("role");

@@ -1,9 +1,9 @@
-package GourmetSpot::Schema::Restrant;
+package GourmetSpot::Schema::Result::Restrant;
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'GourmetSpot::Schema::Result';
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime TimeStamp Core));
 __PACKAGE__->table("restrant");
@@ -11,6 +11,7 @@ __PACKAGE__->add_columns(
     id => { 
         data_type => "INT", 
         default_value => undef, 
+        is_auto_increment => 1,
         is_nullable => 0, 
         size => 11
     },
@@ -39,16 +40,18 @@ __PACKAGE__->add_columns(
         size => 255 
     },
     latitude => {
-        data_type => "DECIMAL",
+#        data_type => "DECIMAL",
+        data_type => "DOUBLE",
         default_value => "0.000000",
         is_nullable => 0,
-        size => 10,
+#        size => 10,
     },
     longitude => {
-        data_type => "DECIMAL",
+#        data_type => "DECIMAL",
+        data_type => "DOUBLE",
         default_value => "0.000000",
         is_nullable => 0,
-        size => 10,
+#        size => 10,
     },
     panorama => {
         data_type => "TEXT",
@@ -95,17 +98,17 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->has_many(
     'openhours', 
-    'GourmetSpot::Schema::OpenHours',
+    'GourmetSpot::Schema::Result::OpenHours',
     'restrant_id'
 );
 __PACKAGE__->has_many(
     'reviews',
-    'GourmetSpot::Schema::Review',
+    'GourmetSpot::Schema::Result::Review',
     'restrant_id'
 );
 __PACKAGE__->has_many(
     'map_restrant_tag',
-    'GourmetSpot::Schema::TagReview',
+    'GourmetSpot::Schema::Result::TagReview',
     'restrant_id'
 );
 __PACKAGE__->many_to_many(
