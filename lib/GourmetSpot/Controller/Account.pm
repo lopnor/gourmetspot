@@ -129,7 +129,7 @@ sub invite_complete :Private {
                 caller_id => $c->user->id,
                 mail => $mail,
                 nonce => sha1_base64($now . $mail . $c->user . rand),
-                created_at => $now,
+#                created_at => $now,
             });
         $c->stash(
             email => {
@@ -203,7 +203,7 @@ sub join_complete :Private {
         );
         $invitation->update({
                 member_id => $member->id,
-                joined_at => DateTime->now,
+                joined_at => DateTime->now(time_zone => 'Asia/Tokyo'),
             });
         $c->stash(
             email => {
