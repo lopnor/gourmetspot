@@ -132,6 +132,7 @@ sub _get_geo {
         param => {
             output => 'xml',
             gl => 'jp',
+            key => $self->apikey,
         }
     );
     my $res = $api->get($args);
