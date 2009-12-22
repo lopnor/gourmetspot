@@ -15,6 +15,9 @@
 #searchbox {
     text-align: center;
 }
+div.searchboxin {
+    text-align: left;
+}
 body {
     font-size: small;
 }

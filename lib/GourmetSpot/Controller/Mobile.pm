@@ -98,8 +98,17 @@ sub setup_map :Private {
     );
 }
 
-sub search :Path('search') :Args(0) {
-    my ( $self, $c ) = @_;
+sub search :Path('search') :Args() {
+    my ( $self, $c, @args) = @_;
+    while (my $key = shift @args) {
+        if ($key eq 'tag_id') {
+            $c->req->param($key => @args);
+            last;
+        }
+        my $value = shift @args;
+        $c->req->param($key => $value);
+    }
+    $c->log->_dump($c->req->params);
     my $point;
     my $mapapi = $c->model('Map');
     if ( my $address = $c->req->param('q') ) {
@@ -114,6 +123,26 @@ sub search :Path('search') :Args(0) {
         $c->stash(
             address => $address,
         );
+    } elsif ( my $gps_mode = $c->req->param('gps_mode') ) {
+        my $gps_endpoint = {
+            'DoCoMo' => 'http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl=',
+            'EZweb' => 'device:location?url=',
+            'Vodafone' => 'location:auto?url=',
+        };
+        my $endpoint = $gps_endpoint->{$c->req->mobile_agent->carrier_longname};
+        if ($endpoint) {
+            my @tag_id = $c->req->param('tag_id');
+            $c->log->_dump( \@tag_id );
+            my $url = $c->uri_for('search',
+                gps_mode => 0,
+                now_available => $c->req->param('now_available') || 0,
+                q => $c->req->param('q'),
+                tag_id => @tag_id,
+            );
+            $c->log->debug($url);
+            $c->res->redirect( $endpoint . uri_escape($url) );
+            $c->detach;
+        }
     } else {
         $point = $mapapi->gps_to_coordinates($c->req);
         if ( $point ) {

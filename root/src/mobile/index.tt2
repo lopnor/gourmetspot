@@ -7,7 +7,18 @@ device:location?url=[% c.uri_for('search') | url -%]
 location:auto?url=[% c.uri_for('search') | url -%]
 [% END -%]">現在地点から検索</a><br />
 <form action="[% c.uri_for('search') %]" method="GET">
-<input type="text" name="q" size="10"/>
-<input type="submit" value="地名から検索" />
+<div class="searchboxin">
+いつ？<br />
+<input type="checkbox" name="now_available" value="1" checked="checked" />今やっているお店<br />
+<input type="checkbox" name="tag_id" value="9" />昼に
+<input type="checkbox" name="tag_id" value="3" />夜に
+<input type="checkbox" name="tag_id" value="4" />24時以降に
+</div>
+<div class="searchboxin">
+どこで？<br />
+<input type="checkbox" name="gps_mode" value="1" checked="checked" />現在地
+<input type="text" name="q" size="10" />
+</div>
+<input type="submit" value="検索スタート" />
 </form>
 </div>
