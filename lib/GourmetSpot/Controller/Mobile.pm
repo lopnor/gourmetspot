@@ -77,22 +77,24 @@ sub setup_ugo2 :Private {
 sub setup_map :Private {
     my ( $self, $c, $item ) = @_;
     my $map = Geo::Google::StaticMaps::Navigation->new(
-        zoom_ratio => 2,
         key => $c->config->{googlemaps}->{$c->req->uri->host},
-        center => Geo::Coordinates::Converter->new(
-            lat => $c->req->param('lat') || $item->latitude,
-            lng => $c->req->param('lng') || $item->longitude,
-        ),
-        width => $c->req->mobile_agent->display->width || 100,
-        height => $c->req->mobile_agent->display->width || 100,
-        span => $c->req->param('span') || 0.002,
+        center => [
+            $c->req->param('lat') || $item->latitude,
+            $c->req->param('lng') || $item->longitude,
+        ],
+        size => [
+            $c->req->mobile_agent->display->width || 100,
+            $c->req->mobile_agent->display->width || 100,
+        ],
+        zoom => $c->req->param('zoom') || 17,
         markers => [ 
-            Geo::Coordinates::Converter->new(
-                lat => $item->latitude,
-                lng => $item->longitude,
-            )
+            {
+                size => 'small',
+                point => [$item->latitude,$item->longitude,],
+            }
         ],
     );
+    $c->log->_dump($map);
     $c->stash(
         map  => $map,
     );
