@@ -46,7 +46,6 @@ requires 'Module::Pluggable' => '3.8';
 requires 'Path::Class';
 requires 'Hash::Merge::Simple';
 requires 'Geo::Google::StaticMaps::Navigation';
-requires 'Geo::Coordinates::Converter';
 requires 'Data::Visitor::Callback';
 requires 'Moose';
 requires 'Geography::JapanesePrefectures';

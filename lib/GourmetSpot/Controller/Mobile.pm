@@ -3,7 +3,6 @@ package GourmetSpot::Controller::Mobile;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller::Mobile::JP';
-use Geo::Coordinates::Converter;
 use Geo::Google::StaticMaps::Navigation;
 use URI::Escape;
 
