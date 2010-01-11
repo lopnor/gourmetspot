@@ -23,7 +23,7 @@ sub search_with_coordinates {
                 "$distance as distance",
             ],
             order_by => 'distance',
-            rows => $args->{rows} || 5,
+            rows => $args->{rows} || 10,
         }
     );
 }

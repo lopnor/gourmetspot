@@ -21,9 +21,7 @@ my $restrant = {
 }
 
 {
-    my $mech = guest;
     for my $agent (
-#        {'User-Agent' => 'DoCoMo/2.0 N04A(c100;TB;W30H20)'},
         {'User-Agent' => 'DoCoMo/2.0 SH901iC(c100;TB;W24H12)'},
         {
             'User-Agent' => 'KDDI-SN3A UP.Browser/6.2.0.7.3.129 (GUI) MMP/2.0',
@@ -36,9 +34,8 @@ my $restrant = {
             'X-JPHONE-COLOR' => 'C262144',
         },
     ) {
-#        diag("User-Agent: ", $agent->{'User-Agent'});
+        my $mech = guest;
         $mech->add_header($_ => $agent->{$_}) for keys %$agent;
-#        $mech->agent($agent);
         $mech->get_ok('/mobile');
         is $mech->uri->path, '/mobile';
         ok $mech->find_link(text => '現在地点から検索');

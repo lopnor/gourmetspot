@@ -38,9 +38,10 @@
 [% END %]
 [% END %]
 <img src="[% map.url | html %]" width="[% map.width | html %]" height="[% map.height | html %]" /><br />
-&#xE6E3;<a href="[% map.north.pageurl(c.req.uri) | html %]" accesskey="2">↑</a
->&#xE6E9;<a href="[% map.south.pageurl(c.req.uri) | html %]" accesskey="8">↓</a
->&#xE6E7;<a href="[% map.east.pageurl(c.req.uri) | html %]" accesskey="6">→</a
->&#xE6E5;<a href="[% map.west.pageurl(c.req.uri) | html %]" accesskey="4">←</a
->♯<a href="[% map.zoom_in.pageurl(c.req.uri) | html %]" accesskey="#">in</a
->＊<a href="[% map.zoom_out.pageurl(c.req.uri) | html %]" accesskey="*">out</a>
+[% SET mapurl = c.uri_for('map',item.id) %]
+&#xE6E3;<a href="[% map.north.pageurl(mapurl) | html %]" accesskey="2">↑</a
+>&#xE6E9;<a href="[% map.south.pageurl(mapurl) | html %]" accesskey="8">↓</a
+>&#xE6E7;<a href="[% map.east.pageurl(mapurl) | html %]" accesskey="6">→</a
+>&#xE6E5;<a href="[% map.west.pageurl(mapurl) | html %]" accesskey="4">←</a
+>♯<a href="[% map.zoom_in.pageurl(mapurl) | html %]" accesskey="#">in</a
+>＊<a href="[% map.zoom_out.pageurl(mapurl) | html %]" accesskey="*">out</a>

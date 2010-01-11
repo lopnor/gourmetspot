@@ -1,24 +1,9 @@
 <div id="searchbox">
-<a href="[% IF c.req.mobile_agent.is_ezweb -%]
-device:location?url=[% c.uri_for('search') | url -%]
-[% ELSIF c.req.mobile_agent.is_docomo -%]
-[% 'http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl=' _ c.uri_for('search') | html -%]
-[% ELSIF c.req.mobile_agent.is_softbank -%]
-location:auto?url=[% c.uri_for('search') | url -%]
-[% END -%]">現在地点から検索</a><br />
+<a [% c.model('Map').location_a_attrs({req => c.req, cb => c.uri_for('search')}) %]
+>ｺｺｶﾗ検索</a><br />
 <form action="[% c.uri_for('search') %]" method="GET">
-<div class="searchboxin">
-いつ？<br />
-<input type="checkbox" name="now_available" value="1" checked="checked" />今やっているお店<br />
-<input type="checkbox" name="tag_id" value="9" />昼に
-<input type="checkbox" name="tag_id" value="3" />夜に
-<input type="checkbox" name="tag_id" value="4" />24時以降に
-</div>
-<div class="searchboxin">
-どこで？<br />
-<input type="checkbox" name="gps_mode" value="1" checked="checked" />現在地
-<input type="text" name="q" size="10" />
-</div>
-<input type="submit" value="検索スタート" />
-</form>
+<input type="text" name="q" size="10" /><input type="submit" value="地名で検索" />
+</form><br />
+<a href="[% c.uri_for('form') %]">詳細検索</a>
+(<a [% c.model('Map').location_a_attrs({req => c.req, cb => c.uri_for('form')}) %]>ｺｺｶﾗ</a>)
 </div>

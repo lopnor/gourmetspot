@@ -7,6 +7,9 @@ use Geo::Coordinates::Converter;
 use WebService::Simple;
 use Geo::Google::StaticMaps::Navigation;
 use Geography::JapanesePrefectures::Unicode;
+use HTTP::MobileAgent;
+use URI::Escape;
+use HTML::Entities;
 
 has apikey => (
     isa => 'Str',
@@ -40,6 +43,19 @@ sub reverse_geocode {
     }
 }
 
+sub get_point {
+    my ($self, $query) = @_;
+    if (my $point = $self->gps_to_coordinates($query)) {
+        if ($point) {
+            my $address = $self->reverse_geocode($point);
+            return ($address, $point);
+        }
+    } elsif (my $address = $query->param('q')) {
+        my @points = $self->geocode($address);
+        return ($address, @points);
+    }
+}
+
 sub geocode {
     my ($self, $address) = @_;
     my $geo = $self->_get_geo({q => $address});
@@ -63,7 +79,17 @@ sub geocode {
 sub gps_to_coordinates {
     my ($self, $query) = @_;
     my $point;
-    if ($query->param('pos')) {
+    if (my $j = $query->header('x-jphone-geocode')) {
+        my ($lat, $lng) = 
+            map { $_ =~ s/^(\d{2,3})(\d{2})(\d{2})$/$1.$2.$2/g; $_ }
+            split(/%1A/, $j);
+        $point = Geo::Coordinates::Converter->new(
+            lat => $lat,
+            lng => $lng,
+            format => 'dms',
+            datum => 'tokyo',
+        );
+    } elsif ($query->param('pos')) {
         # supports only NE world...
         if ($query->param('pos') =~ m{N([\d\.]+)E([\d\.]+)}) {
             $point = Geo::Coordinates::Converter->new(
@@ -101,27 +127,10 @@ sub distance_for_mysql {
     );
 }
 
-sub static_map {
-    my ($self, $args) = @_;
-    my $center = Geo::Coordinates::Converter->new(
-        lat => $args->{lat},
-        lng => $args->{lng},
-    ) || $args->{marker};
-
-    my $map = Geo::Google::StaticMaps::Navigation->new(
-        zoom_ratio => 2,
-        key => $self->apikey,
-        center => $center,
-        width => $args->{width} || 100,
-        height => $args->{height} || $args->{width} || 100,
-        span => $args->{span} || 0.002,
-        markers => $args->{markers} || [],
-    );
-}
-
 sub _find_param {
     my ($self, $query, $regex) = @_;
-    map {$query->param($_) } grep {$_ =~ $regex} $query->param;
+    my ($key) = grep {$_ =~ $regex} $query->param;
+    return $query->param($key);
 }
 
 sub _get_geo {
@@ -177,6 +186,30 @@ sub _get_placemarks {
 sub _get_accuracy {
     my ($self, $elem) = @_;
     return $elem->getElementsByTagName('AddressDetails')->shift->getAttribute('Accuracy');
+}
+
+
+# much borrowed from HTML::MobileJp::Plugin::GPS
+sub location_a_attrs {
+    my ($self, $args) = @_;
+    my $mobile_agent = HTTP::MobileAgent->new($args->{req}->headers);
+    my $callback = $args->{cb};
+
+    my $map = {
+        'DoCoMo' => sub { +{href => 'http://w1m.docomo.ne.jp/cp/iarea?guid=ON&ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl='. uri_escape($_[0])} },
+        'EZweb' => sub { +{href => 'device:location?url=' . uri_escape($_[0]) } },
+        'Vodafone' => sub {
+            $_[1]->is_type_3gc ? +{href => 'location:cell?url='.$_[0]} : +{href => $_[0], z => 'z'}
+        }
+    };
+
+    my $attrs = $map->{$mobile_agent->carrier_longname}->($callback, $mobile_agent);
+
+    my $ret = "";
+    for my $name (sort { $a cmp $b } keys %$attrs) {
+        $ret .= qq{ $name="} . encode_entities($attrs->{$name}) . q{"};
+    }
+    return $ret;
 }
 
 1;

@@ -5,12 +5,18 @@ use warnings;
 use parent 'Catalyst::Controller::Mobile::JP';
 use Geo::Google::StaticMaps::Navigation;
 use URI::Escape;
+use HTML::MobileJp;
 
 sub auto :Private {
     my ( $self, $c ) = @_;
 
     if ($c->req->mobile_agent->is_non_mobile) {
         $c->res->redirect($c->uri_for('/'));
+        return 0;
+    }
+    if ($c->req->mobile_agent->is_docomo && ! $c->req->param('guid')) {
+        # XXX mmmm.... no need to append %{$c->req->params} but...
+        $c->res->redirect($c->req->uri_with({%{$c->req->params}, guid => 'ON'}));
         return 0;
     }
     $c->forward('setup_ugo2');
@@ -93,67 +99,37 @@ sub setup_map :Private {
             }
         ],
     );
-    $c->log->_dump($map);
+    $c->log->_dump($map) if $c->debug;
     $c->stash(
         map  => $map,
     );
 }
 
-sub search :Path('search') :Args() {
-    my ( $self, $c, @args) = @_;
-    while (my $key = shift @args) {
-        if ($key eq 'tag_id') {
-            $c->req->param($key => @args);
-            last;
-        }
-        my $value = shift @args;
-        $c->req->param($key => $value);
-    }
-    $c->log->_dump($c->req->params);
+sub setup_location :Private {
+    my ($self, $c, @args) = @_;
+    $self->_args_to_params($c, \@args);
     my $point;
     my $mapapi = $c->model('Map');
-    if ( my $address = $c->req->param('q') ) {
-        my @points = $mapapi->geocode($address);
-        if (scalar @points == 1) {
-            $point = $points[0];
-        } else {
-            $c->stash(
-                candidates => \@points,
-            );
-        }
+    my ($address, @points) = $mapapi->get_point($c->req);
+    if (scalar @points == 1) {
+        $point = $points[0];
+        $c->req->param(_lat => $point->lat);
+        $c->req->param(_lng => $point->lng);
         $c->stash(
-            address => $address,
+            point => $point,
         );
-    } elsif ( my $gps_mode = $c->req->param('gps_mode') ) {
-        my $gps_endpoint = {
-            'DoCoMo' => 'http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl=',
-            'EZweb' => 'device:location?url=',
-            'Vodafone' => 'location:auto?url=',
-        };
-        my $endpoint = $gps_endpoint->{$c->req->mobile_agent->carrier_longname};
-        if ($endpoint) {
-            my @tag_id = $c->req->param('tag_id');
-            $c->log->_dump( \@tag_id );
-            my $url = $c->uri_for('search',
-                gps_mode => 0,
-                now_available => $c->req->param('now_available') || 0,
-                q => $c->req->param('q'),
-                tag_id => @tag_id,
-            );
-            $c->log->debug($url);
-            $c->res->redirect( $endpoint . uri_escape($url) );
-            $c->detach;
-        }
-    } else {
-        $point = $mapapi->gps_to_coordinates($c->req);
-        if ( $point ) {
-            my $address = $mapapi->reverse_geocode($point);
-            $c->stash(
-                address => $address,
-            );
-        }
+    } elsif (scalar @points > 1) {
+        $c->stash(
+            candidates => \@points,
+        );
+        $c->detach;
     }
-    if ($point) {
+}
+
+sub search :Path('search') :Args() {
+    my ( $self, $c, @args) = @_;
+    $c->forward('setup_location', \@args);
+    if (my $point = $c->stash->{point}) {
         my @tag_id = $c->req->param('tag_id');
         my $arg = {
             resultset => $c->model('DBIC::Restrant'),
@@ -172,14 +148,57 @@ sub search :Path('search') :Args() {
     }
 }
 
+sub form :Local :Args() {
+    my ($self, $c, @args) = @_;
+    $c->forward('setup_location', \@args);
+
+    $c->stash(
+        loc_callback => $self->_params_to_args($c, $c->uri_for('search', $c->req->params)),
+    );
+}
+
 sub end :Private {
     my ( $self, $c ) = @_;
 
     $c->forward('render');
+    $c->fillform;
     $c->forward( $c->view('MobileJpFilter') );
     $self->next::method($c);
 }
 
 sub render :ActionClass('RenderView') {}
+
+sub _params_to_args {
+    my ($self, $c, $uri) = @_;
+    my %params = $uri->query_form;
+    my $tag_id = delete $params{tag_id};
+    $uri->query(undef);
+    my $path = join ('/', 
+        $uri->path, 
+        map({$_, ($params{$_} || '-') } sort keys %params),
+        $tag_id ? (tag_id => ref $tag_id ? @$tag_id : $tag_id) : ()
+    );
+    $uri->path($path);
+    $c->log->debug($uri) if $c->debug;
+    return $uri;
+}
+
+sub _args_to_params {
+    my ($self, $c, $args) = @_;
+    while (my $key = shift @$args) {
+        if ($key eq 'tag_id') {
+            my @value = grep {$_ ne '-'} @$args;
+            if (scalar @value) {
+                $c->req->param($key => @value);
+            }
+            last;
+        }
+        my $value = shift @$args;
+        if ($value ne '-') {
+            $c->req->param($key => $value);
+        }
+    }
+    $c->log->_dump($c->req->params) if $c->debug;
+}
 
 1;

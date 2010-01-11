@@ -1,0 +1,21 @@
+<a [% c.model('Map').location_a_attrs({req => c.req, cb => loc_callback}) %]>今の条件でｺｺｶﾗ検索</a>
+<form action="[% c.uri_for('search') %]" method="get">
+<div class="searchboxin">
+<input type="hidden" name="_lat" />
+<input type="hidden" name="_lng" />
+<input type="checkbox" name="now_available" value="1" />今やっているお店<br />
+<input type="checkbox" name="tag_id" value="9" />昼に
+<input type="checkbox" name="tag_id" value="3" />夜に
+<input type="checkbox" name="tag_id" value="4" />24時以降に
+</div>
+<div class="searchboxin">
+[% FOR t IN c.req.param('tag_id') %]
+[% stop = [1,3,4,9]; NEXT IF stop.grep(t).size > 0 %]
+<input type="checkbox" name="tag_id" value="[% t %]" />[% c.model('DBIC::Tag').find(t).value %]<br />
+[% END %]
+</div>
+<div class="searchboxin">
+地名：<input type="text" name="q" size="10" />
+</div>
+<input type="submit" value="検索スタート" />
+</form>

@@ -1,3 +1,4 @@
+<a href="[% c.uri_for('form', c.req.params) | html %]">再検索</a>
 [% IF list -%]
 <div class="h2"><h2>[% address | html %]付近のお店情報
 [% IF tags.size > 0 %]
@@ -8,7 +9,7 @@
 [% END %]
 [% END %]
 </h2></div>
-[% FOR item IN list.slice(0,5) -%]
+[% FOR item IN list.slice(0,10) -%]
 [% NEXT UNLESS item %]
 <div class="restrant[% 'odd' IF (loop.count % 2) == 1 %]">
 &#xE66F;<a href="[% c.uri_for('restrant', item.id) %]">[% item.name | html %]</a><br />
@@ -29,7 +30,7 @@
 [% IF tags -%]
 <div class="tags">
 <div class="h3"><h3>&#xE689;タグで絞り込み</h3></div>
-[% FOR t IN tags_nearby -%]
+[% FOR t IN tags_nearby.slice(0,10) -%]
 [% NEXT UNLESS t -%]
 <div class="tag">&#xE689; <a href="[% empty = []; new_tag = empty.merge(tags, [ t.id ]); c.uri_for('search', {lat => lat, lng => lng, datum => 'wgs84', tag_id => new_tag }) | html %]">[% t.value | html %]([% t.count %])</a></div>
 [% END -%]
@@ -46,15 +47,9 @@
 [% END -%]
 <div id="searchbox">
 <div class="h3"><h3>もう一度検索する</h3></div>
-<a href="[% IF c.req.mobile_agent.is_ezweb -%]
-device:location?url=[% c.uri_for('search') | url -%]
-[% ELSIF c.req.mobile_agent.is_docomo -%]
-[% 'http://w1m.docomo.ne.jp/cp/iarea?ecode=OPENAREACODE&msn=OPENAREAKEY&posinfo=1&nl=' _ c.uri_for('search') | html -%]
-[% ELSIF c.req.mobile_agent.is_softbank -%]
-location:auto?url=[% c.uri_for('search') | url -%]
-[% END -%]">現在地点から検索</a><br />
+<a [% c.model('Map').location_a_attrs({req => c.req, cb => c.uri_for('search')}) -%]>ｺｺｶﾗ検索</a><br />
 <form action="[% c.uri_for('search') %]" method="GET">
 <input type="text" name="q" size="10"/>
-<input type="submit" value="地名から検索" />
+<input type="submit" value="地名で検索" />
 </form>
 </div>

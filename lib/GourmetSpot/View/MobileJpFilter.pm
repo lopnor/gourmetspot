@@ -12,6 +12,7 @@ __PACKAGE__->config(
             },
             {
                 module => 'DoCoMoGUID',
+                config => { abs => 1 },
             },
             {
                 module => 'EntityReference',
